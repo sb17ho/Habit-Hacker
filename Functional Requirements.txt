@@ -1,0 +1,20 @@
+Must Have:- 
+1) Daily habits to be listed as a vertical list. 
+2) New habits can be added, edited (additional information) or removed (Habit as a whole or information within).
+3) New habit is added to the current day only.
+4) New habit is added as uncompleted.
+5) You can change the color of the habit.
+6) Habits can be rearranged.
+7) Current uncompleted habit is empty gray ring, missed habit is red-cross, completed habit is green tick.
+  - Incompletely done habits show the progress bar (can be a ring representation)
+8) Reminders can be sent for habits.
+9) Habits must have a progress bar for progress tracking. Habit is completed when the progress bar is completed. 
+10) Tapping on the habit to add timer and progress bar.
+
+TBD:- 
+1) Add login, such that each user has a database that is specific to the user
+2) New habit is added on day specified by user
+3) Adding automatic progress bar update
+
+Tools:-
+Kotlin, Firebase
