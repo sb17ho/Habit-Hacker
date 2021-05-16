@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import java.util.*
 
 class HabitForm : AppCompatActivity() {
 
-    private val done: Button by lazy { findViewById(R.id.done) }
+    private val done: Button by lazy { findViewById(R.id.delete) }
     private val habitName: EditText by lazy { findViewById(R.id.habitName) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
