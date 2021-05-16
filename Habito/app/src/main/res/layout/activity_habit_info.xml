@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".HabitInfo">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="168dp"
-        android:layout_height="116dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp"
+        android:layout_width="276dp"
+        android:layout_height="309dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="32dp"
         android:src="@drawable/dumbbell"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="16dp"
+        android:background="#E3F2FD"
         android:ems="10"
         android:hint="enter habit name here"
         android:inputType="textPersonName"
@@ -34,6 +36,7 @@
         android:id="@+id/done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#E3F2FD"
         android:text="done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +54,7 @@
         android:weightSum="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habitName">
+        app:layout_constraintTop_toBottomOf="@+id/desc">
 
         <EditText
             android:id="@+id/steps"
@@ -60,10 +63,10 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
             android:layout_weight="1"
-            android:background="#FFFFFF"
+            android:background="#E3F2FD"
             android:ems="10"
             android:hint="enter steps"
-            android:inputType="textPersonName" />
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/reminder"
@@ -72,107 +75,22 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
             android:layout_weight="1"
+            android:background="#E3F2FD"
             android:ems="10"
             android:inputType="time" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/stats"
-        android:layout_width="407dp"
-        android:layout_height="147dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        app:layout_constraintBottom_toTopOf="@+id/done"
+    <EditText
+        android:id="@+id/desc"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:background="#E3F2FD"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/options"
-        app:layout_constraintVertical_bias="0.05">
-
-        <LinearLayout
-            android:id="@+id/streakLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/streakValue"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.25"
-                android:gravity="center"
-                android:text="5"
-                android:textSize="32sp" />
-
-            <TextView
-                android:id="@+id/streakTitle"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.75"
-                android:gravity="center"
-                android:text="Streak"
-                android:textSize="22sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/alltimeLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/alltimeValue"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.25"
-                android:gravity="center"
-                android:text="100.45%"
-                android:textSize="32sp" />
-
-            <TextView
-                android:id="@+id/alltimeTitle"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.75"
-                android:gravity="center"
-                android:text="All Time"
-                android:textSize="22sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/compLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/compValue"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.25"
-                android:gravity="center"
-                android:text="45"
-                android:textSize="32sp" />
-
-            <TextView
-                android:id="@+id/compTitle"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.75"
-                android:gravity="center"
-                android:text="Completions"
-                android:textSize="22sp" />
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/habitName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

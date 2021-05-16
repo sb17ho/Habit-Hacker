@@ -10,6 +10,11 @@ import android.widget.GridLayout
 import android.widget.GridView
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
+
+/**
+ * TODO figure out a way to pass Set to ArrayAdapter
+ */
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,8 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val add: Button by lazy { findViewById(R.id.add) }
     private val remove: Button by lazy { findViewById(R.id.remove) }
 
-    private var habits: ArrayList<String> = mutableListOf("new") as ArrayList<String>
-    var h = "empty"
+    private var habits = HashSet<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -27,31 +31,17 @@ class MainActivity : AppCompatActivity() {
 
         add.setOnClickListener {
             val habitInfoIntent = Intent(this, HabitInfo::class.java)
-            startActivity(habitInfoIntent)
+            val result = 1
+            startActivityForResult(habitInfoIntent, result)
         }
 
-
-
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putStringArrayList("all", habits)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        habits.add(data?.getStringExtra("new_habit").toString())
+        habitsGrid.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, habits.toArray())
     }
-
-    override fun onResume() {
-        super.onResume()
-        habits.add(intent.getStringExtra("new_habit").toString())
-        println(habits)
-    }
-
-
-
-
-
-
-
-
 
 }
 

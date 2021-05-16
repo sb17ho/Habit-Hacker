@@ -22,7 +22,8 @@ class HabitInfo : AppCompatActivity() {
         done.setOnClickListener {
             val mainActIntent = Intent(applicationContext, MainActivity::class.java)
             mainActIntent.putExtra("new_habit", habitName.text.toString())
-            startActivity(mainActIntent)
+            setResult(RESULT_OK, mainActIntent)
+            finish()
         }
 
     }
