@@ -4,7 +4,6 @@ class Habit(
     private var name: String,
     private var desc: String,
     private var steps: Int,
-    private var reminder: String,
     private var streak: Int = 0,
     private var allTime: Double = 0.0,
     private var comp: Int = 0
@@ -25,12 +24,11 @@ class Habit(
         var result = name.hashCode()
         result = 31 * result + desc.hashCode()
         result = 31 * result + steps
-        result = 31 * result + reminder.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Habit(name='$name', desc='$desc', steps=$steps, reminder='$reminder', streak=$streak, allTime=$allTime, comp=$comp)"
+        return "Habit(name='$name', desc='$desc', steps=$steps, streak=$streak, allTime=$allTime, comp=$comp)"
     }
 
 

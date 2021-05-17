@@ -11,7 +11,10 @@
         android:theme="@style/Theme.Habito">
 
         <activity android:name=".HabitInfo" />
-        <activity android:name=".HabitForm" />
+
+        <activity
+            android:name=".HabitForm"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

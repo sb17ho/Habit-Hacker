@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import com.google.android.material.textfield.TextInputLayout
 import kotlin.math.max
 
 
@@ -12,17 +14,12 @@ class HabitForm : AppCompatActivity() {
 
     private val icons: GridView by lazy { findViewById(R.id.icons) }
 
-    private val habitName: EditText by lazy { findViewById(R.id.habitName) }
-    private val habitDesc: EditText by lazy { findViewById(R.id.habit_desc) }
+    private val habitName: TextInputLayout by lazy { findViewById(R.id.habitName) }
+    private val habitDesc: TextInputLayout by lazy { findViewById(R.id.habit_desc) }
 
-    private val steps: EditText by lazy { findViewById(R.id.steps) }
-    private val increment: Button by lazy { findViewById(R.id.increment) }
-    private val decrement: Button by lazy { findViewById(R.id.decrement) }
+    private val steps: TextInputLayout by lazy { findViewById(R.id.steps) }
 
-    private val reminder: EditText by lazy { findViewById(R.id.reminder) }
-    private val reminderSwitch: Switch by lazy { findViewById(R.id.reminderSwitch) }
-
-    private val done: Button by lazy { findViewById(R.id.delete) }
+    private val done: Button by lazy { findViewById(R.id.done) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +27,7 @@ class HabitForm : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-        steps.setText("1")
+        steps.editText!!.setText("1")
 
         val iconsList = listOf("icons", "icons", "icons", "icons", "icons", "icons")
         val iconsAdapter = ArrayAdapter(
@@ -40,26 +37,34 @@ class HabitForm : AppCompatActivity() {
         )
         icons.adapter = iconsAdapter
 
+        
 
-        // sends habit creation data back to the main screen
+//        habitName.editText!!.addTextChangedListener {
+//            habitDesc.editText!!.requestFocus()
+//        }
+
+        getFilledHabitData()
+
+    }
+
+    private fun getFilledHabitData(){
         done.setOnClickListener {
+
             val mainActIntent = Intent(applicationContext, MainActivity::class.java)
 
-            habitDesc.setText("")
-            steps.setText("1")
-            reminder.setText("")
+            habitDesc.editText!!.setText("")
+            steps.editText!!.setText("1")
 
             mainActIntent.putStringArrayListExtra(
                 "new_habit",
                 arrayListOf(
-                    habitName.text.toString(),
-                    habitDesc.text.toString(),
-                    steps.text.toString(),
-                    reminder.text.toString()
+                    habitName.editText!!.text.toString(),
+                    habitDesc.editText!!.text.toString(),
+                    steps.editText!!.text.toString(),
                 )
             )
 
-            if (TextUtils.isEmpty(habitName.text)) {
+            if (TextUtils.isEmpty(habitName.editText!!.text)) {
                 habitName.error = "Habit name is required"
             } else {
                 setResult(RESULT_OK, mainActIntent)
@@ -69,30 +74,7 @@ class HabitForm : AppCompatActivity() {
         }
 
 
-        stepsButtonControl()
-
-        toggleReminder()
-
     }
 
-    private fun stepsButtonControl() {
-
-        increment.setOnClickListener {
-            steps.setText((steps.text.toString().toInt() + 1).toString())
-        }
-
-        decrement.setOnClickListener {
-            steps.setText(max(steps.text.toString().toInt() - 1, 1).toString())
-        }
-
-    }
-
-    private fun toggleReminder() {
-
-        reminderSwitch.setOnClickListener {
-            reminder.isEnabled = reminderSwitch.isChecked
-        }
-
-    }
 
 }

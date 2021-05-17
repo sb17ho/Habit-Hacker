@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
             newHabitData[0],
             newHabitData[1],
             newHabitData[2].toInt(),
-            newHabitData[3],
         )
 
         if (!habits.contains(newHabit)) {
