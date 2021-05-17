@@ -21,47 +21,38 @@ class HabitForm : AppCompatActivity() {
 
     private val done: Button by lazy { findViewById(R.id.done) }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-        steps.editText!!.setText("1")
+        //steps.editText!!.setText("1")
 
         val iconsList = listOf("icons", "icons", "icons", "icons", "icons", "icons")
         val iconsAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_expandable_list_item_1,
-            iconsList
+                this,
+                android.R.layout.simple_expandable_list_item_1,
+                iconsList
         )
         icons.adapter = iconsAdapter
-
-        
-
-//        habitName.editText!!.addTextChangedListener {
-//            habitDesc.editText!!.requestFocus()
-//        }
 
         getFilledHabitData()
 
     }
 
-    private fun getFilledHabitData(){
+    private fun getFilledHabitData() {
+
         done.setOnClickListener {
 
             val mainActIntent = Intent(applicationContext, MainActivity::class.java)
 
-            habitDesc.editText!!.setText("")
-            steps.editText!!.setText("1")
-
             mainActIntent.putStringArrayListExtra(
-                "new_habit",
-                arrayListOf(
-                    habitName.editText!!.text.toString(),
-                    habitDesc.editText!!.text.toString(),
-                    steps.editText!!.text.toString(),
-                )
+                    "new_habit",
+                    arrayListOf(
+                            habitName.editText!!.text.toString(),
+                            if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
+                            if (steps.editText!!.text.toString().isEmpty()) "1" else steps.editText!!.text.toString(),
+                    )
             )
 
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
@@ -73,8 +64,6 @@ class HabitForm : AppCompatActivity() {
 
         }
 
-
     }
-
 
 }

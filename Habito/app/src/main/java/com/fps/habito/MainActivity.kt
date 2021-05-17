@@ -10,7 +10,6 @@ import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 
-
 /**
  * TODO figure out a way to pass Set to ArrayAdapter
  */
@@ -28,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Starts HabitForm activity
         add.setOnClickListener {
             val habitFormIntent = Intent(this, HabitForm::class.java)
             val result = 1
@@ -42,19 +42,17 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
         val newHabitData = data?.getStringArrayListExtra("new_habit")!!
 
         // adds the new habit to the main habit grid
         val newHabit = Habit(
             newHabitData[0],
             newHabitData[1],
-            newHabitData[2].toInt(),
         )
 
         if (!habits.contains(newHabit)) {
             habits.add(newHabit)
-            habitsGrid.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, habits)
+            habitsGrid.adapter = HabitAdapter(this, habits)
 
         }
     }
@@ -76,8 +74,7 @@ class MainActivity : AppCompatActivity() {
                 if (deleteButtonPressed) {
                     habits.removeAt(position)
                 }
-                habitsGrid.adapter =
-                    ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, habits)
+               habitsGrid.adapter = HabitAdapter(this, habits)
                 deleteButtonPressed = false
             }
         }

@@ -1,12 +1,12 @@
 package com.fps.habito
 
 class Habit(
-    private var name: String,
-    private var desc: String,
-    private var steps: Int,
-    private var streak: Int = 0,
-    private var allTime: Double = 0.0,
-    private var comp: Int = 0
+        var name: String,
+        var desc: String,
+        private var steps: Int = 1,
+        private var streak: Int = 0,
+        private var allTime: Double = 0.0,
+        private var comp: Int = 0
 ) {
 
     override fun equals(other: Any?): Boolean {
