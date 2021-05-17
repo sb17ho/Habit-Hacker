@@ -7,30 +7,32 @@
     android:background="#FFFFFF"
     tools:context=".HabitForm">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="276dp"
-        android:layout_height="309dp"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="32dp"
-        android:src="@drawable/dumbbell"
+    <GridView
+        android:id="@+id/icons"
+        android:layout_width="0dp"
+        android:layout_height="184dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:numColumns="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/habitName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp"
+        android:layout_margin="0dp"
         android:background="#E3F2FD"
         android:ems="10"
+        android:gravity="center"
         android:hint="enter habit name here"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/iconColorTray" />
 
     <Button
         android:id="@+id/delete"
@@ -40,57 +42,164 @@
         android:text="done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
-        android:id="@+id/options"
+        android:id="@+id/iconColorTray"
         android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp"
-        android:gravity="center"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:weightSum="2"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/desc">
+        app:layout_constraintTop_toBottomOf="@+id/icons">
 
-        <EditText
-            android:id="@+id/steps"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
+        <ImageView
+            android:id="@+id/icc0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#E3F2FD"
-            android:ems="10"
-            android:hint="enter steps"
-            android:inputType="number" />
+            app:srcCompat="@drawable/icon_color_circle_0" />
 
-        <EditText
-            android:id="@+id/reminder"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
+        <ImageView
+            android:id="@+id/icc7"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#E3F2FD"
-            android:ems="10"
-            android:inputType="time" />
+            app:srcCompat="@drawable/icon_color_circle_7" />
+
+        <ImageView
+            android:id="@+id/icc2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/icon_color_circle_2" />
+
+        <ImageView
+            android:id="@+id/icc1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/icon_color_circle_1" />
+
+        <ImageView
+            android:id="@+id/icc5"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/icon_color_circle_5" />
+
+        <ImageView
+            android:id="@+id/icc3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/icon_color_circle_3" />
+
+        <ImageView
+            android:id="@+id/icc6"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/icon_color_circle_6" />
+
+        <ImageView
+            android:id="@+id/icc4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/icon_color_circle_4" />
+
+
     </LinearLayout>
 
     <EditText
-        android:id="@+id/desc"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:layout_margin="16dp"
+        android:id="@+id/habit_desc"
+        android:layout_width="0dp"
+        android:layout_height="53dp"
         android:background="#E3F2FD"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="desc"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitName" />
+
+    <LinearLayout
+        android:layout_width="155dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/delete"
+        app:layout_constraintEnd_toStartOf="@+id/reminder"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habit_desc"
+        app:layout_constraintVertical_bias="0.0">
+
+        <Button
+            android:id="@+id/decrement"
+            android:layout_width="40dp"
+            android:layout_height="37dp"
+            android:text="-" />
+
+        <EditText
+            android:id="@+id/steps"
+            android:layout_width="62dp"
+            android:layout_height="32dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:layout_weight="1"
+            android:background="#E3F2FD"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            tools:text="1" />
+
+        <Button
+            android:id="@+id/increment"
+            android:layout_width="40dp"
+            android:layout_height="37dp"
+            android:text="+" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="208dp"
+        android:layout_height="62dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habit_desc"
+        app:layout_constraintVertical_bias="0.005">
+
+        <EditText
+            android:id="@+id/reminder"
+            android:layout_width="95dp"
+            android:layout_height="36dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:layout_weight="1"
+            android:background="#E3F2FD"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="reminder"
+            android:inputType="time" />
+
+        <Switch
+            android:id="@+id/reminderSwitch"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

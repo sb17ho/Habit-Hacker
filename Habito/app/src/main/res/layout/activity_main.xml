@@ -10,18 +10,21 @@
 
     <GridView
         android:id="@+id/habitsGrid"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="395dp"
+        android:layout_height="654dp"
+        android:numColumns="2"
         app:layout_constraintBottom_toTopOf="@+id/habitToolbar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:numColumns="2"/>
+        app:layout_constraintVertical_bias="0.266" />
 
     <LinearLayout
         android:id="@+id/habitToolbar"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_width="410dp"
+        android:layout_height="55dp"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

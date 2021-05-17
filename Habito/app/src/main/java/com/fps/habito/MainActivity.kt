@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 
 
 /**
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val add: Button by lazy { findViewById(R.id.add) }
     private val remove: Button by lazy { findViewById(R.id.remove) }
 
-    private var habits = ArrayList<String>()
+    private var habits = ArrayList<Habit>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,24 +36,38 @@ class MainActivity : AppCompatActivity() {
 
         habitDeletion()
 
-        habitsGrid.onItemLongClickListener = OnItemLongClickListener { arg0, arg1, position, arg3 ->
-            val habitInfoIntent = Intent(this, HabitInfo::class.java)
-            startActivity(habitInfoIntent)
-            true
-        }
-
-
+        openHabitInfo()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+
+        val newHabitData = data?.getStringArrayListExtra("new_habit")!!
+
         // adds the new habit to the main habit grid
-        val newHabitName = data?.getStringExtra("new_habit_name").toString()
-        if (!habits.contains(newHabitName)) {
-            habits.add(newHabitName)
+        val newHabit = Habit(
+            newHabitData[0],
+            newHabitData[1],
+            newHabitData[2].toInt(),
+            newHabitData[3],
+        )
+
+        if (!habits.contains(newHabit)) {
+            habits.add(newHabit)
             habitsGrid.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, habits)
+
         }
+    }
+
+    private fun openHabitInfo(){
+
+        habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, _, _ ->
+            val habitInfoIntent = Intent(this, HabitInfo::class.java)
+            startActivity(habitInfoIntent)
+            true
+        }
+
     }
 
     private fun habitDeletion() {
@@ -62,7 +77,8 @@ class MainActivity : AppCompatActivity() {
                 if (deleteButtonPressed) {
                     habits.removeAt(position)
                 }
-                habitsGrid.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, habits)
+                habitsGrid.adapter =
+                    ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, habits)
                 deleteButtonPressed = false
             }
         }
