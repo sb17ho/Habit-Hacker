@@ -26,8 +26,6 @@ class HabitForm : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-        //steps.editText!!.setText("1")
-
         val iconsList = listOf("icons", "icons", "icons", "icons", "icons", "icons")
         val iconsAdapter = ArrayAdapter(
                 this,
@@ -58,7 +56,7 @@ class HabitForm : AppCompatActivity() {
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
                 habitName.error = "Habit name is required"
             } else {
-                setResult(RESULT_OK, mainActIntent)
+                setResult(100, mainActIntent)
                 finish()
             }
 

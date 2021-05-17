@@ -34,51 +34,54 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(habitFormIntent, result)
         }
 
-        habitDeletion()
-
         openHabitInfo()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val newHabitData = data?.getStringArrayListExtra("new_habit")!!
+        if (resultCode == 100) { // addition
+            val newHabitData = data?.getStringArrayListExtra("new_habit")!!
 
-        // adds the new habit to the main habit grid
-        val newHabit = Habit(
-            newHabitData[0],
-            newHabitData[1],
-        )
+            val newHabit = Habit(
+                    newHabitData[0],
+                    newHabitData[1],
+            )
 
-        if (!habits.contains(newHabit)) {
-            habits.add(newHabit)
+            if (!habits.contains(newHabit)) {
+                habits.add(newHabit)
+                habitsGrid.adapter = HabitAdapter(this, habits)
+            }
+
+        } else if (resultCode == 200) { // deletion
+            habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
             habitsGrid.adapter = HabitAdapter(this, habits)
-
         }
+
     }
 
-    private fun openHabitInfo(){
+    private fun openHabitInfo() {
 
-        habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, _, _ ->
+        habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, c, d ->
             val habitInfoIntent = Intent(this, HabitInfo::class.java)
-            startActivity(habitInfoIntent)
+
+            println("GRID ${habits[c]}")
+            habitInfoIntent.putStringArrayListExtra("habit_info",
+                    arrayListOf(
+                            habits[c].name,
+                            habits[c].desc,
+                            habits[c].steps.toString(),
+                            habits[c].streak.toString(),
+                            habits[c].allTime.toString(),
+                            habits[c].comp.toString(),
+                    ))
+            val result = 2
+            startActivityForResult(habitInfoIntent, result)
             true
         }
 
     }
 
-    private fun habitDeletion() {
-        remove.setOnClickListener {
-            var deleteButtonPressed = true
-            habitsGrid.onItemClickListener = OnItemClickListener { _, _, position, _ ->
-                if (deleteButtonPressed) {
-                    habits.removeAt(position)
-                }
-               habitsGrid.adapter = HabitAdapter(this, habits)
-                deleteButtonPressed = false
-            }
-        }
-    }
 
 }
 

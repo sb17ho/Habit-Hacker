@@ -18,18 +18,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+
+    <TextView
         android:id="@+id/habitName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
         android:layout_margin="8dp"
         android:background="#E3F2FD"
         android:ems="10"
-        android:hint="enter habit name here"
-        android:inputType="textPersonName"
+        android:gravity="start|top"
+        android:hint="habit name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.315"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_margin="8dp"
+        android:background="#E3F2FD"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="desc"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habitName" />
 
     <LinearLayout
         android:id="@+id/options"
@@ -45,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/desc">
 
-        <EditText
+        <TextView
             android:id="@+id/steps"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,31 +72,9 @@
             android:hint="enter steps"
             android:inputType="number" />
 
-        <EditText
-            android:id="@+id/reminder"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:background="#E3F2FD"
-            android:ems="10"
-            android:hint="reminder"
-            android:inputType="time" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/desc"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:layout_margin="8dp"
-        android:background="#E3F2FD"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="desc"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habitName" />
+
 
     <LinearLayout
         android:id="@+id/stats"
@@ -101,7 +95,7 @@
             android:orientation="vertical"
             android:weightSum="2">
 
-            <EditText
+            <TextView
                 android:id="@+id/streakValue"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -131,7 +125,7 @@
             android:orientation="vertical"
             android:weightSum="2">
 
-            <EditText
+            <TextView
                 android:id="@+id/alltimeValue"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -161,7 +155,7 @@
             android:orientation="vertical"
             android:weightSum="2">
 
-            <EditText
+            <TextView
                 android:id="@+id/compValue"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -197,7 +191,7 @@
         app:layout_constraintVertical_bias="0.949" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="108dp"
