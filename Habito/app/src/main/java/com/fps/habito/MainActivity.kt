@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: Button by lazy { findViewById(R.id.add) }
-    private val remove: Button by lazy { findViewById(R.id.remove) }
 
     private var habits = ArrayList<Habit>()
 
