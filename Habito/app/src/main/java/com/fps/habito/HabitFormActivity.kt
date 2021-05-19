@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
-import kotlin.math.max
 
 
-class HabitForm : AppCompatActivity() {
+class HabitFormActivity : AppCompatActivity() {
 
     private val icons: GridView by lazy { findViewById(R.id.icons) }
 
@@ -26,19 +24,50 @@ class HabitForm : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-        val iconsList = listOf("icons", "icons", "icons", "icons", "icons", "icons")
-        val iconsAdapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_expandable_list_item_1,
-                iconsList
-        )
-        icons.adapter = iconsAdapter
+        icons.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, listOf("icons", "icons", "icons", "icons", "icons", "icons"))
 
-        getFilledHabitData()
+        if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
+            sendNewHabitData()
+        } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
+
+            println("THIS IS COOL")
+
+            // fills HabitForm with data received from HabitInfo
+            fillWithHabitData()
+
+            done.setOnClickListener {
+                val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
+
+                habitInfoIntent.putStringArrayListExtra("updated_habit",
+                        arrayListOf(
+                                habitName.editText!!.text.toString(),
+                                habitDesc.editText!!.text.toString(),
+                                steps.editText!!.text.toString(),
+                        ))
+
+                setResult(300, habitInfoIntent)
+                finish()
+            }
+        }
+
 
     }
 
-    private fun getFilledHabitData() {
+    private fun fillWithHabitData() {
+
+        val habit_filled_info = intent.getStringArrayListExtra("habit_filled_info")
+
+        println("filled habit info $habit_filled_info")
+        habitName.editText!!.setText(habit_filled_info?.get(0))
+        habitDesc.editText!!.setText(habit_filled_info?.get(1))
+        steps.editText!!.setText(habit_filled_info?.get(2))
+
+    }
+
+    /**
+     * Send the newly created habit to the main activity.
+     */
+    private fun sendNewHabitData() {
 
         done.setOnClickListener {
 

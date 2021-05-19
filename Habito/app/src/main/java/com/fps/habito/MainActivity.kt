@@ -2,13 +2,10 @@ package com.fps.habito
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemLongClickListener
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 
 /**
  * TODO figure out a way to pass Set to ArrayAdapter
@@ -28,7 +25,8 @@ class MainActivity : AppCompatActivity() {
 
         // Starts HabitForm activity
         add.setOnClickListener {
-            val habitFormIntent = Intent(this, HabitForm::class.java)
+            val habitFormIntent = Intent(this, HabitFormActivity::class.java)
+            habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             val result = 1
             startActivityForResult(habitFormIntent, result)
         }
@@ -36,8 +34,36 @@ class MainActivity : AppCompatActivity() {
         openHabitInfo()
     }
 
+
+    /**
+     * Starts HabitInfoActivity
+     */
+    private fun openHabitInfo() {
+
+        habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, c, d ->
+            val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
+
+            habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
+            habitInfoIntent.putStringArrayListExtra("habit_info",
+                    arrayListOf(
+                            habits[c].name,
+                            habits[c].desc,
+                            habits[c].steps.toString(),
+                            habits[c].streak.toString(),
+                            habits[c].allTime.toString(),
+                            habits[c].comp.toString(),
+                    ))
+            val result = 2
+            startActivityForResult(habitInfoIntent, result)
+            true
+        }
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        println("RESULT $resultCode")
 
         if (resultCode == 100) { // addition
             val newHabitData = data?.getStringArrayListExtra("new_habit")!!
@@ -55,32 +81,20 @@ class MainActivity : AppCompatActivity() {
         } else if (resultCode == 200) { // deletion
             habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
             habitsGrid.adapter = HabitAdapter(this, habits)
+        } else if (resultCode == 400) { // returning to main with no changes
+
+            val updatedHabit = data!!.getStringArrayListExtra("habit_for_main")
+
+            val targetHabit = habits.find { it.name == updatedHabit?.get(0) }
+            targetHabit?.name = updatedHabit?.get(1)!!
+            targetHabit?.desc = updatedHabit[2]
+            targetHabit?.steps = updatedHabit[3]!!.toInt()
+
+            habitsGrid.adapter = HabitAdapter(this, habits)
+
         }
 
     }
-
-    private fun openHabitInfo() {
-
-        habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, c, d ->
-            val habitInfoIntent = Intent(this, HabitInfo::class.java)
-
-            println("GRID ${habits[c]}")
-            habitInfoIntent.putStringArrayListExtra("habit_info",
-                    arrayListOf(
-                            habits[c].name,
-                            habits[c].desc,
-                            habits[c].steps.toString(),
-                            habits[c].streak.toString(),
-                            habits[c].allTime.toString(),
-                            habits[c].comp.toString(),
-                    ))
-            val result = 2
-            startActivityForResult(habitInfoIntent, result)
-            true
-        }
-
-    }
-
 
 }
 

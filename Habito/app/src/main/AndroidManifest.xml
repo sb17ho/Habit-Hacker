@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Habito">
 
-        <activity android:name=".HabitInfo" />
+        <activity android:name=".HabitInfoActivity" />
 
         <activity
-            android:name=".HabitForm"
+            android:name=".HabitFormActivity"
             android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".MainActivity">
