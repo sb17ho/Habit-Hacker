@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import com.google.android.material.textfield.TextInputLayout
 import java.sql.SQLOutput
 
 class HabitInfoActivity : AppCompatActivity() {
 
-    private val habitName: TextView by lazy { findViewById(R.id.habitName) }
-    private val desc: TextView by lazy { findViewById(R.id.desc) }
-    private val steps: TextView by lazy { findViewById(R.id.steps) }
+    private val habitName: TextInputLayout by lazy { findViewById(R.id.habitName) }
+    private val desc: TextInputLayout by lazy { findViewById(R.id.desc) }
+    private val steps: TextInputLayout by lazy { findViewById(R.id.steps) }
 
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
     private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
@@ -40,15 +41,15 @@ class HabitInfoActivity : AppCompatActivity() {
 
         val mainIntent = Intent(this, MainActivity::class.java)
 
-        println("INFO $oldHabitName ${habitName.text}")
+        println("INFO $oldHabitName ${habitName.editText!!.text}")
 
-        if(!oldHabitName.equals(habitName.text)){
+        if(!oldHabitName.equals(habitName.editText!!.text)){
             mainIntent.putStringArrayListExtra("habit_for_main",
                     arrayListOf(
                             oldHabitName,
-                            habitName.text.toString(),
-                            desc.text.toString(),
-                            steps.text.toString(),
+                            habitName.editText!!.text.toString(),
+                            desc.editText!!.text.toString(),
+                            steps.editText!!.text.toString(),
                     )
             )
         }
@@ -63,10 +64,10 @@ class HabitInfoActivity : AppCompatActivity() {
     private fun fillFormFields() {
         val habitInfo = intent.getStringArrayListExtra("habit_info")!!
 
-        habitName.text = habitInfo[0]
-        desc.text = habitInfo[1]
+        habitName.editText!!.setText(habitInfo[0])
+        desc.editText!!.setText(habitInfo[1])
 
-        steps.text = habitInfo[2]
+        steps.editText!!.setText(habitInfo[2])
 
         streak.text = habitInfo[3]
         alltime.text = habitInfo[4]
@@ -102,7 +103,7 @@ class HabitInfoActivity : AppCompatActivity() {
         delete.setOnClickListener {
             val mainActIntent = Intent(applicationContext, MainActivity::class.java)
 
-            mainActIntent.putExtra("del_habit", habitName.text)
+            mainActIntent.putExtra("del_habit", habitName.editText!!.text)
 
             setResult(200, mainActIntent)
             finish()
@@ -116,9 +117,9 @@ class HabitInfoActivity : AppCompatActivity() {
         if (resultCode == 300) {
             val updatedHabit = data!!.getStringArrayListExtra("updated_habit")!!
 
-            habitName.text = updatedHabit[0]
-            desc.text = updatedHabit[1]
-            steps.text = updatedHabit[2]
+            habitName.editText!!.setText(updatedHabit[0])
+            desc.editText!!.setText(updatedHabit[1])
+            steps.editText!!.setText(updatedHabit[2])
 
         }
     }
