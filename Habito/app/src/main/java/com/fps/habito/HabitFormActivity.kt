@@ -7,10 +7,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 
-
 class HabitFormActivity : AppCompatActivity() {
 
-    private val icons: GridView by lazy { findViewById(R.id.icons) }
+    private val icon: ImageView by lazy { findViewById(R.id.icon) }
 
     private val habitName: TextInputLayout by lazy { findViewById(R.id.habitName) }
     private val habitDesc: TextInputLayout by lazy { findViewById(R.id.habit_desc) }
@@ -24,43 +23,65 @@ class HabitFormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-        icons.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, listOf("icons", "icons", "icons", "icons", "icons", "icons"))
-
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
+            selectHabitIcon()
             sendNewHabitData()
         } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
 
-            println("THIS IS COOL")
-
-            // fills HabitForm with data received from HabitInfo
             fillWithHabitData()
+            selectHabitIcon()
 
             done.setOnClickListener {
                 val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
 
-                habitInfoIntent.putStringArrayListExtra("updated_habit",
-                        arrayListOf(
+                habitInfoIntent.putExtra("updated_habit",
+                        Habit(
+                                icon.tag as Int,
                                 habitName.editText!!.text.toString(),
                                 habitDesc.editText!!.text.toString(),
-                                steps.editText!!.text.toString(),
-                        ))
-
+                                steps.editText!!.text.toString().toInt(),
+                                0,
+                                0.0,
+                                0,
+                        )
+                )
                 setResult(300, habitInfoIntent)
                 finish()
             }
         }
 
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == 500) {
+            val iconRes = data!!.getIntExtra("selected_icon", 0)
+            icon.setImageResource(iconRes)
+            icon.tag = iconRes
+        }
 
     }
 
     private fun fillWithHabitData() {
 
-        val habit_filled_info = intent.getStringArrayListExtra("habit_filled_info")
+        val habit_filled = intent.getParcelableExtra<Habit>("habit_filled_info")!!
+        icon.setImageResource(habit_filled.icon)
+        icon.tag = habit_filled.icon
+        habitName.editText!!.setText(habit_filled.name)
+        habitDesc.editText!!.setText(habit_filled.desc)
+        steps.editText!!.setText(habit_filled.steps.toString())
 
-        println("filled habit info $habit_filled_info")
-        habitName.editText!!.setText(habit_filled_info?.get(0))
-        habitDesc.editText!!.setText(habit_filled_info?.get(1))
-        steps.editText!!.setText(habit_filled_info?.get(2))
+
+    }
+
+
+    private fun selectHabitIcon() {
+
+        icon.setOnClickListener {
+            startActivityForResult(Intent(this, HabitIconPickerActivity::class.java), 1)
+        }
 
     }
 
@@ -71,26 +92,31 @@ class HabitFormActivity : AppCompatActivity() {
 
         done.setOnClickListener {
 
-            val mainActIntent = Intent(applicationContext, MainActivity::class.java)
+            val mainIntent = Intent(applicationContext, MainActivity::class.java)
 
-            mainActIntent.putStringArrayListExtra(
+            mainIntent.putExtra(
                     "new_habit",
-                    arrayListOf(
+                    Habit(
+                            icon.tag.toString().toInt(),
                             habitName.editText!!.text.toString(),
                             if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
-                            if (steps.editText!!.text.toString().isEmpty()) "1" else steps.editText!!.text.toString(),
+                            if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
+                            0,
+                            0.0,
+                            0,
                     )
             )
 
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
                 habitName.error = "Habit name is required"
             } else {
-                setResult(100, mainActIntent)
+                setResult(100, mainIntent)
                 finish()
             }
 
         }
 
     }
+
 
 }

@@ -13,7 +13,7 @@
         android:layout_height="104dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
-        android:src="@drawable/dumbbell"
+        android:src="@drawable/fitness"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

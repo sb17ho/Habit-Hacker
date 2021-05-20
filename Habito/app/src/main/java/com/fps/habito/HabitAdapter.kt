@@ -1,10 +1,12 @@
 package com.fps.habito
 
 import android.content.Context
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 
 class HabitAdapter(private var mContext: Context, private var allHabits: ArrayList<Habit>) : ArrayAdapter<Habit>(mContext, 0, allHabits) {
@@ -19,12 +21,8 @@ class HabitAdapter(private var mContext: Context, private var allHabits: ArrayLi
 
         val habit = allHabits[position]
 
-        println("HABIT $habit")
-        val tv1: TextView = habitItemView!!.findViewById(R.id.habitViewName)
-        tv1.text = habit.name
-
-        val tv2: TextView = habitItemView!!.findViewById(R.id.habitViewDetails)
-        tv2.text = habit.desc
+        (habitItemView!!.findViewById(R.id.habitViewName) as TextView).text = habit.name
+        (habitItemView.findViewById(R.id.habitIcon) as ImageView).setImageResource(habit.icon)
 
         return habitItemView
 
