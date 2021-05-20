@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private var habits = ArrayList<Habit>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -49,9 +50,13 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        println("RESULT $resultCode")
+        /**
+         * 100 for addition
+         * 200 for deletion
+         * 400 for back-buttoning from Info to Main
+         */
 
-        if (resultCode == 100) { // addition
+        if (resultCode == 100) {
             val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
 
             if (!habits.contains(newHabit)) {
@@ -59,10 +64,10 @@ class MainActivity : AppCompatActivity() {
                 habitsGrid.adapter = HabitAdapter(this, habits)
             }
 
-        } else if (resultCode == 200) { // deletion
+        } else if (resultCode == 200) {
             habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
             habitsGrid.adapter = HabitAdapter(this, habits)
-        } else if (resultCode == 400) { // returning to main with no changes
+        } else if (resultCode == 400) {
 
             val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
 

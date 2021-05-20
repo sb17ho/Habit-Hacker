@@ -1,6 +1,5 @@
 package com.fps.habito
 
-import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -34,6 +33,7 @@ class Habit(
 
 
     override fun equals(other: Any?): Boolean {
+
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
@@ -42,6 +42,7 @@ class Habit(
         if (name != other.name) return false
 
         return true
+
     }
 
     override fun hashCode(): Int {

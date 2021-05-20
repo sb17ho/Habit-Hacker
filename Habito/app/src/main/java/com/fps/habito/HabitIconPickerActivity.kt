@@ -4,9 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.GridView
-import android.widget.ImageView
 
 
 class HabitIconPickerActivity : AppCompatActivity() {
@@ -32,6 +30,7 @@ class HabitIconPickerActivity : AppCompatActivity() {
         R.drawable.wardrobe,
     )
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_icon_picker)
@@ -44,9 +43,9 @@ class HabitIconPickerActivity : AppCompatActivity() {
     private fun sendSelectedIcon() {
 
         iconsGrid.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
-            habitInfoIntent.putExtra("selected_icon", allIcons[position])
-            setResult(500, habitInfoIntent)
+            val habitFormIntent = Intent(this, HabitFormActivity::class.java)
+            habitFormIntent.putExtra("selected_icon", allIcons[position])
+            setResult(500, habitFormIntent)
             finish()
         }
 

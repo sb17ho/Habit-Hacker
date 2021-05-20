@@ -10,20 +10,17 @@ import android.widget.TextView
 class HabitInfoActivity : AppCompatActivity() {
 
     private val icon: ImageView by lazy { findViewById(R.id.imageView) }
-
     private val habitName: TextView by lazy { findViewById(R.id.habitName) }
     private val desc: TextView by lazy { findViewById(R.id.desc) }
     private val steps: TextView by lazy { findViewById(R.id.steps) }
-
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
     private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
-
     private val edit: Button by lazy { findViewById(R.id.edit) }
     private val delete: Button by lazy { findViewById(R.id.delete) }
 
     private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
-
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

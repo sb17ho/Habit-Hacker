@@ -10,13 +10,11 @@ import com.google.android.material.textfield.TextInputLayout
 class HabitFormActivity : AppCompatActivity() {
 
     private val icon: ImageView by lazy { findViewById(R.id.icon) }
-
     private val habitName: TextInputLayout by lazy { findViewById(R.id.habitName) }
     private val habitDesc: TextInputLayout by lazy { findViewById(R.id.habit_desc) }
-
     private val steps: TextInputLayout by lazy { findViewById(R.id.steps) }
-
     private val done: Button by lazy { findViewById(R.id.done) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -53,16 +51,7 @@ class HabitFormActivity : AppCompatActivity() {
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == 500) {
-            val iconRes = data!!.getIntExtra("selected_icon", 0)
-            icon.setImageResource(iconRes)
-            icon.tag = iconRes
-        }
-
-    }
 
     private fun fillWithHabitData() {
 
@@ -97,7 +86,7 @@ class HabitFormActivity : AppCompatActivity() {
             mainIntent.putExtra(
                     "new_habit",
                     Habit(
-                            icon.tag.toString().toInt(),
+                            if(icon.tag ==null) R.drawable.close else icon.tag.toString().toInt(),
                             habitName.editText!!.text.toString(),
                             if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
                             if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
@@ -114,6 +103,17 @@ class HabitFormActivity : AppCompatActivity() {
                 finish()
             }
 
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == 500) {
+            val iconRes = data!!.getIntExtra("selected_icon", 0)
+            icon.setImageResource(iconRes)
+            icon.tag = iconRes
         }
 
     }
