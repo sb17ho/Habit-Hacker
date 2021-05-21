@@ -11,10 +11,31 @@ class Habit(
         var streak: Int = 0,
         var allTime: Double = 0.0,
         var comp: Int = 0,
+
 ) : Parcelable {
 
-    private val progress = HabitProgress(steps = steps)
+    private var startDate = 1
+    private var compDate = 0
 
+    private var progress = 0
+    private var status = "NOT_STARTED"
+
+    fun updateProgress() {
+
+        println("MAKE PROGRESS")
+
+        if (progress < steps) {
+            ++progress
+            status = "IN_PROGRESS"
+        }
+
+        if(progress == steps && status != "COMPLETED"){
+            status = "COMPLETED"
+            ++streak
+            compDate = startDate
+        }
+
+    }
 
     companion object {
         @JvmField
@@ -69,7 +90,7 @@ class Habit(
     }
 
     override fun toString(): String {
-        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, streak=$streak, allTime=$allTime, comp=$comp, progress=$progress)"
+        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, streak=$streak, allTime=$allTime, comp=$comp, progress=$progress, status='$status')"
     }
 
 

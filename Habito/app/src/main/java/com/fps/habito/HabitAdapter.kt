@@ -23,6 +23,7 @@ class HabitAdapter(private var mContext: Context, private var allHabits: ArrayLi
 
         (habitItemView!!.findViewById(R.id.habitViewName) as TextView).text = habit.name
         (habitItemView.findViewById(R.id.habitIcon) as ImageView).setImageResource(habit.icon)
+        (habitItemView.findViewById(R.id.streakView) as TextView).text = habit.streak.toString()
 
         return habitItemView
 

@@ -7,6 +7,9 @@ import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
 import com.fps.habito.R.drawable
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,12 +17,15 @@ class MainActivity : AppCompatActivity() {
     private val add: ImageView by lazy { findViewById(R.id.add) }
 
     private var habits = ArrayList<Habit>()
-
+    private lateinit var habitAdapter: HabitAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        habitAdapter = HabitAdapter(this, habits)
+        habitsGrid.adapter = habitAdapter
 
         add.setOnClickListener {
             val habitFormIntent = Intent(this, HabitFormActivity::class.java)
@@ -31,10 +37,10 @@ class MainActivity : AppCompatActivity() {
         openHabitInfo()
     }
 
-    private fun progressHabit(){
+    private fun progressHabit() {
         habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            habits[position].updateProgress()
             println("HABIT DATA ${habits[position]}")
-
         }
     }
 
@@ -66,13 +72,14 @@ class MainActivity : AppCompatActivity() {
             val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
 
             if (!habits.contains(newHabit)) {
-                habits.add(newHabit)
-                habitsGrid.adapter = HabitAdapter(this, habits)
+                println("HELLO")
+                habitAdapter.add(newHabit)
+                habitAdapter.notifyDataSetChanged()
             }
 
         } else if (resultCode == 200) {
-            habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
-            habitsGrid.adapter = HabitAdapter(this, habits)
+            habitAdapter.remove(habits.find { it.name == data!!.getStringExtra("del_habit") })
+            habitAdapter.notifyDataSetChanged()
         } else if (resultCode == 400) {
 
             val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
@@ -86,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             targetHabit?.allTime = updatedHabit.allTime
             targetHabit?.comp = updatedHabit.comp
 
-            habitsGrid.adapter = HabitAdapter(this, habits)
+            habitAdapter.notifyDataSetChanged()
 
         }
 
