@@ -1,11 +1,14 @@
 package com.fps.habito
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
+import java.util.*
 
 import kotlin.collections.ArrayList
 
@@ -14,8 +17,10 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: ImageView by lazy { findViewById(R.id.add) }
 
-    private var habits = ArrayList<Habit>()
-    private lateinit var habitAdapter: HabitAdapter
+    companion object{
+         var habits = ArrayList<Habit>()
+         lateinit var habitAdapter: HabitAdapter
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -33,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         progressHabit()
         openHabitInfo()
+
+        reset()
     }
 
     private fun progressHabit() {
@@ -42,9 +49,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Starts HabitInfoActivity
-     */
     private fun openHabitInfo() {
 
         habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
@@ -70,7 +74,6 @@ class MainActivity : AppCompatActivity() {
             val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
 
             if (!habits.contains(newHabit)) {
-                println("HELLO")
                 habitAdapter.add(newHabit)
                 habitAdapter.notifyDataSetChanged()
             }
@@ -97,5 +100,29 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun reset() {
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+        intent.putParcelableArrayListExtra("all_habits_list", habits)
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = 18
+        calendar[Calendar.MINUTE] = 8
+        calendar[Calendar.SECOND] = 45
+
+        println("SEND ALARM")
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                (24 * 60 * 60 * 1000).toLong(),
+                pendingIntent
+        )
+
+    }
 }
 

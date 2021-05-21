@@ -1,11 +1,15 @@
 package com.fps.habito
 
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
+import java.lang.Math.abs
+import java.time.LocalDate
+import java.util.*
 
 class HabitFormActivity : AppCompatActivity() {
 
@@ -15,19 +19,27 @@ class HabitFormActivity : AppCompatActivity() {
     private val steps: TextInputLayout by lazy { findViewById(R.id.steps) }
     private val done: ImageView by lazy { findViewById(R.id.done) }
 
+    private val reminderTextView: TextView by lazy { findViewById(R.id.reminderTextView) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
+
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             selectHabitIcon()
             sendNewHabitData()
+
+            getReminderTime()
+
+
         } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
 
             fillWithHabitData()
             selectHabitIcon()
+
 
             done.setOnClickListener {
                 val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
@@ -51,8 +63,6 @@ class HabitFormActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun fillWithHabitData() {
 
         val habit_filled = intent.getParcelableExtra<Habit>("habit_filled_info")!!
@@ -62,6 +72,29 @@ class HabitFormActivity : AppCompatActivity() {
         habitDesc.editText!!.setText(habit_filled.desc)
         steps.editText!!.setText(habit_filled.steps.toString())
 
+
+    }
+
+    private fun getReminderTime() {
+
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val min = calendar.get(Calendar.MINUTE)
+
+        reminderTextView.setOnClickListener {
+
+            TimePickerDialog(this, { view, hourOfDay, minute ->
+
+                val reminderHour = "${abs(12 - hourOfDay)}:"
+                val reminderMinute = "$minute "
+                val ampm = if (hourOfDay < 12) "am" else "pm"
+
+                reminderTextView.text = reminderHour + reminderMinute + ampm
+
+            }, hour, min, false).show()
+
+
+        }
 
     }
 
@@ -86,7 +119,7 @@ class HabitFormActivity : AppCompatActivity() {
             mainIntent.putExtra(
                     "new_habit",
                     Habit(
-                            if(icon.tag ==null) R.drawable.close else icon.tag.toString().toInt(),
+                            if (icon.tag == null) R.drawable.close else icon.tag.toString().toInt(),
                             habitName.editText!!.text.toString(),
                             if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
                             if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),

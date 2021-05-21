@@ -17,8 +17,8 @@ class Habit(
     private var startDate = 1
     private var compDate = 0
 
-    private var progress = 0
-    private var status = "NOT_STARTED"
+    var progress = 0
+    var status = "NOT_STARTED"
 
     fun updateProgress() {
 

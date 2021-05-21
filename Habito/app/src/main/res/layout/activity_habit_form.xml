@@ -98,5 +98,37 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/done" />
 
+    <TextView
+        android:id="@+id/dailyReminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Daily-Reminder"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/reminderSwitch"
+        app:layout_constraintHorizontal_bias="0.009"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/steps" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/reminderSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/steps" />
+
+    <TextView
+        android:id="@+id/reminderTextView"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:gravity="center_vertical"
+        android:text="Tap to set reminder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/done"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dailyReminder"
+        app:layout_constraintVertical_bias="0.02" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
