@@ -13,6 +13,9 @@ class Habit(
         var comp: Int = 0,
 ) : Parcelable {
 
+    private val progress = HabitProgress(steps = steps)
+
+
     companion object {
         @JvmField
         val CREATOR = object : Parcelable.Creator<Habit> {
@@ -52,9 +55,6 @@ class Habit(
         return result
     }
 
-    override fun toString(): String {
-        return "Habit(icon $icon, name='$name', desc='$desc', steps=$steps, streak=$streak, allTime=$allTime, comp=$comp)"
-    }
 
     override fun describeContents() = 0
 
@@ -66,6 +66,10 @@ class Habit(
         dest?.writeInt(streak)
         dest?.writeDouble(allTime)
         dest?.writeInt(comp)
+    }
+
+    override fun toString(): String {
+        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, streak=$streak, allTime=$allTime, comp=$comp, progress=$progress)"
     }
 
 

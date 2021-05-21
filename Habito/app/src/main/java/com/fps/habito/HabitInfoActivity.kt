@@ -20,7 +20,7 @@ class HabitInfoActivity : AppCompatActivity() {
     private val delete: Button by lazy { findViewById(R.id.delete) }
 
     private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
-    
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -53,7 +53,6 @@ class HabitInfoActivity : AppCompatActivity() {
         )
 
         mainIntent.putExtra("old_habit_for_main", oldHabitName)
-
 
         setResult(400, mainIntent)
         finish()

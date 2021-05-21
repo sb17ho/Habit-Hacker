@@ -3,16 +3,15 @@ package com.fps.habito
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
-import android.widget.Button
-import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
 import com.fps.habito.R.drawable
 
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
-    private val add: Button by lazy { findViewById(R.id.add) }
+    private val add: ImageView by lazy { findViewById(R.id.add) }
 
     private var habits = ArrayList<Habit>()
 
@@ -28,9 +27,16 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(habitFormIntent, 1)
         }
 
+        progressHabit()
         openHabitInfo()
     }
 
+    private fun progressHabit(){
+        habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            println("HABIT DATA ${habits[position]}")
+
+        }
+    }
 
     /**
      * Starts HabitInfoActivity

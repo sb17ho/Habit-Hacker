@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import androidx.core.view.setPadding
 
 class IconAdapter(private var mContext:Context, private var allIcons:ArrayList<Int>) : ArrayAdapter<Int>(mContext, 0, allIcons){
 

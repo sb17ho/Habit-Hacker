@@ -13,7 +13,7 @@ class HabitFormActivity : AppCompatActivity() {
     private val habitName: TextInputLayout by lazy { findViewById(R.id.habitName) }
     private val habitDesc: TextInputLayout by lazy { findViewById(R.id.habit_desc) }
     private val steps: TextInputLayout by lazy { findViewById(R.id.steps) }
-    private val done: Button by lazy { findViewById(R.id.done) }
+    private val done: ImageView by lazy { findViewById(R.id.done) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
