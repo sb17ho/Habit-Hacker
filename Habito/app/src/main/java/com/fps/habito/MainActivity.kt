@@ -12,6 +12,10 @@ import java.util.*
 
 import kotlin.collections.ArrayList
 
+/**
+ * TODO update streak number on ui
+ */
+
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
@@ -45,7 +49,11 @@ class MainActivity : AppCompatActivity() {
     private fun progressHabit() {
         habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             habits[position].updateProgress()
-            println("HABIT DATA ${habits[position]}")
+            //println("HABIT DATA ${habits[position]}")
+
+            if(habits[position].status == HabitStatus.COMPLETED){
+                habitAdapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -111,18 +119,21 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
 
         val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = 18
-        calendar[Calendar.MINUTE] = 8
-        calendar[Calendar.SECOND] = 45
+        calendar[Calendar.HOUR_OF_DAY] = 19
+        calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
+        calendar[Calendar.SECOND] = 0
 
         println("SEND ALARM")
         alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                (24 * 60 * 60 * 1000).toLong(),
+                (60 * 1000).toLong(),
                 pendingIntent
         )
 
+        /**
+         * for everyday (24 * 60 * 60 * 1000).toLong(),
+         */
     }
 }
 

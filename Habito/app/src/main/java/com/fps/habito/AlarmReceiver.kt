@@ -12,12 +12,10 @@ class AlarmReceiver : BroadcastReceiver() {
         println(MainActivity.habits)
 
         for (h in MainActivity.habits){
-            h.name = "simar"
             h.progress = 0
-            h.status = "NOT_STARTED"
+            h.status = HabitStatus.NOT_STARTED
         }
         MainActivity.habitAdapter.notifyDataSetChanged()
 
-//        Toast.makeText(context, "param", Toast.LENGTH_LONG).show()
     }
 }

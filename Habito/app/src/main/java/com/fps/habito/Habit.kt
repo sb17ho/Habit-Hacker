@@ -14,25 +14,20 @@ class Habit(
 
 ) : Parcelable {
 
-    private var startDate = 1
-    private var compDate = 0
-
     var progress = 0
-    var status = "NOT_STARTED"
+    var status = HabitStatus.NOT_STARTED
 
     fun updateProgress() {
 
-        println("MAKE PROGRESS")
-
         if (progress < steps) {
             ++progress
-            status = "IN_PROGRESS"
+            status =HabitStatus.IN_PROGRESS
         }
 
-        if(progress == steps && status != "COMPLETED"){
-            status = "COMPLETED"
+        if(progress == steps && status != HabitStatus.COMPLETED){
+            status = HabitStatus.COMPLETED
             ++streak
-            compDate = startDate
+            ++comp
         }
 
     }
