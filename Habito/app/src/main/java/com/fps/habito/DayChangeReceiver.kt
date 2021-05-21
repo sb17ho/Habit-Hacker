@@ -5,10 +5,11 @@ import android.content.Context
 import android.content.Intent
 
 
-class AlarmReceiver : BroadcastReceiver() {
+class DayChangeReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        println("REST RECEIVED")
+
+        println("DAY CHANGE RECEIVED")
         println(MainActivity.habits)
 
         for (h in MainActivity.habits){

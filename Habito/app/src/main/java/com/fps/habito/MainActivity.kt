@@ -43,17 +43,20 @@ class MainActivity : AppCompatActivity() {
         progressHabit()
         openHabitInfo()
 
-        reset()
+        markDayChange()
     }
 
     private fun progressHabit() {
         habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            habits[position].updateProgress()
-            //println("HABIT DATA ${habits[position]}")
 
-            if(habits[position].status == HabitStatus.COMPLETED){
+            val crntHabit = habits[position]
+
+            crntHabit.updateProgress()
+
+            if(crntHabit.status == HabitStatus.COMPLETED){
                 habitAdapter.notifyDataSetChanged()
             }
+
         }
     }
 
@@ -108,12 +111,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun reset() {
+    private fun markDayChange() {
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = Intent(this, AlarmReceiver::class.java)
-
+        val intent = Intent(this, DayChangeReceiver::class.java)
         intent.putParcelableArrayListExtra("all_habits_list", habits)
 
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
@@ -123,7 +125,6 @@ class MainActivity : AppCompatActivity() {
         calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
         calendar[Calendar.SECOND] = 0
 
-        println("SEND ALARM")
         alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,

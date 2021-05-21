@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlarmReceiver"/>
+        <receiver android:name=".DayChangeReceiver"/>
 
     </application>
 

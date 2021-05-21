@@ -50,7 +50,6 @@ class Habit(
             parcel.readInt(),
     )
 
-
     override fun equals(other: Any?): Boolean {
 
         if (this === other) return true
@@ -70,7 +69,6 @@ class Habit(
         result = 31 * result + steps
         return result
     }
-
 
     override fun describeContents() = 0
 
