@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
-import com.fps.habito.R.drawable
-import java.util.*
+
 import kotlin.collections.ArrayList
-import kotlin.concurrent.schedule
 
 class MainActivity : AppCompatActivity() {
 

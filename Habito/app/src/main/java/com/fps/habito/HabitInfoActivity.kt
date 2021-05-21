@@ -27,7 +27,6 @@ class HabitInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_info)
 
-
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             fillFormFields()
             title = habitName.text
@@ -43,7 +42,7 @@ class HabitInfoActivity : AppCompatActivity() {
         mainIntent.putExtra("habit_for_main",
                 Habit(
                         icon.tag.toString().toInt(),
-                        habitName.text.toString(),
+                        title.toString(),
                         desc.text.toString(),
                         steps.text.toString().toInt(),
                         streak.text.toString().toInt(),
@@ -117,7 +116,7 @@ class HabitInfoActivity : AppCompatActivity() {
 
     private fun deleteHabit(){
         val mainActIntent = Intent(applicationContext, MainActivity::class.java)
-        mainActIntent.putExtra("del_habit", habitName.text)
+        mainActIntent.putExtra("del_habit", title)
         setResult(200, mainActIntent)
         finish()
     }
