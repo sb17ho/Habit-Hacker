@@ -4,15 +4,15 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Habit(
-        var icon: Int = R.drawable.close,
-        var name: String,
-        var desc: String = "",
-        var steps: Int = 1,
-        var streak: Int = 0,
-        var allTime: Double = 0.0,
-        var comp: Int = 0,
+    var icon: Int = R.drawable.nil,
+    var name: String,
+    var desc: String = "",
+    var steps: Int = 1,
+    var streak: Int = 0,
+    var allTime: Double = 0.0,
+    var comp: Int = 0,
 
-) : Parcelable {
+    ) : Parcelable {
 
     var progress = 0
     var status = HabitStatus.NOT_STARTED

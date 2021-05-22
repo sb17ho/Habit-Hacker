@@ -8,7 +8,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.Math.abs
-import java.time.LocalDate
 import java.util.*
 
 class HabitFormActivity : AppCompatActivity() {
@@ -17,17 +16,19 @@ class HabitFormActivity : AppCompatActivity() {
     private val habitName: TextInputLayout by lazy { findViewById(R.id.habitName) }
     private val habitDesc: TextInputLayout by lazy { findViewById(R.id.habit_desc) }
     private val steps: TextInputLayout by lazy { findViewById(R.id.steps) }
+    private val reminderTextView: TextView by lazy { findViewById(R.id.reminderTextView) }
     private val done: ImageView by lazy { findViewById(R.id.done) }
 
-    private val reminderTextView: TextView by lazy { findViewById(R.id.reminderTextView) }
-
+    private val progressBar:ProgressBar by lazy {findViewById(R.id.progressBar)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-
+        progressBar.setOnClickListener {
+            progressBar.progress += 5
+        }
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             selectHabitIcon()
             sendNewHabitData()
@@ -62,7 +63,6 @@ class HabitFormActivity : AppCompatActivity() {
 
     }
 
-
     private fun fillWithHabitData() {
 
         val habit_filled = intent.getParcelableExtra<Habit>("habit_filled_info")!!
@@ -71,7 +71,6 @@ class HabitFormActivity : AppCompatActivity() {
         habitName.editText!!.setText(habit_filled.name)
         habitDesc.editText!!.setText(habit_filled.desc)
         steps.editText!!.setText(habit_filled.steps.toString())
-
 
     }
 
@@ -93,11 +92,9 @@ class HabitFormActivity : AppCompatActivity() {
 
             }, hour, min, false).show()
 
-
         }
 
     }
-
 
     private fun selectHabitIcon() {
 
@@ -119,7 +116,7 @@ class HabitFormActivity : AppCompatActivity() {
             mainIntent.putExtra(
                     "new_habit",
                     Habit(
-                            if (icon.tag == null) R.drawable.close else icon.tag.toString().toInt(),
+                            if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
                             habitName.editText!!.text.toString(),
                             if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
                             if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
@@ -150,6 +147,5 @@ class HabitFormActivity : AppCompatActivity() {
         }
 
     }
-
 
 }

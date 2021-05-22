@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toolbar
 
 class HabitInfoActivity : AppCompatActivity() {
 
@@ -21,7 +22,6 @@ class HabitInfoActivity : AppCompatActivity() {
 
     private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -33,7 +33,6 @@ class HabitInfoActivity : AppCompatActivity() {
         }
 
     }
-
 
     override fun onBackPressed() {
 
@@ -71,7 +70,6 @@ class HabitInfoActivity : AppCompatActivity() {
         comp.text = habit.comp.toString()
 
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -120,6 +118,5 @@ class HabitInfoActivity : AppCompatActivity() {
         setResult(200, mainActIntent)
         finish()
     }
-
 
 }

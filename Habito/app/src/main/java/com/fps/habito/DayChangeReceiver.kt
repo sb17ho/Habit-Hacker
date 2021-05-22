@@ -9,8 +9,8 @@ class DayChangeReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        println("DAY CHANGE RECEIVED")
-        println(MainActivity.habits)
+//        println("DAY CHANGE RECEIVED")
+//        println(MainActivity.habits)
 
         for (h in MainActivity.habits){
             h.progress = 0

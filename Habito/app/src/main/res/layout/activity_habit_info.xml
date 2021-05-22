@@ -13,7 +13,7 @@
         android:layout_height="104dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
-        android:src="@drawable/close"
+        android:src="@drawable/nil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,24 +35,29 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/textview_border"
         android:gravity="center_vertical"
+        android:hint="@string/description"
+        android:padding="4dp"
         android:text="At a fast pace"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habitName"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/habitName" />
 
     <TextView
         android:id="@+id/steps"
-        android:layout_width="302dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center_vertical"
+        android:layout_width="59dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:text="2"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/desc" />
 
@@ -139,6 +144,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/alltimeText" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

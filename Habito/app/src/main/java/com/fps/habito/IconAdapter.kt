@@ -23,4 +23,5 @@ class IconAdapter(private var mContext:Context, private var allIcons:ArrayList<I
 
         return iconView
     }
+
 }

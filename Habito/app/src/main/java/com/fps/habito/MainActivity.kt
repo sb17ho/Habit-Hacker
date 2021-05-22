@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity() {
 
             crntHabit.updateProgress()
 
+            habitAdapter.notifyDataSetChanged()
+
             if(crntHabit.status == HabitStatus.COMPLETED){
                 habitAdapter.notifyDataSetChanged()
             }
