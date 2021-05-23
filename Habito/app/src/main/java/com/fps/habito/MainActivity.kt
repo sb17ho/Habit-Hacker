@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         sendData()
 
-
+        getData()
 
         // Starts HabitForm activity
         add.setOnClickListener {
@@ -76,7 +76,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun getData(){
 
+
+
+        fbdatabase.collection("Habit").document("Suffering").get()
+            .addOnCompleteListener{
+                    task ->
+                if (task.isSuccessful) {
+                    val habit  = task.result
+                    Toast.makeText(this, (habit.toString()),Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "habit recived to db!",Toast.LENGTH_LONG).show()
+                }
+            }
+
+    }
 
 
 
