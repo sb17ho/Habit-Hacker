@@ -1,62 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="256dp">
+    android:layout_height="match_parent"
+    android:padding="8dp">
 
 
     <TextView
         android:id="@+id/habitViewName"
-        android:layout_width="214dp"
-        android:layout_height="26dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="276dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="483dp" />
-
-    <TextView
-        android:id="@+id/streakView"
-        android:layout_width="161dp"
-        android:layout_height="wrap_content"
+        android:layout_width="213dp"
+        android:layout_height="36dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="115dp"
-        android:layout_marginTop="502dp"
-        android:layout_marginEnd="117dp"
-        android:layout_marginBottom="264dp" />
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habitIcon" />
 
-    <ImageView
-        android:id="@+id/habitIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/streakView"
+        android:layout_width="212dp"
+        android:layout_height="39dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="-3dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="-3dp"
-        android:elevation="1dp"
-        android:padding="100dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habitViewName" />
+
+    <ImageView
+        android:id="@+id/habitIcon"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/nil" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/circle_shape"
+        android:layout_width="204dp"
+        android:layout_height="43dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+
+        android:foregroundGravity="center"
         android:max="100"
         android:progress="0"
-        android:progressDrawable="@drawable/circular_progress_bar" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/streakView"
+        app:layout_constraintVertical_bias="0.0" />
 
 
+    <!--        android:background="@drawable/circle_shape"-->
+    <!--        android:progressDrawable="@drawable/circular_progress_bar"-->
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
