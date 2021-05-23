@@ -2,10 +2,18 @@ package com.fps.habito
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.Button
 import android.widget.GridView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import java.sql.Time
+import java.util.HashMap
 
 /**
  * TODO figure out a way to pass Set to ArrayAdapter
@@ -23,6 +31,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        sendData()
+
+
+
+        getData()
+
         // Starts HabitForm activity
         add.setOnClickListener {
             val habitFormIntent = Intent(this, HabitFormActivity::class.java)
@@ -33,6 +47,14 @@ class MainActivity : AppCompatActivity() {
 
         openHabitInfo()
     }
+
+
+    var fbdatabase = FirebaseFirestore.getInstance()
+
+
+
+
+
 
 
     /**
