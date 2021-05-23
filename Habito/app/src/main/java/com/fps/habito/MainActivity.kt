@@ -35,8 +35,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        getData()
-
         // Starts HabitForm activity
         add.setOnClickListener {
             val habitFormIntent = Intent(this, HabitFormActivity::class.java)
@@ -50,6 +48,34 @@ class MainActivity : AppCompatActivity() {
 
 
     var fbdatabase = FirebaseFirestore.getInstance()
+
+
+    private fun sendData(){
+
+
+        var habit : HashMap<String, Any> = HashMap<String, Any> ()
+        habit.put("daysCounts", 0)
+        habit.put("description", "hello! brotha!")
+        habit.put("hid", "param Gando hai")
+        habit.put("progress", 0)
+        habit.put("status", "simar Gando hai")
+        habit.put("steps", 0)
+        habit.put("streak", 0)
+        habit.put("uid", "Main bhi hoon waisay :/")
+
+
+
+        fbdatabase.collection("Habit").document("Suffering")
+            .set(habit)
+            .addOnSuccessListener {
+                Toast.makeText(this, "habit sent to db!",Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "couldnt sent to db!",Toast.LENGTH_LONG).show()
+            }
+
+    }
+
 
 
 
