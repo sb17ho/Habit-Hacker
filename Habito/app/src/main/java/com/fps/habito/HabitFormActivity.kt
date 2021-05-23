@@ -19,28 +19,19 @@ class HabitFormActivity : AppCompatActivity() {
     private val reminderTextView: TextView by lazy { findViewById(R.id.reminderTextView) }
     private val done: ImageView by lazy { findViewById(R.id.done) }
 
-    private val progressBar:ProgressBar by lazy {findViewById(R.id.progressBar)}
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-        progressBar.setOnClickListener {
-            progressBar.progress += 5
-        }
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             selectHabitIcon()
             sendNewHabitData()
-
             getReminderTime()
-
-
         } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
 
             fillWithHabitData()
             selectHabitIcon()
-
 
             done.setOnClickListener {
                 val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
