@@ -26,14 +26,19 @@ class MainActivity : AppCompatActivity() {
 
     private var habits = ArrayList<Habit>()
 
+    private val firebaseAccess = firebaseConnect()
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sendData()
 
-        getData()
+        firebaseAccess.sendorEditData(7,"sadfasdfa","sadfa",5,"dfgdfg",8,0,"fgdfg")
+
+
+        firebaseAccess.getData()
+
 
         // Starts HabitForm activity
         add.setOnClickListener {
@@ -46,52 +51,6 @@ class MainActivity : AppCompatActivity() {
         openHabitInfo()
     }
 
-
-    var fbdatabase = FirebaseFirestore.getInstance()
-
-
-    private fun sendData(){
-
-
-        var habit : HashMap<String, Any> = HashMap<String, Any> ()
-        habit.put("daysCounts", 0)
-        habit.put("description", "hello! brotha!")
-        habit.put("hid", "param Gando hai")
-        habit.put("progress", 0)
-        habit.put("status", "simar Gando hai")
-        habit.put("steps", 0)
-        habit.put("streak", 0)
-        habit.put("uid", "Main bhi hoon waisay :/")
-
-
-
-        fbdatabase.collection("Habit").document("Suffering")
-            .set(habit)
-            .addOnSuccessListener {
-                Toast.makeText(this, "habit sent to db!",Toast.LENGTH_LONG).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "couldnt sent to db!",Toast.LENGTH_LONG).show()
-            }
-
-    }
-
-    private fun getData(){
-
-
-
-        fbdatabase.collection("Habit").document("Suffering").get()
-            .addOnCompleteListener{
-                    task ->
-                if (task.isSuccessful) {
-                    val habit  = task.result
-                    Toast.makeText(this, (habit.toString()),Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(this, "habit recived to db!",Toast.LENGTH_LONG).show()
-                }
-            }
-
-    }
 
 
 
