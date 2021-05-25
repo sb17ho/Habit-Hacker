@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         firebaseAccess.sendorEditData(7,"sadfasdfa","sadfa",5,"dfgdfg",8,0,"fgdfg")
 
 
-        firebaseAccess.getData()
+        firebaseAccess.getData("Suffering")
 
 
         // Starts HabitForm activity
