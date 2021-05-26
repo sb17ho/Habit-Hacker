@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 import kotlin.collections.ArrayList
@@ -21,10 +24,13 @@ class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: ImageView by lazy { findViewById(R.id.add) }
+    private val sign_out: Button by lazy { findViewById(R.id.sign_out_button) }
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mGoogleAuth: GoogleSignInClient
 
-    companion object{
-         var habits = ArrayList<Habit>()
-         lateinit var habitAdapter: HabitAdapter
+    companion object {
+        var habits = ArrayList<Habit>()
+        lateinit var habitAdapter: HabitAdapter
     }
 
     private val firebaseAccess = firebaseConnect()
@@ -44,26 +50,45 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(habitFormIntent, 1)
         }
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleAuth =
+            com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
+
+        sign_out.setOnClickListener {
+            mGoogleAuth.signOut().addOnCompleteListener {
+                mAuth = FirebaseAuth.getInstance()
+                mAuth.signOut()
+                val intent_to_sign_in = Intent(this, GoogleSignIn::class.java)
+                startActivity(intent_to_sign_in)
+                finish()
+            }
+        }
+
         progressHabit()
         openHabitInfo()
-
         markDayChange()
     }
 
     private fun progressHabit() {
-        habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        habitsGrid.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
 
-            val crntHabit = habits[position]
+                val crntHabit = habits[position]
 
-            crntHabit.updateProgress()
+                crntHabit.updateProgress()
 
-            habitAdapter.notifyDataSetChanged()
-
-            if(crntHabit.status == HabitStatus.COMPLETED){
                 habitAdapter.notifyDataSetChanged()
-            }
 
-        }
+                if (crntHabit.status == HabitStatus.COMPLETED) {
+                    habitAdapter.notifyDataSetChanged()
+                }
+
+            }
     }
 
 
@@ -103,7 +128,8 @@ class MainActivity : AppCompatActivity() {
 
             val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
 
-            val targetHabit = habits.find { it.name == data.getStringExtra("old_habit_for_main") }
+            val targetHabit =
+                habits.find { it.name == data.getStringExtra("old_habit_for_main") }
             targetHabit?.icon = updatedHabit?.icon!!
             targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
@@ -133,10 +159,10 @@ class MainActivity : AppCompatActivity() {
         calendar[Calendar.SECOND] = 0
 
         alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                (60 * 1000).toLong(),
-                pendingIntent
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            (60 * 1000).toLong(),
+            pendingIntent
         )
 
         /**
@@ -144,4 +170,3 @@ class MainActivity : AppCompatActivity() {
          */
     }
 }
-
