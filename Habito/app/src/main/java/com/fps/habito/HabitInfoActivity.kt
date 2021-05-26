@@ -3,25 +3,24 @@ package com.fps.habito
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
-import com.google.android.material.textfield.TextInputLayout
-import java.sql.SQLOutput
+import android.widget.Toolbar
 
 class HabitInfoActivity : AppCompatActivity() {
 
+    private val icon: ImageView by lazy { findViewById(R.id.imageView) }
     private val habitName: TextView by lazy { findViewById(R.id.habitName) }
     private val desc: TextView by lazy { findViewById(R.id.desc) }
     private val steps: TextView by lazy { findViewById(R.id.steps) }
-
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
     private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
 
-    private val edit: Button by lazy { findViewById(R.id.edit) }
-    private val delete: Button by lazy { findViewById(R.id.delete) }
-
-    private val oldHabitName by lazy { intent.getStringArrayListExtra("habit_info")!![0] }
+    private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -30,10 +29,8 @@ class HabitInfoActivity : AppCompatActivity() {
 
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             fillFormFields()
-            deleteHabit()
+            title = habitName.text
         }
-
-        editButtonListener()
 
     }
 
@@ -41,20 +38,19 @@ class HabitInfoActivity : AppCompatActivity() {
 
         val mainIntent = Intent(this, MainActivity::class.java)
 
-        println("INFO $oldHabitName ${habitName.text}")
+        mainIntent.putExtra("habit_for_main",
+                Habit(
+                        icon.tag.toString().toInt(),
+                        title.toString(),
+                        desc.text.toString(),
+                        steps.text.toString().toInt(),
+                        streak.text.toString().toInt(),
+                        alltime.text.toString().toDouble(),
+                        comp.text.toString().toInt(),
+                )
+        )
 
-        if (!oldHabitName.equals(habitName.text)) {
-            mainIntent.putStringArrayListExtra("habit_for_main",
-                    arrayListOf(
-                            oldHabitName,
-                            habitName.text.toString(),
-                            desc.text.toString(),
-                            steps.text.toString(),
-                    )
-            )
-        }
-
-
+        mainIntent.putExtra("old_habit_for_main", oldHabitName)
 
         setResult(400, mainIntent)
         finish()
@@ -62,52 +58,16 @@ class HabitInfoActivity : AppCompatActivity() {
     }
 
     private fun fillFormFields() {
-        val habitInfo = intent.getStringArrayListExtra("habit_info")!!
 
-        habitName.text = habitInfo[0]
-        desc.text = habitInfo[1]
-
-        steps.text = habitInfo[2]
-
-        streak.text = habitInfo[3]
-        alltime.text = habitInfo[4]
-        comp.text = habitInfo[5]
-    }
-
-    /**
-     * Opens HabitForm and sends name, desc and steps.
-     */
-    private fun editButtonListener() {
-
-        edit.setOnClickListener {
-            val habitFormIntent = Intent(applicationContext, HabitFormActivity::class.java)
-
-            val habitInfo = intent.getStringArrayListExtra("habit_info")!!
-
-            habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
-            habitFormIntent.putStringArrayListExtra("habit_filled_info",
-                    arrayListOf(
-                            habitInfo[0],
-                            habitInfo[1],
-                            habitInfo[2],
-                    )
-            )
-
-            startActivityForResult(habitFormIntent, 300)
-        }
-
-    }
-
-    private fun deleteHabit() {
-
-        delete.setOnClickListener {
-            val mainActIntent = Intent(applicationContext, MainActivity::class.java)
-
-            mainActIntent.putExtra("del_habit", habitName.text)
-
-            setResult(200, mainActIntent)
-            finish()
-        }
+        val habit = intent.getParcelableExtra<Habit>("habit_info")!!
+        icon.setImageResource(habit.icon)
+        icon.tag = habit.icon
+        habitName.text = habit.name
+        desc.text = habit.desc
+        steps.text = habit.steps.toString()
+        streak.text = habit.streak.toString()
+        alltime.text = habit.allTime.toString()
+        comp.text = habit.comp.toString()
 
     }
 
@@ -115,14 +75,48 @@ class HabitInfoActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == 300) {
-            val updatedHabit = data!!.getStringArrayListExtra("updated_habit")!!
-
-            habitName.text = updatedHabit[0]
-            desc.text = updatedHabit[1]
-            steps.text = updatedHabit[2]
-
+            val updatedHabit = data!!.getParcelableExtra<Habit>("updated_habit")!!
+            icon.setImageResource(updatedHabit.icon)
+            icon.tag = updatedHabit.icon
+            habitName.text = updatedHabit.name
+            desc.text = updatedHabit.desc
+            steps.text = updatedHabit.steps.toString()
+            streak.text = updatedHabit.streak.toString()
+            alltime.text = updatedHabit.allTime.toString()
+            comp.text = updatedHabit.comp.toString()
         }
+
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.habit_info_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if(item.itemId == R.id.editMenuOption ){
+            editHabit()
+        }
+        else if(item.itemId == R.id.deleteMenuOption){
+            deleteHabit()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun editHabit(){
+        val habitFormIntent = Intent(applicationContext, HabitFormActivity::class.java)
+        habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
+        habitFormIntent.putExtra("habit_filled_info", intent.getParcelableExtra<Habit>("habit_info"))
+        startActivityForResult(habitFormIntent, 300)
+    }
+
+    private fun deleteHabit(){
+        val mainActIntent = Intent(applicationContext, MainActivity::class.java)
+        mainActIntent.putExtra("del_habit", title)
+        setResult(200, mainActIntent)
+        finish()
+    }
 
 }
