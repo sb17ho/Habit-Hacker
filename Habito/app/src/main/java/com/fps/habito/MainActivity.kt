@@ -4,10 +4,12 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import java.util.*
 
 import kotlin.collections.ArrayList
@@ -19,6 +21,7 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
+    private val habitCard : CardView by lazy {findViewById(R.id.habitCard)}
     private val add: ImageView by lazy { findViewById(R.id.add) }
 
     companion object{
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        actionBar!!.setHomeButtonEnabled(true)
+
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
 
@@ -40,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(habitFormIntent, 1)
         }
 
+
         progressHabit()
         openHabitInfo()
 
@@ -48,9 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun progressHabit() {
         habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-
             val crntHabit = habits[position]
-
             crntHabit.updateProgress()
 
             habitAdapter.notifyDataSetChanged()

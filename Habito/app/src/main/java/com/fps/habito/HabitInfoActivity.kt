@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.appcompat.app.ActionBar
 
 class HabitInfoActivity : AppCompatActivity() {
 
@@ -26,6 +27,9 @@ class HabitInfoActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_info)
+
+        val actionBar = actionBar
+//        actionBar!!.setHomeButtonEnabled(true)
 
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             fillFormFields()
