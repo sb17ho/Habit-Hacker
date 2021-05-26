@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toolbar
 
 class HabitInfoActivity : AppCompatActivity() {
 
@@ -36,7 +34,7 @@ class HabitInfoActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        val mainIntent = Intent(this, MainActivity::class.java)
+        val mainIntent = Intent(this, Habit_Main_Screen::class.java)
 
         mainIntent.putExtra("habit_for_main",
                 Habit(
@@ -113,7 +111,7 @@ class HabitInfoActivity : AppCompatActivity() {
     }
 
     private fun deleteHabit(){
-        val mainActIntent = Intent(applicationContext, MainActivity::class.java)
+        val mainActIntent = Intent(applicationContext, Habit_Main_Screen::class.java)
         mainActIntent.putExtra("del_habit", title)
         setResult(200, mainActIntent)
         finish()

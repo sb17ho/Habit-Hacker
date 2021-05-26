@@ -10,8 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Habito">
 
-        <activity
-            android:name=".HabitIconPickerActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".GoogleSignIn" />
+
+        <activity android:name=".HabitIconPickerActivity" />
 
         <activity
             android:name=".HabitInfoActivity"
@@ -22,16 +34,10 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".Habit_Main_Screen"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
-        <receiver android:name=".DayChangeReceiver"/>
-
+        <receiver android:name=".DayChangeReceiver" />
     </application>
 
 </manifest>
