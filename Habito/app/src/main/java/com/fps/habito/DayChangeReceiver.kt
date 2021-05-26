@@ -12,11 +12,11 @@ class DayChangeReceiver : BroadcastReceiver() {
 //        println("DAY CHANGE RECEIVED")
 //        println(MainActivity.habits)
 
-        for (h in Habit_Main_Screen.habits){
+        for (h in MainActivity.habits){
             h.progress = 0
             h.status = HabitStatus.NOT_STARTED
         }
-        Habit_Main_Screen.habitAdapter.notifyDataSetChanged()
+        MainActivity.habitAdapter.notifyDataSetChanged()
 
     }
 }

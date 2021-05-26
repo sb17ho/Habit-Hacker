@@ -87,7 +87,7 @@ class GoogleSignIn : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignInActivity", "signInWithCredential:success")
-                    val intent_to = Intent(this, Habit_Main_Screen::class.java)
+                    val intent_to = Intent(this, MainActivity::class.java)
                     startActivity(intent_to)
                     finish() //To avoid going back to boot screen
                     //TODO If success take the user to its habit screen

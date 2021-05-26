@@ -102,7 +102,7 @@ class HabitFormActivity : AppCompatActivity() {
 
         done.setOnClickListener {
 
-            val mainIntent = Intent(applicationContext, Habit_Main_Screen::class.java)
+            val mainIntent = Intent(applicationContext, MainActivity::class.java)
 
             mainIntent.putExtra(
                     "new_habit",

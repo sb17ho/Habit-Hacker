@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Habito">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Boot_Screen_Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +34,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".Habit_Main_Screen"
+            android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <receiver android:name=".DayChangeReceiver" />

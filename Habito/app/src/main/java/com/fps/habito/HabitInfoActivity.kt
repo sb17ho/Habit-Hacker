@@ -34,7 +34,7 @@ class HabitInfoActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        val mainIntent = Intent(this, Habit_Main_Screen::class.java)
+        val mainIntent = Intent(this, MainActivity::class.java)
 
         mainIntent.putExtra("habit_for_main",
                 Habit(
@@ -111,7 +111,7 @@ class HabitInfoActivity : AppCompatActivity() {
     }
 
     private fun deleteHabit(){
-        val mainActIntent = Intent(applicationContext, Habit_Main_Screen::class.java)
+        val mainActIntent = Intent(applicationContext, MainActivity::class.java)
         mainActIntent.putExtra("del_habit", title)
         setResult(200, mainActIntent)
         finish()
