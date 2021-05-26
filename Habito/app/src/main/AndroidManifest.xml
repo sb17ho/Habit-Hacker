@@ -14,16 +14,14 @@
             android:name=".HabitIconPickerActivity" />
 
         <activity
-            android:name=".HabitInfoActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:name=".HabitInfoActivity" />
 
         <activity
             android:name=".HabitFormActivity"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".MainActivity"
-           >
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,5 +33,3 @@
     </application>
 
 </manifest>
-
-<!--    android:theme="@style/Theme.AppCompat.Light.DarkActionBar"-->

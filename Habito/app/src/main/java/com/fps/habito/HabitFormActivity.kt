@@ -36,16 +36,17 @@ class HabitFormActivity : AppCompatActivity() {
             done.setOnClickListener {
                 val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
 
-                habitInfoIntent.putExtra("updated_habit",
-                        Habit(
-                                icon.tag as Int,
-                                habitName.editText!!.text.toString(),
-                                habitDesc.editText!!.text.toString(),
-                                steps.editText!!.text.toString().toInt(),
-                                0,
-                                0.0,
-                                0,
-                        )
+                habitInfoIntent.putExtra(
+                    "updated_habit",
+                    Habit(
+                        icon.tag as Int,
+                        habitName.editText!!.text.toString(),
+                        habitDesc.editText!!.text.toString(),
+                        steps.editText!!.text.toString().toInt(),
+                        0,
+                        0.0,
+                        0,
+                    )
                 )
                 setResult(300, habitInfoIntent)
                 finish()
@@ -56,12 +57,12 @@ class HabitFormActivity : AppCompatActivity() {
 
     private fun fillWithHabitData() {
 
-        val habit_filled = intent.getParcelableExtra<Habit>("habit_filled_info")!!
-        icon.setImageResource(habit_filled.icon)
-        icon.tag = habit_filled.icon
-        habitName.editText!!.setText(habit_filled.name)
-        habitDesc.editText!!.setText(habit_filled.desc)
-        steps.editText!!.setText(habit_filled.steps.toString())
+        val habitFilled = intent.getParcelableExtra<Habit>("habit_filled_info")!!
+        icon.setImageResource(habitFilled.icon)
+        icon.tag = habitFilled.icon
+        habitName.editText!!.setText(habitFilled.name)
+        habitDesc.editText!!.setText(habitFilled.desc)
+        steps.editText!!.setText(habitFilled.steps.toString())
 
     }
 
@@ -105,16 +106,20 @@ class HabitFormActivity : AppCompatActivity() {
             val mainIntent = Intent(applicationContext, MainActivity::class.java)
 
             mainIntent.putExtra(
-                    "new_habit",
-                    Habit(
-                            if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
-                            habitName.editText!!.text.toString(),
-                            if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
-                            if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
-                            0,
-                            0.0,
-                            0,
-                    )
+                "new_habit",
+                Habit(
+                    if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
+                    habitName.editText!!.text.toString(),
+                    if (habitDesc.editText!!.text.toString()
+                            .isEmpty()
+                    ) "" else habitDesc.editText!!.text.toString(),
+                    if (steps.editText!!.text.toString()
+                            .isEmpty()
+                    ) 1 else steps.editText!!.text.toString().toInt(),
+                    0,
+                    0.0,
+                    0,
+                )
             )
 
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
@@ -137,6 +142,33 @@ class HabitFormActivity : AppCompatActivity() {
             icon.tag = iconRes
         }
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(
+            "FILLED_HABIT",
+            Habit(
+                if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
+                habitName.editText!!.text.toString(),
+                habitDesc.editText!!.text.toString(),
+                if (steps.editText!!.text.toString() == "") 1
+                else steps.editText!!.text.toString().toInt(),
+                0,
+                0.0,
+                0,
+            )
+        )
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        println("RESTORE")
+        val restoredHabit: Habit = savedInstanceState.getParcelable("FILLED_HABIT")!!
+        icon.setImageResource(restoredHabit.icon)
+        icon.tag = restoredHabit.icon
+        habitName.editText!!.setText(restoredHabit.name)
+        habitDesc.editText!!.setText(restoredHabit.desc)
+        steps.editText!!.setText(restoredHabit.steps.toString())
     }
 
 }

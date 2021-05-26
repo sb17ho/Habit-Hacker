@@ -10,10 +10,10 @@
 
     <GridView
         android:id="@+id/habitsGrid"
-        android:layout_width="match_parent"
-        android:layout_height="666dp"
+        android:layout_width="734dp"
+        android:layout_height="351dp"
         android:horizontalSpacing="16dp"
-        android:numColumns="2"
+        android:numColumns="3"
         android:padding="16dp"
         android:verticalSpacing="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +32,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitsGrid"
-        app:layout_constraintVertical_bias="0.877"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

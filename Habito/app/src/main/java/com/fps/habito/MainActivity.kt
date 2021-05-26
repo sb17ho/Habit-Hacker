@@ -14,14 +14,11 @@ import java.util.*
 
 import kotlin.collections.ArrayList
 
-/**
- * TODO update streak number on ui
- */
+
 
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
-    private val habitCard : CardView by lazy {findViewById(R.id.habitCard)}
     private val add: ImageView by lazy { findViewById(R.id.add) }
 
     companion object{
@@ -33,8 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        actionBar!!.setHomeButtonEnabled(true)
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter

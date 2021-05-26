@@ -28,9 +28,6 @@ class HabitInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_info)
 
-        val actionBar = actionBar
-//        actionBar!!.setHomeButtonEnabled(true)
-
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             fillFormFields()
             title = habitName.text
