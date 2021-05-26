@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
@@ -26,14 +27,17 @@ class MainActivity : AppCompatActivity() {
          lateinit var habitAdapter: HabitAdapter
     }
 
+    private val firebaseAccess = firebaseConnect()
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
-
         add.setOnClickListener {
             val habitFormIntent = Intent(this, HabitFormActivity::class.java)
             habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
@@ -61,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
 
     private fun openHabitInfo() {
 
