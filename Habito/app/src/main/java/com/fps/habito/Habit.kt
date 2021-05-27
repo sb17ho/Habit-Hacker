@@ -9,9 +9,7 @@ class Habit(
         var name: String,
         var desc: String = "",
         var steps: Int = 1,
-        var streak: Int = 0,
-        var allTime: Double = 0.0,
-        var comp: Int = 0,
+        var habitStats : HabitStats = HabitStats(),
         var habitReminder: HabitReminder = HabitReminder()
 ) : Parcelable {
 
@@ -28,8 +26,8 @@ class Habit(
 
         if (progress == steps && status != HabitStatus.COMPLETED) {
             status = HabitStatus.COMPLETED
-            ++streak
-            ++comp
+            ++habitStats.streak
+            ++habitStats.comp
         }
 
     }
@@ -47,9 +45,7 @@ class Habit(
             parcel.readString()!!,
             parcel.readString()!!,
             parcel.readInt(),
-            parcel.readInt(),
-            parcel.readDouble(),
-            parcel.readInt(),
+            parcel.readParcelable<HabitStats>(HabitStats::class.java.classLoader)!!,
             parcel.readParcelable<HabitReminder>(HabitReminder::class.java.classLoader)!!
     )
 
@@ -60,9 +56,7 @@ class Habit(
         dest?.writeString(name)
         dest?.writeString(desc)
         dest?.writeInt(steps)
-        dest?.writeInt(streak)
-        dest?.writeDouble(allTime)
-        dest?.writeInt(comp)
+        dest?.writeParcelable(habitStats, flags)
         dest?.writeParcelable(habitReminder, flags)
     }
 
@@ -88,7 +82,7 @@ class Habit(
 
 
     override fun toString(): String {
-        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, streak=$streak, allTime=$allTime, comp=$comp, progress=$progress, status='$status' HabitReminder($habitReminder))"
+        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, habitStats=$habitStats, progress=$progress, status='$status' HabitReminder($habitReminder))"
     }
 
 

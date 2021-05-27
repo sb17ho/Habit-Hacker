@@ -53,9 +53,7 @@ class HabitInfoActivity : AppCompatActivity() {
                         title.toString(),
                         desc.text.toString(),
                         steps.text.toString().toInt(),
-                        streak.text.toString().toInt(),
-                        alltime.text.toString().toDouble(),
-                        comp.text.toString().toInt(),
+                        HabitStats(streak.text.toString().toInt(),comp.text.toString().toInt()),
                         HabitReminder(1, 1, "am")
                 )
         )
@@ -89,7 +87,7 @@ class HabitInfoActivity : AppCompatActivity() {
             "Reminder not set"
         }
 
-        streak.text = habit.streak.toString()
+        streak.text = habit.habitStats.streak.toString()
 
         val timeElapsed = if (TimeUnit.DAYS.convert(Calendar.getInstance().time.time - habit.startDate.time, TimeUnit.MILLISECONDS) == 0L) {
             1
@@ -97,9 +95,9 @@ class HabitInfoActivity : AppCompatActivity() {
             TimeUnit.DAYS.convert(Calendar.getInstance().time.time - habit.startDate.time, TimeUnit.MILLISECONDS)
         }
 
-        alltime.text = ((habit.comp*1.0)/timeElapsed).toString()
+        alltime.text = ((habit.habitStats.comp*1.0)/timeElapsed).toString()
 
-        comp.text = habit.comp.toString()
+        comp.text = habit.habitStats.comp.toString()
 
         startDate.text = "Started on ${habit.startDate}"
 
@@ -130,9 +128,17 @@ class HabitInfoActivity : AppCompatActivity() {
                 "Reminder not set"
             }
 
-            streak.text = updatedHabit.streak.toString()
-            alltime.text = updatedHabit.allTime.toString()
-            comp.text = updatedHabit.comp.toString()
+            streak.text = updatedHabit.habitStats.streak.toString()
+
+            val timeElapsed = if (TimeUnit.DAYS.convert(Calendar.getInstance().time.time - updatedHabit.startDate.time, TimeUnit.MILLISECONDS) == 0L) {
+                1
+            } else {
+                TimeUnit.DAYS.convert(Calendar.getInstance().time.time - updatedHabit.startDate.time, TimeUnit.MILLISECONDS)
+            }
+
+            alltime.text = ((updatedHabit.habitStats.comp*1.0)/timeElapsed).toString()
+
+            comp.text = updatedHabit.habitStats.comp.toString()
 
             title = habitName.text
         }

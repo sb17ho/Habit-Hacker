@@ -49,9 +49,7 @@ class HabitFormActivity : AppCompatActivity() {
                                 habitName.editText!!.text.toString(),
                                 habitDesc.editText!!.text.toString(),
                                 steps.editText!!.text.toString().toInt(),
-                                0,
-                                0.0,
-                                0,
+                                HabitStats(0, 0),
                                 habitReminderFromClock
                         )
                 )
@@ -131,9 +129,7 @@ class HabitFormActivity : AppCompatActivity() {
                     habitName.editText!!.text.toString(),
                     if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
                     if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
-                    0,
-                    0.0,
-                    0,
+                    HabitStats(0, 0),
                     habitReminderFromClock
             )
 
@@ -175,9 +171,7 @@ class HabitFormActivity : AppCompatActivity() {
                         habitDesc.editText!!.text.toString(),
                         if (steps.editText!!.text.toString() == "") 1
                         else steps.editText!!.text.toString().toInt(),
-                        0,
-                        0.0,
-                        0,
+                        HabitStats(0, 0),
                         habitReminderFromClock
                 )
         )

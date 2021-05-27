@@ -114,9 +114,7 @@ class MainActivity : AppCompatActivity() {
             targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
             targetHabit?.steps = updatedHabit.steps
-            targetHabit?.streak = updatedHabit.streak
-            targetHabit?.allTime = updatedHabit.allTime
-            targetHabit?.comp = updatedHabit.comp
+            targetHabit?.habitStats = HabitStats(updatedHabit.habitStats.streak, updatedHabit.habitStats.comp)
 
             habitAdapter.notifyDataSetChanged()
 
