@@ -12,14 +12,14 @@
         android:theme="@style/Theme.Habito">
 
         <activity
-            android:name=".HabitIconPickerActivity" />
+            android:name=".IconPickerActivity" />
 
         <activity
-            android:name=".HabitInfoActivity"
+            android:name=".InfoActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
         <activity
-            android:name=".HabitFormActivity"
+            android:name=".FormActivity"
             android:windowSoftInputMode="adjustPan" />
 
         <activity

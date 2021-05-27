@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.adapter = habitAdapter
 
         add.setOnClickListener {
-            val habitFormIntent = Intent(this, HabitFormActivity::class.java)
+            val habitFormIntent = Intent(this, FormActivity::class.java)
             habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             startActivityForResult(habitFormIntent, 1)
         }
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             val crntHabit = habits[position]
             crntHabit.updateProgress()
 
-            if(crntHabit.status == HabitStatus.COMPLETED){
+            if(crntHabit.status == Status.COMPLETED){
                 changeHabitViewBackgroundColor(habits.indexOf(crntHabit))
             }
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     private fun openHabitInfo() {
 
         habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
-            val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
+            val habitInfoIntent = Intent(this, InfoActivity::class.java)
             habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             habitInfoIntent.putExtra("habit_info", habits[position])
             startActivityForResult(habitInfoIntent, 2)
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             if (!habits.contains(newHabit)) {
                 habits.add(newHabit)
                 habitAdapter.notifyDataSetChanged()
-                println("HABIT DATE ${newHabit.startDate}")
+//                println("HABIT DATE ${newHabit.startDate}")
             }
 
         } else if (resultCode == 200) {
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
             targetHabit?.steps = updatedHabit.steps
-            targetHabit?.habitStats = HabitStats(updatedHabit.habitStats.streak, updatedHabit.habitStats.comp)
+            targetHabit?.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
 
             habitAdapter.notifyDataSetChanged()
 

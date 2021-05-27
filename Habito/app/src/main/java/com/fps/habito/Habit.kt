@@ -2,32 +2,30 @@ package com.fps.habito
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.util.*
 
 class Habit(
         var icon: Int = R.drawable.nil,
         var name: String,
         var desc: String = "",
         var steps: Int = 1,
-        var habitStats : HabitStats = HabitStats(),
-        var habitReminder: HabitReminder = HabitReminder()
+        var stats: Stats = Stats(),
+        var reminder: Reminder = Reminder()
 ) : Parcelable {
 
     var progress = 0
-    var status = HabitStatus.NOT_STARTED
-     var startDate : Date = Calendar.getInstance().time
+    var status = Status.NOT_STARTED
 
     fun updateProgress() {
 
         if (progress < steps) {
             ++progress
-            status = HabitStatus.IN_PROGRESS
+            status = Status.IN_PROGRESS
         }
 
-        if (progress == steps && status != HabitStatus.COMPLETED) {
-            status = HabitStatus.COMPLETED
-            ++habitStats.streak
-            ++habitStats.comp
+        if (progress == steps && status != Status.COMPLETED) {
+            status = Status.COMPLETED
+            ++stats.streak
+            ++stats.comp
         }
 
     }
@@ -45,8 +43,8 @@ class Habit(
             parcel.readString()!!,
             parcel.readString()!!,
             parcel.readInt(),
-            parcel.readParcelable<HabitStats>(HabitStats::class.java.classLoader)!!,
-            parcel.readParcelable<HabitReminder>(HabitReminder::class.java.classLoader)!!
+            parcel.readParcelable<Stats>(Stats::class.java.classLoader)!!,
+            parcel.readParcelable<Reminder>(Reminder::class.java.classLoader)!!
     )
 
     override fun describeContents() = 0
@@ -56,8 +54,8 @@ class Habit(
         dest?.writeString(name)
         dest?.writeString(desc)
         dest?.writeInt(steps)
-        dest?.writeParcelable(habitStats, flags)
-        dest?.writeParcelable(habitReminder, flags)
+        dest?.writeParcelable(stats, flags)
+        dest?.writeParcelable(reminder, flags)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -82,7 +80,7 @@ class Habit(
 
 
     override fun toString(): String {
-        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, habitStats=$habitStats, progress=$progress, status='$status' HabitReminder($habitReminder))"
+        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, habitStats=$stats, progress=$progress, status='$status' HabitReminder($reminder))"
     }
 
 

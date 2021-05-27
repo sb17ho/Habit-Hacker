@@ -3,13 +3,13 @@ package com.fps.habito
 import android.os.Parcel
 import android.os.Parcelable
 
-data class HabitReminder(var hour: Int = -1, var min: Int = -1, var meridiem: String = "") : Parcelable {
+data class Reminder(var hour: Int = -1, var min: Int = -1, var meridiem: String = "") : Parcelable {
 
     companion object {
         @JvmField
-        val CREATOR = object : Parcelable.Creator<HabitReminder> {
-            override fun createFromParcel(parcel: Parcel) = HabitReminder(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<HabitReminder>(size)
+        val CREATOR = object : Parcelable.Creator<Reminder> {
+            override fun createFromParcel(parcel: Parcel) = Reminder(parcel)
+            override fun newArray(size: Int) = arrayOfNulls<Reminder>(size)
         }
     }
 

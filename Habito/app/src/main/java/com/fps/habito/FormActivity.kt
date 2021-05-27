@@ -13,7 +13,7 @@ import java.util.*
 /**
  * TODO add units for steps for land and portrait
  */
-class HabitFormActivity : AppCompatActivity() {
+class FormActivity : AppCompatActivity() {
 
     private val icon: ImageView by lazy { findViewById(R.id.icon) }
     private val habitName: TextInputLayout by lazy { findViewById(R.id.habitName) }
@@ -23,7 +23,7 @@ class HabitFormActivity : AppCompatActivity() {
     private val reminderTextView: TextView by lazy { findViewById(R.id.reminderTextView) }
     private val done: ImageView by lazy { findViewById(R.id.done) }
 
-    private var habitReminderFromClock = HabitReminder()
+    private var habitReminderFromClock = Reminder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -40,7 +40,7 @@ class HabitFormActivity : AppCompatActivity() {
             selectHabitIcon()
 
             done.setOnClickListener {
-                val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
+                val habitInfoIntent = Intent(this, InfoActivity::class.java)
 
                 habitInfoIntent.putExtra(
                         "updated_habit",
@@ -49,7 +49,7 @@ class HabitFormActivity : AppCompatActivity() {
                                 habitName.editText!!.text.toString(),
                                 habitDesc.editText!!.text.toString(),
                                 steps.editText!!.text.toString().toInt(),
-                                HabitStats(0, 0),
+                                Stats(),
                                 habitReminderFromClock
                         )
                 )
@@ -70,15 +70,15 @@ class HabitFormActivity : AppCompatActivity() {
         habitDesc.editText!!.setText(habitFilled.desc)
         steps.editText!!.setText(habitFilled.steps.toString())
 
-        reminderTextView.text = if (habitFilled.habitReminder.isSet()) {
+        reminderTextView.text = if (habitFilled.reminder.isSet()) {
             reminderSwitch.isChecked = true
-            habitFilled.habitReminder.toString()
+            habitFilled.reminder.toString()
         } else {
             reminderSwitch.isChecked = false
             "Tap to set reminder"
         }
 
-        habitReminderFromClock = habitFilled.habitReminder
+        habitReminderFromClock = habitFilled.reminder
 
     }
 
@@ -99,7 +99,7 @@ class HabitFormActivity : AppCompatActivity() {
 
         TimePickerDialog(this, { view, hourOfDay, minute ->
             habitReminderFromClock =
-                    HabitReminder(
+                    Reminder(
                             kotlin.math.abs(12 - hourOfDay),
                             minute,
                             if (hourOfDay < 12) "am" else "pm"
@@ -112,7 +112,7 @@ class HabitFormActivity : AppCompatActivity() {
     private fun selectHabitIcon() {
 
         icon.setOnClickListener {
-            startActivityForResult(Intent(this, HabitIconPickerActivity::class.java), 1)
+            startActivityForResult(Intent(this, IconPickerActivity::class.java), 1)
         }
 
     }
@@ -129,15 +129,13 @@ class HabitFormActivity : AppCompatActivity() {
                     habitName.editText!!.text.toString(),
                     if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
                     if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
-                    HabitStats(0, 0),
+                    Stats(),
                     habitReminderFromClock
             )
 
-            newHabit.startDate = Calendar.getInstance().time
+            newHabit.stats.startDate = Calendar.getInstance().time
 
             mainIntent.putExtra("new_habit", newHabit)
-
-
 
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
                 habitName.error = "Habit name is required"
@@ -171,7 +169,7 @@ class HabitFormActivity : AppCompatActivity() {
                         habitDesc.editText!!.text.toString(),
                         if (steps.editText!!.text.toString() == "") 1
                         else steps.editText!!.text.toString().toInt(),
-                        HabitStats(0, 0),
+                        Stats(),
                         habitReminderFromClock
                 )
         )

@@ -1,13 +1,11 @@
 package com.fps.habito
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
@@ -25,7 +23,7 @@ class HabitAdapter(private var mContext: Context, private var allHabits: ArrayLi
 
         (habitItemView!!.findViewById(R.id.habitViewName) as TextView).text = habit.name
         (habitItemView.findViewById(R.id.habitIcon) as ImageView).setImageResource(habit.icon)
-        (habitItemView.findViewById(R.id.streakView) as TextView).text = habit.habitStats.streak.toString()
+        (habitItemView.findViewById(R.id.streakView) as TextView).text = habit.stats.streak.toString()
         (habitItemView.findViewById(R.id.progressBar) as LinearProgressIndicator).progress = ((habit.progress*1.0/habit.steps)*100).toInt()
 
         return habitItemView

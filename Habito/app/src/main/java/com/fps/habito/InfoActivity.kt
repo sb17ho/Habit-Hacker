@@ -6,18 +6,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
-import androidx.constraintlayout.solver.state.State
-import androidx.constraintlayout.widget.ConstraintLayout
-import java.util.*
-import java.util.concurrent.TimeUnit
 
-class HabitInfoActivity : AppCompatActivity() {
+class InfoActivity : AppCompatActivity() {
 
     private val icon: ImageView by lazy { findViewById(R.id.imageView) }
     private val habitName: TextView by lazy { findViewById(R.id.habitName) }
@@ -53,8 +45,8 @@ class HabitInfoActivity : AppCompatActivity() {
                         title.toString(),
                         desc.text.toString(),
                         steps.text.toString().toInt(),
-                        HabitStats(streak.text.toString().toInt(),comp.text.toString().toInt()),
-                        HabitReminder(1, 1, "am")
+                        Stats(streak.text.toString().toInt(),comp.text.toString().toInt()),
+                        Reminder(1, 1, "am")
                 )
         )
 
@@ -80,26 +72,21 @@ class HabitInfoActivity : AppCompatActivity() {
 
         steps.text = habit.steps.toString()
 
-        reminder.text = if (habit.habitReminder.isSet()) {
+        reminder.text = if (habit.reminder.isSet()) {
             reminder.visibility = View.VISIBLE
-            habit.habitReminder.toString()
+            habit.reminder.toString()
         } else {
             "Reminder not set"
         }
 
-        streak.text = habit.habitStats.streak.toString()
+        streak.text = habit.stats.streak.toString()
 
-        val timeElapsed = if (TimeUnit.DAYS.convert(Calendar.getInstance().time.time - habit.startDate.time, TimeUnit.MILLISECONDS) == 0L) {
-            1
-        } else {
-            TimeUnit.DAYS.convert(Calendar.getInstance().time.time - habit.startDate.time, TimeUnit.MILLISECONDS)
-        }
 
-        alltime.text = ((habit.habitStats.comp*1.0)/timeElapsed).toString()
+        alltime.text =habit.stats.allTime.toString()
 
-        comp.text = habit.habitStats.comp.toString()
+        comp.text = habit.stats.comp.toString()
 
-        startDate.text = "Started on ${habit.startDate}"
+        startDate.text = "Started on ${habit.stats.startDate}"
 
 
     }
@@ -121,24 +108,18 @@ class HabitInfoActivity : AppCompatActivity() {
 
             steps.text = updatedHabit.steps.toString()
 
-            reminder.text = if (updatedHabit.habitReminder.isSet()) {
+            reminder.text = if (updatedHabit.reminder.isSet()) {
                 reminder.visibility = View.VISIBLE
-                updatedHabit.habitReminder.toString()
+                updatedHabit.reminder.toString()
             } else {
                 "Reminder not set"
             }
 
-            streak.text = updatedHabit.habitStats.streak.toString()
+            streak.text = updatedHabit.stats.streak.toString()
 
-            val timeElapsed = if (TimeUnit.DAYS.convert(Calendar.getInstance().time.time - updatedHabit.startDate.time, TimeUnit.MILLISECONDS) == 0L) {
-                1
-            } else {
-                TimeUnit.DAYS.convert(Calendar.getInstance().time.time - updatedHabit.startDate.time, TimeUnit.MILLISECONDS)
-            }
+            alltime.text = updatedHabit.stats.allTime.toString()
 
-            alltime.text = ((updatedHabit.habitStats.comp*1.0)/timeElapsed).toString()
-
-            comp.text = updatedHabit.habitStats.comp.toString()
+            comp.text = updatedHabit.stats.comp.toString()
 
             title = habitName.text
         }
@@ -162,7 +143,7 @@ class HabitInfoActivity : AppCompatActivity() {
     }
 
     private fun editHabit() {
-        val habitFormIntent = Intent(applicationContext, HabitFormActivity::class.java)
+        val habitFormIntent = Intent(applicationContext, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
         habitFormIntent.putExtra("habit_filled_info", intent.getParcelableExtra<Habit>("habit_info"))
         startActivityForResult(habitFormIntent, 300)
