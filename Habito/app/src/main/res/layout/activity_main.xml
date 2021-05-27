@@ -24,15 +24,16 @@
 
     <ImageView
         android:id="@+id/add"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginVertical="8dp"
+        android:layout_width="413dp"
+        android:layout_height="52dp"
+        android:background="@drawable/new_habit_button_border"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitsGrid"
-        app:layout_constraintVertical_bias="0.877"
-        app:srcCompat="@drawable/add" />
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/new_habit_white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

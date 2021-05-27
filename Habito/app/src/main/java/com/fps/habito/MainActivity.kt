@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             if (!habits.contains(newHabit)) {
                 habits.add(newHabit)
                 habitAdapter.notifyDataSetChanged()
-//                println("HABIT DATE ${newHabit.startDate}")
             }
 
         } else if (resultCode == 200) {
