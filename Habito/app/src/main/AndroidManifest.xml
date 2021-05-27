@@ -14,7 +14,8 @@
             android:name=".HabitIconPickerActivity" />
 
         <activity
-            android:name=".HabitInfoActivity" />
+            android:name=".HabitInfoActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
         <activity
             android:name=".HabitFormActivity"

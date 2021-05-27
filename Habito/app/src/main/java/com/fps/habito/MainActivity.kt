@@ -4,12 +4,11 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import androidx.core.view.get
 import java.util.*
 
 import kotlin.collections.ArrayList
@@ -49,14 +48,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun progressHabit() {
         habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+
             val crntHabit = habits[position]
             crntHabit.updateProgress()
 
-            habitAdapter.notifyDataSetChanged()
-
             if(crntHabit.status == HabitStatus.COMPLETED){
-                habitAdapter.notifyDataSetChanged()
+                changeHabitViewBackgroundColor(habits.indexOf(crntHabit))
             }
+
+            habitAdapter.notifyDataSetChanged()
 
         }
     }
@@ -86,15 +86,18 @@ class MainActivity : AppCompatActivity() {
             val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
 
             if (!habits.contains(newHabit)) {
-                habitAdapter.add(newHabit)
+                habits.add(newHabit)
                 habitAdapter.notifyDataSetChanged()
             }
 
         } else if (resultCode == 200) {
-            habitAdapter.remove(habits.find { it.name == data!!.getStringExtra("del_habit") })
+            habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
             habitAdapter.notifyDataSetChanged()
         } else if (resultCode == 400) {
 
+            /**
+             * TODO add the feature where the habit is considered changed no matter what field is changed.
+             */
             val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
 
             val targetHabit = habits.find { it.name == data.getStringExtra("old_habit_for_main") }
@@ -129,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                (60 * 1000).toLong(),
+                (600 * 1000).toLong(),
                 pendingIntent
         )
 
@@ -137,5 +140,10 @@ class MainActivity : AppCompatActivity() {
          * for everyday (24 * 60 * 60 * 1000).toLong(),
          */
     }
+
+    private fun changeHabitViewBackgroundColor(position : Int){
+        habitsGrid[position].background =  resources.getDrawable(R.drawable.habit_view_border_filled)
+    }
+
 }
 
