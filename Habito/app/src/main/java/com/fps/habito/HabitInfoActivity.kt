@@ -25,6 +25,7 @@ class HabitInfoActivity : AppCompatActivity() {
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
     private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
+    private val startDate : TextView by lazy {findViewById(R.id.startDate)}
 
     private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
 
@@ -46,7 +47,7 @@ class HabitInfoActivity : AppCompatActivity() {
 
         mainIntent.putExtra("habit_for_main",
                 Habit(
-                        icon.tag.toString().toInt(),
+                        if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
                         title.toString(),
                         desc.text.toString(),
                         steps.text.toString().toInt(),
@@ -86,11 +87,11 @@ class HabitInfoActivity : AppCompatActivity() {
             "Reminder not set"
         }
 
-
         streak.text = habit.streak.toString()
         alltime.text = habit.allTime.toString()
         comp.text = habit.comp.toString()
 
+        startDate.text = "Started on ${habit.startDate}"
 
     }
 
@@ -121,6 +122,8 @@ class HabitInfoActivity : AppCompatActivity() {
             streak.text = updatedHabit.streak.toString()
             alltime.text = updatedHabit.allTime.toString()
             comp.text = updatedHabit.comp.toString()
+
+            title = habitName.text
         }
 
     }

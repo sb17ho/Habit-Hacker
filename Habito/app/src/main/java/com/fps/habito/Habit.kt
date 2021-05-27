@@ -2,6 +2,7 @@ package com.fps.habito
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.util.*
 
 class Habit(
         var icon: Int = R.drawable.nil,
@@ -16,6 +17,7 @@ class Habit(
 
     var progress = 0
     var status = HabitStatus.NOT_STARTED
+     var startDate : Date = Calendar.getInstance().time
 
     fun updateProgress() {
 

@@ -4,9 +4,9 @@
     android:id="@+id/habitCard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
+    android:background="@drawable/habit_view_border"
     android:orientation="vertical"
-    android:background="@drawable/habit_view_border">
+    android:padding="8dp">
 
     <ImageView
         android:id="@+id/habitIcon"
@@ -36,20 +36,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitViewName" />
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foregroundGravity="center"
+        android:indeterminate="false"
         android:max="100"
-        android:progress="0"
-        android:progressBackgroundTint="#323232"
-        android:progressTint="@color/vib_red_pink"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/streakView" />
+        android:progress="12"
+        app:trackCornerRadius="5dp"
+        app:trackThickness="5dp" />
+
 
     <!--    android:background="@drawable/circle_shape"-->
     <!--    android:progressDrawable="@drawable/circular_progress_bar"-->

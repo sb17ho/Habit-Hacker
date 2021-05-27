@@ -34,7 +34,6 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/textview_border"
         android:gravity="center_vertical"
         android:hint="@string/description"
         android:padding="4dp"
@@ -52,6 +51,7 @@
         android:id="@+id/steps"
         android:layout_width="300dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:text="8 glasses"
@@ -64,8 +64,8 @@
         android:id="@+id/reminder"
         android:layout_width="300dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
-        android:background="@color/teal_700"
         android:gravity="center_vertical"
         android:text="10:30 pm"
         android:textSize="24sp"
@@ -159,6 +159,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/alltimeText" />
+
+    <TextView
+        android:id="@+id/startDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/streakText"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

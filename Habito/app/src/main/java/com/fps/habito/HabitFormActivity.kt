@@ -10,6 +10,9 @@ import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
+/**
+ * TODO add units for steps for land and portrait
+ */
 class HabitFormActivity : AppCompatActivity() {
 
     private val icon: ImageView by lazy { findViewById(R.id.icon) }
@@ -32,7 +35,6 @@ class HabitFormActivity : AppCompatActivity() {
             getReminderTime()
             sendNewHabitData()
         } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
-
             fillWithHabitData()
             getReminderTime()
             selectHabitIcon()
@@ -124,17 +126,21 @@ class HabitFormActivity : AppCompatActivity() {
 
             val mainIntent = Intent(applicationContext, MainActivity::class.java)
 
-            mainIntent.putExtra("new_habit",
-                    Habit(
-                            if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
-                            habitName.editText!!.text.toString(),
-                            if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
-                            if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
-                            0,
-                            0.0,
-                            0,
-                            habitReminderFromClock
-                    ))
+            val newHabit = Habit(
+                    if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
+                    habitName.editText!!.text.toString(),
+                    if (habitDesc.editText!!.text.toString().isEmpty()) "" else habitDesc.editText!!.text.toString(),
+                    if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString().toInt(),
+                    0,
+                    0.0,
+                    0,
+                    habitReminderFromClock
+            )
+
+            newHabit.startDate = Calendar.getInstance().time
+
+            mainIntent.putExtra("new_habit", newHabit)
+
 
 
             if (TextUtils.isEmpty(habitName.editText!!.text)) {

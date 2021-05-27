@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
@@ -88,6 +89,7 @@ class MainActivity : AppCompatActivity() {
             if (!habits.contains(newHabit)) {
                 habits.add(newHabit)
                 habitAdapter.notifyDataSetChanged()
+                println("HABIT DATE ${newHabit.startDate}")
             }
 
         } else if (resultCode == 200) {
