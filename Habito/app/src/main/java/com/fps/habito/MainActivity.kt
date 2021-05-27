@@ -4,11 +4,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.get
 import java.util.*
 
@@ -21,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: ImageView by lazy { findViewById(R.id.add) }
 
+    private lateinit var notificationManagerCompat : NotificationManagerCompat
+
     companion object{
          var habits = ArrayList<Habit>()
          lateinit var habitAdapter: HabitAdapter
@@ -30,6 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        notificationManagerCompat = NotificationManagerCompat.from(this)
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
@@ -146,6 +152,21 @@ class MainActivity : AppCompatActivity() {
     private fun changeHabitViewBackgroundColor(position : Int){
         habitsGrid[position].background =  resources.getDrawable(R.drawable.habit_view_border_filled)
     }
+
+    private fun sendNotification(view: View){
+
+        val notification = NotificationCompat.Builder(this, ReminderNotification.CHANNEL_ID)
+                .setSmallIcon(R.drawable.home)
+                .setContentTitle(title)
+                .setContentText("Time to do your habit")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .build()
+
+        notificationManagerCompat.notify(1, notification)
+
+    }
+
 
 }
 
