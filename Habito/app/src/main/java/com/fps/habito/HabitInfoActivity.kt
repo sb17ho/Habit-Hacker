@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBar
+import androidx.constraintlayout.solver.state.State
+import androidx.constraintlayout.widget.ConstraintLayout
 
 class HabitInfoActivity : AppCompatActivity() {
 
@@ -67,10 +71,16 @@ class HabitInfoActivity : AppCompatActivity() {
         icon.setImageResource(habit.icon)
         icon.tag = habit.icon
         habitName.text = habit.name
+
         desc.text = habit.desc
+        if(desc.text.isNotEmpty()){
+            desc.visibility = View.VISIBLE
+        }
+
         steps.text = habit.steps.toString()
 
         reminder.text = if (habit.habitReminder.isSet()) {
+            reminder.visibility = View.VISIBLE
             habit.habitReminder.toString()
         } else {
             "Reminder not set"
@@ -89,13 +99,20 @@ class HabitInfoActivity : AppCompatActivity() {
 
         if (resultCode == 300) {
             val updatedHabit = data!!.getParcelableExtra<Habit>("updated_habit")!!
+
             icon.setImageResource(updatedHabit.icon)
             icon.tag = updatedHabit.icon
             habitName.text = updatedHabit.name
+
             desc.text = updatedHabit.desc
+            if(desc.text.isNotEmpty()){
+                desc.visibility = View.VISIBLE
+            }
+
             steps.text = updatedHabit.steps.toString()
 
             reminder.text = if (updatedHabit.habitReminder.isSet()) {
+                reminder.visibility = View.VISIBLE
                 updatedHabit.habitReminder.toString()
             } else {
                 "Reminder not set"

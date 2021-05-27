@@ -38,6 +38,7 @@
             app:counterMaxLength="15"
             app:endIconMode="clear_text"
             app:helperText="Required"
+            app:startIconDrawable="@drawable/baseline_badge_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/icon">
@@ -60,6 +61,7 @@
             android:nextFocusDown="@id/steps"
             app:counterEnabled="true"
             app:counterMaxLength="320"
+            app:startIconDrawable="@drawable/baseline_article_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/habitName">
@@ -78,6 +80,7 @@
             android:layout_marginVertical="8dp"
             android:layout_marginTop="4dp"
             android:hint="@string/steps"
+            app:startIconDrawable="@drawable/baseline_incomplete_circle_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/habit_desc">
@@ -110,11 +113,11 @@
             android:id="@+id/dailyReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:text="Daily-Reminder"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/reminderSwitch"
-            app:layout_constraintHorizontal_bias="0.009"
+            app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/steps" />
 
@@ -137,6 +140,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dailyReminder"
             app:layout_constraintVertical_bias="0.02" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/reminderTextView"
+            app:layout_constraintEnd_toStartOf="@+id/dailyReminder"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/steps"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/baseline_notifications_active_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
