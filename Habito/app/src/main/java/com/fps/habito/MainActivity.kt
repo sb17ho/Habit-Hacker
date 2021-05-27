@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import java.util.*
 
@@ -150,7 +151,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeHabitViewBackgroundColor(position : Int){
-        habitsGrid[position].background =  resources.getDrawable(R.drawable.habit_view_border_filled)
+        habitsGrid[position].background =  ContextCompat.getDrawable(this, R.drawable.habit_view_border_filled)
     }
 
     private fun sendNotification(view: View){
