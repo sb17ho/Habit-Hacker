@@ -14,6 +14,8 @@ import android.widget.Toolbar
 import androidx.appcompat.app.ActionBar
 import androidx.constraintlayout.solver.state.State
 import androidx.constraintlayout.widget.ConstraintLayout
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class HabitInfoActivity : AppCompatActivity() {
 
@@ -25,7 +27,7 @@ class HabitInfoActivity : AppCompatActivity() {
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
     private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
-    private val startDate : TextView by lazy {findViewById(R.id.startDate)}
+    private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
     private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
 
@@ -74,7 +76,7 @@ class HabitInfoActivity : AppCompatActivity() {
         habitName.text = habit.name
 
         desc.text = habit.desc
-        if(desc.text.isNotEmpty()){
+        if (desc.text.isNotEmpty()) {
             desc.visibility = View.VISIBLE
         }
 
@@ -88,10 +90,19 @@ class HabitInfoActivity : AppCompatActivity() {
         }
 
         streak.text = habit.streak.toString()
-        alltime.text = habit.allTime.toString()
+
+        val timeElapsed = if (TimeUnit.DAYS.convert(Calendar.getInstance().time.time - habit.startDate.time, TimeUnit.MILLISECONDS) == 0L) {
+            1
+        } else {
+            TimeUnit.DAYS.convert(Calendar.getInstance().time.time - habit.startDate.time, TimeUnit.MILLISECONDS)
+        }
+
+        alltime.text = ((habit.comp*1.0)/timeElapsed).toString()
+
         comp.text = habit.comp.toString()
 
         startDate.text = "Started on ${habit.startDate}"
+
 
     }
 
@@ -106,7 +117,7 @@ class HabitInfoActivity : AppCompatActivity() {
             habitName.text = updatedHabit.name
 
             desc.text = updatedHabit.desc
-            if(desc.text.isNotEmpty()){
+            if (desc.text.isNotEmpty()) {
                 desc.visibility = View.VISIBLE
             }
 
