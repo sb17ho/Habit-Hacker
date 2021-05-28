@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="475dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <TextView
+        android:id="@+id/closebutton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:text="@string/closePopUp"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/userImageView"
+            android:layout_width="60dp"
+            android:layout_height="65dp"
+            android:contentDescription="@string/noUserLoggedInImageDesc"
+            android:src="@drawable/no_user_icon" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:id="@+id/userNameView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contextClickable="false"
+                android:text="@string/noUserLoggedIn"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/userEmailView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contextClickable="false" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/separater"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="20dp">
+
+        <!--        I guess I should be using custom button than text view-->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/settings"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:padding="10dp"
+            android:text="@string/settings"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/howTouse"
+            android:gravity="start"
+            android:padding="10dp"
+            android:text="@string/howToUse"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/helpIcon"
+            android:gravity="start"
+            android:padding="10dp"
+            android:text="@string/help"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/abouticon"
+            android:gravity="start"
+            android:padding="10dp"
+            android:text="@string/about"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/loguout"
+            android:gravity="start"
+            android:padding="10dp"
+            android:text="@string/logout"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+</LinearLayout>
