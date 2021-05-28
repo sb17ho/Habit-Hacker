@@ -25,6 +25,7 @@
             android:id="@+id/userImageView"
             android:layout_width="60dp"
             android:layout_height="65dp"
+            android:scaleType="centerCrop"
             android:contentDescription="@string/noUserLoggedInImageDesc"
             android:src="@drawable/no_user_icon" />
 

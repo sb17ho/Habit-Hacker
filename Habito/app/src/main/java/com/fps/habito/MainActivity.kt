@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: ImageView by lazy { findViewById(R.id.add) }
     private val sign_out: Button by lazy { findViewById(R.id.sign_out_button) }
+    private val user_info_button: Button by lazy { findViewById(R.id.userInfoImageButton) }
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -63,6 +64,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent_to_sign_in)
                 finish()
             }
+        }
+
+        user_info_button.setOnClickListener {
+            val userInfoScreen: Intent = Intent(this, popUpUserWindow::class.java)
+            startActivity(userInfoScreen)
         }
 
         progressHabit()
