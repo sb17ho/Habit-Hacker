@@ -17,8 +17,6 @@ import java.util.*
 
 import kotlin.collections.ArrayList
 
-
-
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
