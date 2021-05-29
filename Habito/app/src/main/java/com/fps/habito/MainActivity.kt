@@ -5,14 +5,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 import kotlin.collections.ArrayList
@@ -21,24 +21,26 @@ class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: ImageView by lazy { findViewById(R.id.add) }
+    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mGoogleAuth: GoogleSignInClient
 
-    private lateinit var notificationManagerCompat : NotificationManagerCompat
-
-    companion object{
-         var habits = ArrayList<Habit>()
-         lateinit var habitAdapter: HabitAdapter
+    companion object {
+        var habits = ArrayList<Habit>()
+        lateinit var habitAdapter: HabitAdapter
     }
+
+    private val firebaseAccess = firebaseConnect()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        notificationManagerCompat = NotificationManagerCompat.from(this)
+
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
-
         add.setOnClickListener {
             val habitFormIntent = Intent(this, FormActivity::class.java)
             habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
@@ -46,14 +48,32 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
+
+        signOut.setOnClickListener {
+            mGoogleAuth.signOut().addOnCompleteListener {
+                mAuth = FirebaseAuth.getInstance()
+                mAuth.signOut()
+                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
+                startActivity(intentToSignIn)
+                finish()
+            }
+        }
+
         progressHabit()
         openHabitInfo()
-
         markDayChange()
     }
 
     private fun progressHabit() {
-        habitsGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        habitsGrid.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
 
             val crntHabit = habits[position]
             crntHabit.updateProgress()
@@ -65,7 +85,9 @@ class MainActivity : AppCompatActivity() {
             habitAdapter.notifyDataSetChanged()
 
         }
+
     }
+
 
     private fun openHabitInfo() {
 
@@ -106,7 +128,8 @@ class MainActivity : AppCompatActivity() {
              */
             val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
 
-            val targetHabit = habits.find { it.name == data.getStringExtra("old_habit_for_main") }
+            val targetHabit =
+                habits.find { it.name == data.getStringExtra("old_habit_for_main") }
             targetHabit?.icon = updatedHabit?.icon!!
             targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
@@ -138,6 +161,7 @@ class MainActivity : AppCompatActivity() {
                 calendar.timeInMillis,
                 (600 * 1000).toLong(),
                 pendingIntent
+
         )
 
         /**
@@ -149,20 +173,8 @@ class MainActivity : AppCompatActivity() {
         habitsGrid[position].background =  ContextCompat.getDrawable(this, R.drawable.habit_view_border_filled)
     }
 
-    private fun sendNotification(view: View){
-
-        val notification = NotificationCompat.Builder(this, ReminderNotification.CHANNEL_ID)
-                .setSmallIcon(R.drawable.home)
-                .setContentTitle(title)
-                .setContentText("Time to do your habit")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_REMINDER)
-                .build()
-
-        notificationManagerCompat.notify(1, notification)
-
-    }
 
 
 }
+
 

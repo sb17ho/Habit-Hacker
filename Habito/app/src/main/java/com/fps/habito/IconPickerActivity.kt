@@ -7,7 +7,7 @@ import android.widget.AdapterView
 import android.widget.GridView
 
 
-class IconPickerActivity : AppCompatActivity() {
+class HabitIconPickerActivity : AppCompatActivity() {
 
     private val iconsGrid: GridView by lazy { findViewById(R.id.iconsGrid) }
 

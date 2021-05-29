@@ -18,9 +18,7 @@
         android:verticalSpacing="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </GridView>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/add"
@@ -35,5 +33,17 @@
         app:layout_constraintTop_toBottomOf="@+id/habitsGrid"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/new_habit_white" />
+
+    <Button
+        android:id="@+id/sign_out_button"
+        android:layout_width="101dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="16dp"
+        android:text="Sign Out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habitsGrid"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
