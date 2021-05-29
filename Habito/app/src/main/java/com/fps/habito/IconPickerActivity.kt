@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.GridView
 
+
 class HabitIconPickerActivity : AppCompatActivity() {
 
     private val iconsGrid: GridView by lazy { findViewById(R.id.iconsGrid) }
@@ -57,7 +58,7 @@ class HabitIconPickerActivity : AppCompatActivity() {
     private fun sendSelectedIcon() {
 
         iconsGrid.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val habitFormIntent = Intent(this, HabitFormActivity::class.java)
+            val habitFormIntent = Intent(this, FormActivity::class.java)
             habitFormIntent.putExtra("selected_icon", allIcons[position])
             setResult(500, habitFormIntent)
             finish()

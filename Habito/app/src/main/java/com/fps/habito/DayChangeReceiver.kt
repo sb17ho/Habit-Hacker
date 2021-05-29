@@ -14,7 +14,7 @@ class DayChangeReceiver : BroadcastReceiver() {
 
         for (h in MainActivity.habits){
             h.progress = 0
-            h.status = HabitStatus.NOT_STARTED
+            h.status = Status.NOT_STARTED
         }
         MainActivity.habitAdapter.notifyDataSetChanged()
 

@@ -5,10 +5,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -16,15 +17,11 @@ import java.util.*
 
 import kotlin.collections.ArrayList
 
-/**
- * TODO update streak number on ui
- */
-
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: ImageView by lazy { findViewById(R.id.add) }
-    private val sign_out: Button by lazy { findViewById(R.id.sign_out_button) }
+    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -45,10 +42,11 @@ class MainActivity : AppCompatActivity() {
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
         add.setOnClickListener {
-            val habitFormIntent = Intent(this, HabitFormActivity::class.java)
+            val habitFormIntent = Intent(this, FormActivity::class.java)
             habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             startActivityForResult(habitFormIntent, 1)
         }
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -56,15 +54,14 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleAuth =
-            com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
+        mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
-        sign_out.setOnClickListener {
+        signOut.setOnClickListener {
             mGoogleAuth.signOut().addOnCompleteListener {
                 mAuth = FirebaseAuth.getInstance()
                 mAuth.signOut()
-                val intent_to_sign_in = Intent(this, GoogleSignIn::class.java)
-                startActivity(intent_to_sign_in)
+                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
+                startActivity(intentToSignIn)
                 finish()
             }
         }
@@ -78,24 +75,24 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
 
-                val crntHabit = habits[position]
+            val crntHabit = habits[position]
+            crntHabit.updateProgress()
 
-                crntHabit.updateProgress()
-
-                habitAdapter.notifyDataSetChanged()
-
-                if (crntHabit.status == HabitStatus.COMPLETED) {
-                    habitAdapter.notifyDataSetChanged()
-                }
-
+            if(crntHabit.status == Status.COMPLETED){
+                changeHabitViewBackgroundColor(habits.indexOf(crntHabit))
             }
+
+            habitAdapter.notifyDataSetChanged()
+
+        }
+
     }
 
 
     private fun openHabitInfo() {
 
         habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
-            val habitInfoIntent = Intent(this, HabitInfoActivity::class.java)
+            val habitInfoIntent = Intent(this, InfoActivity::class.java)
             habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             habitInfoIntent.putExtra("habit_info", habits[position])
             startActivityForResult(habitInfoIntent, 2)
@@ -117,15 +114,18 @@ class MainActivity : AppCompatActivity() {
             val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
 
             if (!habits.contains(newHabit)) {
-                habitAdapter.add(newHabit)
+                habits.add(newHabit)
                 habitAdapter.notifyDataSetChanged()
             }
 
         } else if (resultCode == 200) {
-            habitAdapter.remove(habits.find { it.name == data!!.getStringExtra("del_habit") })
+            habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
             habitAdapter.notifyDataSetChanged()
         } else if (resultCode == 400) {
 
+            /**
+             * TODO add the feature where the habit is considered changed no matter what field is changed.
+             */
             val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
 
             val targetHabit =
@@ -134,9 +134,7 @@ class MainActivity : AppCompatActivity() {
             targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
             targetHabit?.steps = updatedHabit.steps
-            targetHabit?.streak = updatedHabit.streak
-            targetHabit?.allTime = updatedHabit.allTime
-            targetHabit?.comp = updatedHabit.comp
+            targetHabit?.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
 
             habitAdapter.notifyDataSetChanged()
 
@@ -159,14 +157,24 @@ class MainActivity : AppCompatActivity() {
         calendar[Calendar.SECOND] = 0
 
         alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            (60 * 1000).toLong(),
-            pendingIntent
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                (600 * 1000).toLong(),
+                pendingIntent
+
         )
 
         /**
          * for everyday (24 * 60 * 60 * 1000).toLong(),
          */
     }
+
+    private fun changeHabitViewBackgroundColor(position : Int){
+        habitsGrid[position].background =  ContextCompat.getDrawable(this, R.drawable.habit_view_border_filled)
+    }
+
+
+
 }
+
+
