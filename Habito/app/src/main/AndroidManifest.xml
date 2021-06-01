@@ -11,25 +11,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Habito">
 
-
-        <activity android:name=".Boot_Screen_Main">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".GoogleSignIn" />
-
         <activity android:name=".IconPickerActivity" />
+
+        <activity android:name=".Boot_Screen_Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".GoogleSignIn" />
 
         <activity
             android:name=".InfoActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
             android:name=".FormActivity"
@@ -40,6 +39,7 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <receiver android:name=".DayChangeReceiver" />
+
     </application>
 
 </manifest>

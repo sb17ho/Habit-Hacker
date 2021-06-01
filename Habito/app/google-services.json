@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1004088719177",
+    "firebase_url": "https://habito-aca9f-default-rtdb.firebaseio.com",
+    "project_id": "habito-aca9f",
+    "storage_bucket": "habito-aca9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004088719177:android:0364a6070c06a799ad0c98",
+        "android_client_info": {
+          "package_name": "com.fps.habito"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004088719177-pne7bropmkse99259eoi0kun018tl0s7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fps.habito",
+            "certificate_hash": "54be86d621cfd62cbf6142b9bfed375544f0f2d0"
+          }
+        },
+        {
+          "client_id": "1004088719177-1uvb8jvjmo8vqlksfjrfjrcqs20v6je9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7xiYUGh297Nl7rKthVoRm-og5WvVHCOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004088719177-1uvb8jvjmo8vqlksfjrfjrcqs20v6je9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -30,14 +30,12 @@ class MainActivity : AppCompatActivity() {
         lateinit var habitAdapter: HabitAdapter
     }
 
-    private val firebaseAccess = firebaseConnect()
+    private val firebaseAccess = FirebaseConnection()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
