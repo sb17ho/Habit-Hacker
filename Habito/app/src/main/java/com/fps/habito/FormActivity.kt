@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -35,6 +36,9 @@ class FormActivity : AppCompatActivity() {
             getReminderTime()
             sendNewHabitData()
         } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
+
+            habitName.editText!!.focusable = View.NOT_FOCUSABLE
+
             fillWithHabitData()
             getReminderTime()
             selectHabitIcon()

@@ -108,7 +108,6 @@ class MainActivity : AppCompatActivity() {
 
             val targetHabit = habits.find { it.name == data.getStringExtra("old_habit_for_main") }
             targetHabit?.icon = updatedHabit?.icon!!
-            targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
             targetHabit?.progress!!.steps = updatedHabit.progress.steps
             targetHabit.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)

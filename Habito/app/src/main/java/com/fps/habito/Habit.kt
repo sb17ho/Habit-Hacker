@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Habit(
-    var name: String,
+    val name: String,
     var desc: String = "",
     var icon: Int = R.drawable.nil,
     var progress: Progress = Progress(),
