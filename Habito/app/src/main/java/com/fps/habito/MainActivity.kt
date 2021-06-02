@@ -21,9 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: ImageView by lazy { findViewById(R.id.add) }
-    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
-    private lateinit var mAuth: FirebaseAuth
-    private lateinit var mGoogleAuth: GoogleSignInClient
 
     companion object {
         var habits = ArrayList<Habit>()
@@ -43,25 +40,6 @@ class MainActivity : AppCompatActivity() {
             val habitFormIntent = Intent(this, FormActivity::class.java)
             habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             startActivityForResult(habitFormIntent, 1)
-        }
-
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
-
-        signOut.setOnClickListener {
-            mGoogleAuth.signOut().addOnCompleteListener {
-                mAuth = FirebaseAuth.getInstance()
-                mAuth.signOut()
-                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
-                startActivity(intentToSignIn)
-                finish()
-            }
         }
 
         progressHabit()
