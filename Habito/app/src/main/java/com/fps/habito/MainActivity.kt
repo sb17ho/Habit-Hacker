@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             val crntHabit = habits[position]
             crntHabit.updateProgress()
 
-            if(crntHabit.status == Status.COMPLETED){
+            if(crntHabit.progress.status == Status.COMPLETED.toString()){
                 changeHabitViewBackgroundColor(habits.indexOf(crntHabit))
             }
 
@@ -110,8 +110,8 @@ class MainActivity : AppCompatActivity() {
             targetHabit?.icon = updatedHabit?.icon!!
             targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
-            targetHabit?.steps = updatedHabit.steps
-            targetHabit?.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
+            targetHabit?.progress!!.steps = updatedHabit.progress.steps
+            targetHabit.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
 
             habitAdapter.notifyDataSetChanged()
 

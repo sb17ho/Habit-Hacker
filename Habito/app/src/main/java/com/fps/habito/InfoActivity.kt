@@ -39,17 +39,14 @@ class InfoActivity : AppCompatActivity() {
 
         val mainIntent = Intent(this, MainActivity::class.java)
 
-        mainIntent.putExtra("habit_for_main",
-                Habit(
-                        if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
-                        title.toString(),
-                        desc.text.toString(),
-                        steps.text.toString().toInt(),
-                        Stats(streak.text.toString().toInt(),comp.text.toString().toInt()),
-                        Reminder(1, 1, "am")
-                )
-        )
+        val habit = Habit(title.toString())
+        habit.desc = desc.text.toString()
+        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+        habit.progress.steps = steps.text.toString().toInt()
+        habit.stats.streak = streak.text.toString().toInt()
+        habit.stats.comp = comp.text.toString().toInt()
 
+        mainIntent.putExtra("habit_for_main", habit)
         mainIntent.putExtra("old_habit_for_main", oldHabitName)
 
         setResult(400, mainIntent)
@@ -70,7 +67,7 @@ class InfoActivity : AppCompatActivity() {
             desc.visibility = View.VISIBLE
         }
 
-        steps.text = habit.steps.toString()
+        steps.text = habit.progress.steps.toString()
 
         reminder.text = if (habit.reminder.isSet()) {
             reminder.visibility = View.VISIBLE
@@ -106,7 +103,7 @@ class InfoActivity : AppCompatActivity() {
                 desc.visibility = View.VISIBLE
             }
 
-            steps.text = updatedHabit.steps.toString()
+            steps.text = updatedHabit.progress.steps.toString()
 
             reminder.text = if (updatedHabit.reminder.isSet()) {
                 reminder.visibility = View.VISIBLE
