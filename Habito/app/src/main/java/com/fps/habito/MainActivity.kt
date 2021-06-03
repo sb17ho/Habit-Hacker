@@ -15,6 +15,7 @@ import androidx.core.view.get
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
@@ -35,10 +36,26 @@ class MainActivity : AppCompatActivity() {
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
 
+        fetchHabits()
+
         addHabit()
         progressHabit()
         openHabitInfo()
         markDayChange()
+    }
+
+    private fun fetchHabits() {
+
+        firebaseAccess.firebaseDatabase
+            .collection("Habit")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result!!.forEach { habits.add(it.toObject(Habit::class.java)) }
+                    habitAdapter.notifyDataSetChanged()
+                }
+            }
+
     }
 
     private fun addHabit() {
@@ -67,7 +84,6 @@ class MainActivity : AppCompatActivity() {
             }
 
     }
-
 
     private fun openHabitInfo() {
 
