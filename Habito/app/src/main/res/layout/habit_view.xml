@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/habit_view_border"
-    android:orientation="vertical"
- >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/habitViewName"
@@ -15,43 +14,40 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habitIcon"
-        android:background="@color/vib_red_pink"
-        android:textColor="@color/white"/>
+        app:layout_constraintTop_toBottomOf="@+id/habitIcon" />
 
     <ImageView
         android:id="@+id/habitIcon"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_gravity="center"
+        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/nil"
-        android:layout_margin="8dp"/>
+        app:srcCompat="@drawable/nil" />
 
     <TextView
         android:id="@+id/streakView"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habitViewName"
-        android:visibility="gone"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/habitViewName" />
 
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:indeterminate="false"
         android:max="100"
         android:progress="12"
         app:trackCornerRadius="5dp"
-        app:trackThickness="5dp"
-        android:layout_margin="8dp"/>
+        app:trackThickness="5dp" />
 
 
     <!--    android:background="@drawable/circle_shape"-->

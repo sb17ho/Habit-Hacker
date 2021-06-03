@@ -1,10 +1,12 @@
 package com.fps.habito
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,12 @@ class InfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_info)
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.statusBarColor = resources.getColor(R.color.vib_red_pink)
+
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
             "MAIN" -> {
                 fillViews()
@@ -43,7 +51,7 @@ class InfoActivity : AppCompatActivity() {
 
     private fun fillViews() {
 
-       MainActivity.firestoreCollectionReference
+        MainActivity.firestoreConnection.firebaseDatabase.collection("Habit")
             .document(intent.getStringExtra("habit_name")!!)
             .get()
             .addOnSuccessListener {
@@ -102,6 +110,7 @@ class InfoActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.editMenuOption -> editHabit()
             R.id.deleteMenuOption -> deleteHabit()
+            android.R.id.home -> onBackPressed()
         }
 
         return super.onOptionsItemSelected(item)

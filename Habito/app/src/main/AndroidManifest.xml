@@ -23,7 +23,8 @@
 
         <activity
             android:name=".FormActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
 
         <activity
             android:name=".MainActivity"

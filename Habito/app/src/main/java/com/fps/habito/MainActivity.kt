@@ -4,11 +4,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.GridView
-import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
@@ -20,18 +22,23 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
-    private val add: ImageView by lazy { findViewById(R.id.add) }
+    private val add: TextView by lazy { findViewById(R.id.add) }
 
     companion object {
         var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
-        var firestoreCollectionReference = FirebaseConnection().firebaseDatabase.collection("Habit")
+        var firestoreConnection = FirebaseConnection()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
@@ -45,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchHabits() {
 
-        firestoreCollectionReference
+        firestoreConnection.firebaseDatabase.collection("Habit")
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -79,7 +86,8 @@ class MainActivity : AppCompatActivity() {
 
                 habitAdapter.notifyDataSetChanged()
 
-                val currentHabitDoc = firestoreCollectionReference.document(currentHabit.name)
+                val currentHabitDoc = firestoreConnection.firebaseDatabase.collection("Habit")
+                    .document(currentHabit.name)
                 currentHabitDoc.update("progress", currentHabit.progress)
                 currentHabitDoc.update("stats", currentHabit.stats)
 
@@ -112,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         when (resultCode) {
 
             100 -> {
-                firestoreCollectionReference
+                firestoreConnection.firebaseDatabase.collection("Habit")
                     .document(data?.getStringExtra("new_habit_name")!!)
                     .get()
                     .addOnSuccessListener {
@@ -122,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             200 -> {
-                firestoreCollectionReference
+                firestoreConnection.firebaseDatabase.collection("Habit")
                     .document(data!!.getStringExtra("del_habit")!!)
                     .delete()
                     .addOnSuccessListener {
@@ -132,7 +140,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             400 -> {
-                firestoreCollectionReference
+                firestoreConnection.firebaseDatabase.collection("Habit")
                     .document(data?.getStringExtra("current_habit")!!)
                     .get()
                     .addOnSuccessListener {

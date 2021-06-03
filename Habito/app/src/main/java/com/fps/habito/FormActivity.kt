@@ -2,8 +2,11 @@ package com.fps.habito
 
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +34,14 @@ class FormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
+        title = "Create new habit"
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.statusBarColor = resources.getColor(R.color.vib_red_pink)
+
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
             "MAIN" -> {
                 selectIcon()
@@ -47,13 +58,14 @@ class FormActivity : AppCompatActivity() {
 
     }
 
+
     private fun doneButtonOnClickListener() {
 
         done.setOnClickListener {
 
             val habitInfoIntent = Intent(this, InfoActivity::class.java)
 
-            MainActivity.firestoreCollectionReference
+            MainActivity.firestoreConnection.firebaseDatabase.collection("Habit")
                 .document(intent.getStringExtra("edit_habit")!!)
                 .set(createHabitFromActivity())
 
@@ -66,7 +78,7 @@ class FormActivity : AppCompatActivity() {
 
     private fun fillViews() {
 
-        MainActivity.firestoreCollectionReference
+        MainActivity.firestoreConnection.firebaseDatabase.collection("Habit")
             .document(intent.getStringExtra("edit_habit")!!)
             .get()
             .addOnSuccessListener {
@@ -165,7 +177,7 @@ class FormActivity : AppCompatActivity() {
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
                 habitName.error = "Habit name is required"
             } else {
-                MainActivity.firestoreCollectionReference
+                MainActivity.firestoreConnection.firebaseDatabase.collection("Habit")
                     .document(newHabit.name)
                     .set(newHabit)
                 setResult(100, mainIntent)
@@ -186,6 +198,15 @@ class FormActivity : AppCompatActivity() {
             icon.tag = iconRes
         }
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            android.R.id.home -> finish()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
