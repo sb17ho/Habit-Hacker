@@ -70,14 +70,18 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
 
-                val crntHabit = habits[position]
-                crntHabit.updateProgress()
+                val currentHabit = habits[position]
+                currentHabit.updateProgress()
 
-                if (crntHabit.progress.status == Status.COMPLETED.toString()) {
-                    changeHabitViewBackgroundColor(habits.indexOf(crntHabit))
+                if (currentHabit.progress.status == Status.COMPLETED.toString()) {
+                    changeHabitViewBackgroundColor(habits.indexOf(currentHabit))
                 }
 
                 habitAdapter.notifyDataSetChanged()
+
+                val currentHabitDoc = firestoreCollectionReference.document(currentHabit.name)
+                currentHabitDoc.update("progress", currentHabit.progress)
+                currentHabitDoc.update("stats", currentHabit.stats)
 
             }
 
