@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
@@ -23,37 +24,38 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
 
-    //    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
-    private lateinit var mAuth: FirebaseAuth
-    private lateinit var mGoogleAuth: GoogleSignInClient
-
     companion object {
         var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
     }
 
+    private lateinit var mGoogleAuth: GoogleSignInClient
     private val firestoreConnection = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        println("MY-LOG: CREATE")
 
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
+        googleSignIn()
+
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
 
-        add.setOnClickListener {
-            val habitFormIntent = Intent(this, FormActivity::class.java)
-            habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-            startActivityForResult(habitFormIntent, 1)
-        }
+        getFireStoreData()
 
+        addButtonOnClickListener()
+        progressHabit()
+        startInfoActivity()
+        markDayChange()
+    }
+
+    private fun googleSignIn() {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -63,19 +65,14 @@ class MainActivity : AppCompatActivity() {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
-//        signOut.setOnClickListener {
-//            mGoogleAuth.signOut().addOnCompleteListener {
-//                mAuth = FirebaseAuth.getInstance()
-//                mAuth.signOut()
-//                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
-//                startActivity(intentToSignIn)
-//                finish()
-//            }
-//        }
+    }
 
-        progressHabit()
-        openHabitInfo()
-        markDayChange()
+    private fun addButtonOnClickListener() {
+        add.setOnClickListener {
+            val habitFormIntent = Intent(this, FormActivity::class.java)
+            habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
+            startActivityForResult(habitFormIntent, 1)
+        }
     }
 
     private fun progressHabit() {
@@ -91,8 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-    private fun openHabitInfo() {
+    private fun startInfoActivity() {
 
         habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
             val habitInfoIntent = Intent(this, InfoActivity::class.java)
@@ -107,64 +103,67 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        /**
-         * 100 for addition
-         * 200 for deletion
-         * 400 for back-buttoning from Info to Main
-         */
+        when (resultCode) {
+            100 -> {
+                val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
 
-        if (resultCode == 100) {
-            val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
+                if (!habits.contains(newHabit)) {
+                    habits.add(newHabit)
+                    habitAdapter.notifyDataSetChanged()
+                }
 
-            if (!habits.contains(newHabit)) {
-                habits.add(newHabit)
-                habitAdapter.notifyDataSetChanged()
+                firestoreConnection
+                    .collection("Habits")
+                    .document(newHabit.name)
+                    .set(newHabit)
+                    .addOnSuccessListener {
+                        Log.d("FireStoreHabitAddition", newHabit.name)
+                    }
             }
 
-        } else if (resultCode == 200) {
-            habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
-            habitAdapter.notifyDataSetChanged()
-        } else if (resultCode == 400) {
+            200 -> {
 
-            /**
-             * TODO add the feature where the habit is considered changed no matter what field is changed.
-             */
-            val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
+                val delHabitName = data!!.getStringExtra("del_habit")!!
 
-            val targetHabit =
-                habits.find { it.name == data.getStringExtra("old_habit_for_main") }
-            targetHabit?.icon = updatedHabit?.icon!!
-            targetHabit?.desc = updatedHabit.desc
-            targetHabit?.progress!!.steps = updatedHabit.progress.steps
-            targetHabit.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
+                habits.removeIf { it.name == delHabitName }
+                habitAdapter.notifyDataSetChanged()
 
-            habitAdapter.notifyDataSetChanged()
+                firestoreConnection
+                    .collection("Habits")
+                    .document(delHabitName)
+                    .delete()
+                    .addOnSuccessListener {
+                        Log.d("FireStoreHabitDeletion", delHabitName)
+                    }
+            }
+
+            400 -> {
+
+                val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")!!
+
+                habits[habits.indexOf(updatedHabit)] = updatedHabit
+                habitAdapter.notifyDataSetChanged()
+
+                firestoreConnection
+                    .collection("Habits")
+                    .document(updatedHabit.name)
+                    .set(updatedHabit)
+                    .addOnSuccessListener {
+                        Log.d("FireStoreHabitUpdation", updatedHabit.name)
+                    }
+
+            }
 
         }
 
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        val batch = firestoreConnection.batch()
-
-        habits.forEach {
-            batch.set(firestoreConnection.collection("Habits").document(it.name), it)
-        }
-
-        batch.commit()
-
-    }
-
-
-    override fun onResume() {
-        super.onResume()
+    private fun getFireStoreData() {
 
         firestoreConnection.collection("Habits").addSnapshotListener { value, error ->
             value?.documents?.forEach {
 
-                val habit: Habit? = (it.toObject(Habit::class.java))
+                val habit = (it.toObject(Habit::class.java))
 
                 if (habit != null) {
                     if (habits.contains(habit)) {
@@ -179,7 +178,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
     private fun markDayChange() {
 
@@ -200,14 +198,15 @@ class MainActivity : AppCompatActivity() {
             calendar.timeInMillis,
             (600 * 1000).toLong(),
             pendingIntent
-
         )
 
+        /**
+         * for everyday (24 * 60 * 60 * 1000).toLong(),
+         */
+
     }
+
 }
-/**
- * for everyday (24 * 60 * 60 * 1000).toLong(),
- */
 
 
 

@@ -23,8 +23,6 @@ class InfoActivity : AppCompatActivity() {
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
-    private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -37,9 +35,8 @@ class InfoActivity : AppCompatActivity() {
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
 
-        if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
-            fillFormFields()
-            title = habitName.text
+        when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
+            "MAIN" -> fillViews()
         }
 
     }
@@ -51,21 +48,25 @@ class InfoActivity : AppCompatActivity() {
         val habit = Habit(title.toString())
         habit.desc = desc.text.toString()
         habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+        habit.reminder = Reminder(5,9, "pm")
         habit.progress.steps = steps.text.toString().toInt()
         habit.stats.streak = streak.text.toString().toInt()
         habit.stats.comp = comp.text.toString().toInt()
 
         mainIntent.putExtra("habit_for_main", habit)
-        mainIntent.putExtra("old_habit_for_main", oldHabitName)
 
         setResult(400, mainIntent)
         finish()
 
     }
 
-    private fun fillFormFields() {
+    private fun fillViews() {
 
         val habit = intent.getParcelableExtra<Habit>("habit_info")!!
+
+        println("fill views $habit")
+
+        title = habit.name
 
         icon.setImageResource(habit.icon)
         icon.tag = habit.icon
@@ -161,5 +162,7 @@ class InfoActivity : AppCompatActivity() {
         setResult(200, mainActIntent)
         finish()
     }
+
+
 
 }
