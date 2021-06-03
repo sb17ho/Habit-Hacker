@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit
 
 class Stats(var streak: Int = 0, var comp: Int = 0) : Parcelable {
 
-    var startDate: Date = Calendar.getInstance().time
-
     val allTime: Double
         get() {
 
@@ -21,6 +19,8 @@ class Stats(var streak: Int = 0, var comp: Int = 0) : Parcelable {
             return (comp.toDouble()) / timeElapsed
 
         }
+
+    var startDate: Date = Calendar.getInstance().time
 
     companion object {
         @JvmField

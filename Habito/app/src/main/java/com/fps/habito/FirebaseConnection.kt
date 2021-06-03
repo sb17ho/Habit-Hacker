@@ -5,11 +5,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class FirebaseConnection {
 
-     val firebaseDatabase = FirebaseFirestore.getInstance()
+    private val firebaseDatabase = FirebaseFirestore.getInstance()
 
     fun sendData(habit: Habit) {
-
-        firebaseDatabase.collection("Habit").document("c").get()
 
         firebaseDatabase
             .collection("Habit")

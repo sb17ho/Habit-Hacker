@@ -3,12 +3,13 @@ package com.fps.habito
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.textfield.TextInputLayout
@@ -34,98 +35,81 @@ class FormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_form)
 
-        title = "Create new habit"
-
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
-        when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
-            "MAIN" -> {
-                selectIcon()
-                selectReminder()
-                createHabit()
+
+        if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
+            title = "Create new habit"
+            selectHabitIcon()
+            getReminderTime()
+            sendNewHabitData()
+        } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
+
+            title = "Edit habit"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                habitName.editText!!.focusable = View.NOT_FOCUSABLE
             }
-            "HABIT_INFO" -> {
-                fillViews()
-                selectReminder()
-                selectIcon()
-                doneButtonOnClickListener()
+
+            fillWithHabitData()
+            getReminderTime()
+            selectHabitIcon()
+
+            done.setOnClickListener {
+                val habitInfoIntent = Intent(this, InfoActivity::class.java)
+
+                val updatedHabit = Habit(habitName.editText!!.text.toString())
+                updatedHabit.desc = habitDesc.editText!!.text.toString()
+                updatedHabit.icon = icon.tag as Int
+                updatedHabit.progress.steps = steps.editText!!.text.toString().toInt()
+                updatedHabit.reminder = habitReminderFromClock
+
+                habitInfoIntent.putExtra("updated_habit", updatedHabit)
+                setResult(300, habitInfoIntent)
+                finish()
             }
         }
 
     }
 
+    private fun fillWithHabitData() {
 
-    private fun doneButtonOnClickListener() {
+        val habitFilled = intent.getParcelableExtra<Habit>("habit_filled_info")!!
 
-        done.setOnClickListener {
+        icon.setImageResource(habitFilled.icon)
+        icon.tag = habitFilled.icon
+        habitName.editText!!.setText(habitFilled.name)
+        habitDesc.editText!!.setText(habitFilled.desc)
+        steps.editText!!.setText(habitFilled.progress.steps.toString())
 
-            val habitInfoIntent = Intent(this, InfoActivity::class.java)
-
-            MainActivity.firestoreConnection.firebaseDatabase.collection("Habit")
-                .document(intent.getStringExtra("edit_habit")!!)
-                .set(createHabitFromActivity())
-
-            habitInfoIntent.putExtra("updated_habit", habitName.editText!!.text.toString())
-            setResult(300, habitInfoIntent)
-            finish()
+        reminderTextView.text = if (habitFilled.reminder.isSet()) {
+            reminderSwitch.isChecked = true
+            habitFilled.reminder.toString()
+        } else {
+            reminderSwitch.isChecked = false
+            "Tap to set reminder"
         }
 
-    }
-
-    private fun fillViews() {
-
-        MainActivity.firestoreConnection.firebaseDatabase.collection("Habit")
-            .document(intent.getStringExtra("edit_habit")!!)
-            .get()
-            .addOnSuccessListener {
-
-                val currentHabit = it.toObject(Habit::class.java)!!
-
-                habitName.editText!!.setText(currentHabit.name)
-                habitDesc.editText!!.setText(currentHabit.desc)
-
-                icon.setImageResource(currentHabit.icon)
-                icon.tag = currentHabit.icon
-
-                steps.editText!!.setText(currentHabit.progress.steps.toString())
-
-                reminderTextView.text = if (currentHabit.reminder.isSet()) {
-                    reminderSwitch.isChecked = true
-                    currentHabit.reminder.toString()
-                } else {
-                    reminderSwitch.isChecked = false
-                    "Tap to set reminder"
-                }
-
-                habitReminderFromClock = currentHabit.reminder
-
-            }
+        habitReminderFromClock = habitFilled.reminder
 
     }
 
-    private fun selectIcon() {
 
-        icon.setOnClickListener {
-            startActivityForResult(Intent(this, IconPickerActivity::class.java), 1)
-        }
-
-    }
-
-    private fun selectReminder() {
+    private fun getReminderTime() {
 
         reminderTextView.setOnClickListener {
             if (reminderSwitch.isChecked) {
-                selectReminderFromClock()
+                setHabitReminderFromClock()
             }
         }
 
     }
 
-    private fun selectReminderFromClock() {
+    private fun setHabitReminderFromClock() {
 
         val calendar = Calendar.getInstance()
 
@@ -141,45 +125,37 @@ class FormActivity : AppCompatActivity() {
 
     }
 
-    private fun createHabitFromActivity(): Habit {
+    private fun selectHabitIcon() {
 
-        val newHabit = Habit(habitName.editText!!.text.toString())
-
-        newHabit.desc =
-            if (habitDesc.editText!!.text.toString().isEmpty()) ""
-            else habitDesc.editText!!.text.toString()
-
-        newHabit.icon =
-            if (icon.tag == null) R.drawable.nil
-            else icon.tag.toString().toInt()
-
-        newHabit.progress.steps =
-            if (steps.editText!!.text.toString().isEmpty()) 1
-            else steps.editText!!.text.toString().toInt()
-
-        newHabit.stats.startDate = Calendar.getInstance().time
-
-        newHabit.reminder = habitReminderFromClock
-
-        return newHabit
+        icon.setOnClickListener {
+            startActivityForResult(Intent(this, IconPickerActivity::class.java), 1)
+        }
 
     }
 
-    private fun createHabit() {
+
+    private fun sendNewHabitData() {
 
         done.setOnClickListener {
 
-            val newHabit = createHabitFromActivity()
-
             val mainIntent = Intent(applicationContext, MainActivity::class.java)
-            mainIntent.putExtra("new_habit_name", newHabit.name)
+
+            val newHabit = Habit(habitName.editText!!.text.toString())
+            newHabit.desc = if (habitDesc.editText!!.text.toString()
+                    .isEmpty()
+            ) "" else habitDesc.editText!!.text.toString()
+            newHabit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+            newHabit.progress.steps = if (steps.editText!!.text.toString()
+                    .isEmpty()
+            ) 1 else steps.editText!!.text.toString().toInt()
+            newHabit.stats.startDate = Calendar.getInstance().time
+            newHabit.reminder = habitReminderFromClock
+
+            mainIntent.putExtra("new_habit", newHabit)
 
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
                 habitName.error = "Habit name is required"
             } else {
-                MainActivity.firestoreConnection.firebaseDatabase.collection("Habit")
-                    .document(newHabit.name)
-                    .set(newHabit)
                 setResult(100, mainIntent)
                 finish()
             }
@@ -189,7 +165,6 @@ class FormActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == 500) {
@@ -210,21 +185,30 @@ class FormActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-
         super.onSaveInstanceState(outState)
-        outState.putParcelable("filled_habit", createHabitFromActivity())
+
+        val filledHabit = Habit(habitName.editText!!.text.toString())
+        filledHabit.desc = if (habitDesc.editText!!.text.toString()
+                .isEmpty()
+        ) "" else habitDesc.editText!!.text.toString()
+        filledHabit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+        filledHabit.progress.steps =
+            if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString()
+                .toInt()
+        filledHabit.stats.startDate = Calendar.getInstance().time
+        filledHabit.reminder = habitReminderFromClock
+
+        outState.putParcelable("FILLED_HABIT", filledHabit)
 
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-
-        val restoredHabit: Habit = savedInstanceState.getParcelable("filled_habit")!!
+        val restoredHabit: Habit = savedInstanceState.getParcelable("FILLED_HABIT")!!
         icon.setImageResource(restoredHabit.icon)
         icon.tag = restoredHabit.icon
         habitName.editText!!.setText(restoredHabit.name)
         habitDesc.editText!!.setText(restoredHabit.desc)
         steps.editText!!.setText(restoredHabit.progress.steps.toString())
-
     }
 
 }

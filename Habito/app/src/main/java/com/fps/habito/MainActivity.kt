@@ -7,28 +7,32 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.WindowManager
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
-import android.widget.GridView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
+
 import kotlin.collections.ArrayList
 
-
-@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
+//    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mGoogleAuth: GoogleSignInClient
 
     companion object {
         var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
-        var firestoreConnection = FirebaseConnection()
     }
+
+    private val firebaseAccess = FirebaseConnection()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -42,65 +46,56 @@ class MainActivity : AppCompatActivity() {
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
-
-        fetchHabits()
-        addHabit()
-        progressHabit()
-        openHabitInfo()
-        markDayChange()
-    }
-
-    private fun fetchHabits() {
-
-        firestoreConnection.firebaseDatabase.collection("Habit")
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    task.result!!.forEach { habits.add(it.toObject(Habit::class.java)) }
-                    habitAdapter.notifyDataSetChanged()
-                }
-            }
-
-    }
-
-    private fun addHabit() {
-
         add.setOnClickListener {
             val habitFormIntent = Intent(this, FormActivity::class.java)
             habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             startActivityForResult(habitFormIntent, 1)
         }
 
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
+
+//        signOut.setOnClickListener {
+//            mGoogleAuth.signOut().addOnCompleteListener {
+//                mAuth = FirebaseAuth.getInstance()
+//                mAuth.signOut()
+//                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
+//                startActivity(intentToSignIn)
+//                finish()
+//            }
+//        }
+
+        progressHabit()
+        openHabitInfo()
+        markDayChange()
     }
 
     private fun progressHabit() {
         habitsGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
 
-                val currentHabit = habits[position]
-                currentHabit.updateProgress()
+            val crntHabit = habits[position]
+            crntHabit.updateProgress()
 
-                if (currentHabit.progress.status == Status.COMPLETED.toString()) {
-                    changeHabitViewBackgroundColor(habits.indexOf(currentHabit))
-                }
+            habitAdapter.notifyDataSetChanged()
 
-                habitAdapter.notifyDataSetChanged()
-
-                val currentHabitDoc = firestoreConnection.firebaseDatabase.collection("Habit")
-                    .document(currentHabit.name)
-                currentHabitDoc.update("progress", currentHabit.progress)
-                currentHabitDoc.update("stats", currentHabit.stats)
-
-            }
+        }
 
     }
 
+
     private fun openHabitInfo() {
 
-        habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
+        habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
             val habitInfoIntent = Intent(this, InfoActivity::class.java)
             habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-            habitInfoIntent.putExtra("habit_name", habits[position].name)
+            habitInfoIntent.putExtra("habit_info", habits[position])
             startActivityForResult(habitInfoIntent, 2)
             true
         }
@@ -108,7 +103,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         super.onActivityResult(requestCode, resultCode, data)
 
         /**
@@ -117,38 +111,32 @@ class MainActivity : AppCompatActivity() {
          * 400 for back-buttoning from Info to Main
          */
 
-        when (resultCode) {
+        if (resultCode == 100) {
+            val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
 
-            100 -> {
-                firestoreConnection.firebaseDatabase.collection("Habit")
-                    .document(data?.getStringExtra("new_habit_name")!!)
-                    .get()
-                    .addOnSuccessListener {
-                        habits.add(it.toObject(Habit::class.java)!!)
-                        habitAdapter.notifyDataSetChanged()
-                    }
+            if (!habits.contains(newHabit)) {
+                habits.add(newHabit)
+                habitAdapter.notifyDataSetChanged()
             }
 
-            200 -> {
-                firestoreConnection.firebaseDatabase.collection("Habit")
-                    .document(data!!.getStringExtra("del_habit")!!)
-                    .delete()
-                    .addOnSuccessListener {
-                        habits.removeIf { it.name == data.getStringExtra("del_habit") }
-                        habitAdapter.notifyDataSetChanged()
-                    }
-            }
+        } else if (resultCode == 200) {
+            habits.removeIf { it.name == data!!.getStringExtra("del_habit") }
+            habitAdapter.notifyDataSetChanged()
+        } else if (resultCode == 400) {
 
-            400 -> {
-                firestoreConnection.firebaseDatabase.collection("Habit")
-                    .document(data?.getStringExtra("current_habit")!!)
-                    .get()
-                    .addOnSuccessListener {
-                        val habit = it.toObject(Habit::class.java)!!
-                        habits[habits.indexOf(habit)] = habit
-                        habitAdapter.notifyDataSetChanged()
-                    }
-            }
+            /**
+             * TODO add the feature where the habit is considered changed no matter what field is changed.
+             */
+            val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")
+
+            val targetHabit =
+                habits.find { it.name == data.getStringExtra("old_habit_for_main") }
+            targetHabit?.icon = updatedHabit?.icon!!
+            targetHabit?.desc = updatedHabit.desc
+            targetHabit?.progress!!.steps = updatedHabit.progress.steps
+            targetHabit.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
+
+            habitAdapter.notifyDataSetChanged()
 
         }
 
@@ -169,10 +157,10 @@ class MainActivity : AppCompatActivity() {
         calendar[Calendar.SECOND] = 0
 
         alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            (600 * 1000).toLong(),
-            pendingIntent
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                (600 * 1000).toLong(),
+                pendingIntent
 
         )
 
@@ -181,10 +169,7 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-    private fun changeHabitViewBackgroundColor(position: Int) {
-        habitsGrid[position].background =
-            ContextCompat.getDrawable(this, R.drawable.habit_view_border_filled)
-    }
+
 
 
 }
