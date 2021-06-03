@@ -1,13 +1,13 @@
 package com.fps.habito
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 class InfoActivity : AppCompatActivity() {
 
@@ -17,108 +17,76 @@ class InfoActivity : AppCompatActivity() {
     private val steps: TextView by lazy { findViewById(R.id.steps) }
     private val reminder: TextView by lazy { findViewById(R.id.reminder) }
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
-    private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
+    private val allTime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
-    private val oldHabitName by lazy { intent.getParcelableExtra<Habit>("habit_info")!!.name }
+    private val collectionRef = MainActivity.firebaseAccess.firebaseDatabase.collection("Habit")
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_info)
 
-        if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
-            fillFormFields()
-            title = habitName.text
+        when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
+            "MAIN" -> {
+                fillViews()
+            }
         }
 
     }
 
     override fun onBackPressed() {
-
-        val mainIntent = Intent(this, MainActivity::class.java)
-
-        val habit = Habit(title.toString())
-        habit.desc = desc.text.toString()
-        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
-        habit.progress.steps = steps.text.toString().toInt()
-        habit.stats.streak = streak.text.toString().toInt()
-        habit.stats.comp = comp.text.toString().toInt()
-
-        mainIntent.putExtra("habit_for_main", habit)
-        mainIntent.putExtra("old_habit_for_main", oldHabitName)
-
-        setResult(400, mainIntent)
         finish()
-
     }
 
-    private fun fillFormFields() {
+    private fun fillViews() {
 
-        val habit = intent.getParcelableExtra<Habit>("habit_info")!!
+        collectionRef
+            .document(intent.getStringExtra("habit_name")!!)
+            .get()
+            .addOnSuccessListener {
 
-        icon.setImageResource(habit.icon)
-        icon.tag = habit.icon
-        habitName.text = habit.name
+                val currentHabit = it.toObject(Habit::class.java)!!
 
-        desc.text = habit.desc
-        if (desc.text.isNotEmpty()) {
-            desc.visibility = View.VISIBLE
-        }
+                title = currentHabit.name
 
-        steps.text = habit.progress.steps.toString()
+                habitName.text = currentHabit.name
 
-        reminder.text = if (habit.reminder.isSet()) {
-            reminder.visibility = View.VISIBLE
-            habit.reminder.toString()
-        } else {
-            "Reminder not set"
-        }
+                desc.text = currentHabit.desc
+                if (currentHabit.desc.isNotEmpty()) {
+                    desc.visibility = View.VISIBLE
+                }
 
-        streak.text = habit.stats.streak.toString()
+                icon.setImageResource(currentHabit.icon)
+                icon.tag = currentHabit.icon
 
+                steps.text = currentHabit.progress.steps.toString()
 
-        alltime.text =habit.stats.allTime.toString()
+                reminder.text =
+                    if (currentHabit.reminder.isSet()) {
+                        reminder.visibility = View.VISIBLE
+                        currentHabit.reminder.toString()
+                    } else {
+                        "Reminder not set"
+                    }
 
-        comp.text = habit.stats.comp.toString()
+                streak.text = currentHabit.stats.streak.toString()
+                comp.text = currentHabit.stats.comp.toString()
+                allTime.text = "0"
 
-        startDate.text = "Started on ${habit.stats.startDate}"
+                startDate.text = currentHabit.stats.startDate.toString()
 
+            }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == 300) {
-            val updatedHabit = data!!.getParcelableExtra<Habit>("updated_habit")!!
-
-            icon.setImageResource(updatedHabit.icon)
-            icon.tag = updatedHabit.icon
-            habitName.text = updatedHabit.name
-
-            desc.text = updatedHabit.desc
-            if (desc.text.isNotEmpty()) {
-                desc.visibility = View.VISIBLE
-            }
-
-            steps.text = updatedHabit.progress.steps.toString()
-
-            reminder.text = if (updatedHabit.reminder.isSet()) {
-                reminder.visibility = View.VISIBLE
-                updatedHabit.reminder.toString()
-            } else {
-                "Reminder not set"
-            }
-
-            streak.text = updatedHabit.stats.streak.toString()
-
-            alltime.text = updatedHabit.stats.allTime.toString()
-
-            comp.text = updatedHabit.stats.comp.toString()
-
-            title = habitName.text
+            fillViews()
         }
 
     }
@@ -130,10 +98,9 @@ class InfoActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (item.itemId == R.id.editMenuOption) {
-            editHabit()
-        } else if (item.itemId == R.id.deleteMenuOption) {
-            deleteHabit()
+        when (item.itemId) {
+            R.id.editMenuOption -> editHabit()
+            R.id.deleteMenuOption -> deleteHabit()
         }
 
         return super.onOptionsItemSelected(item)
@@ -142,7 +109,7 @@ class InfoActivity : AppCompatActivity() {
     private fun editHabit() {
         val habitFormIntent = Intent(applicationContext, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
-        habitFormIntent.putExtra("habit_filled_info", intent.getParcelableExtra<Habit>("habit_info"))
+        habitFormIntent.putExtra("edit_habit", title)
         startActivityForResult(habitFormIntent, 300)
     }
 
@@ -154,3 +121,14 @@ class InfoActivity : AppCompatActivity() {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+

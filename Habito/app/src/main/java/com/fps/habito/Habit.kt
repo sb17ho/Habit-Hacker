@@ -4,13 +4,15 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Habit(
-    val name: String,
+    var name: String,
     var desc: String = "",
     var icon: Int = R.drawable.nil,
     var progress: Progress = Progress(),
     var stats: Stats = Stats(),
     var reminder: Reminder = Reminder()
 ) : Parcelable {
+
+    constructor() : this("")
 
     fun updateProgress() {
 
