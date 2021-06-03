@@ -1,11 +1,13 @@
 package com.fps.habito
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 
@@ -28,6 +30,13 @@ class InfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_info)
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.statusBarColor = resources.getColor(R.color.vib_red_pink)
+
+
         if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
             fillFormFields()
             title = habitName.text
@@ -39,17 +48,14 @@ class InfoActivity : AppCompatActivity() {
 
         val mainIntent = Intent(this, MainActivity::class.java)
 
-        mainIntent.putExtra("habit_for_main",
-                Habit(
-                        if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt(),
-                        title.toString(),
-                        desc.text.toString(),
-                        steps.text.toString().toInt(),
-                        Stats(streak.text.toString().toInt(),comp.text.toString().toInt()),
-                        Reminder(1, 1, "am")
-                )
-        )
+        val habit = Habit(title.toString())
+        habit.desc = desc.text.toString()
+        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+        habit.progress.steps = steps.text.toString().toInt()
+        habit.stats.streak = streak.text.toString().toInt()
+        habit.stats.comp = comp.text.toString().toInt()
 
+        mainIntent.putExtra("habit_for_main", habit)
         mainIntent.putExtra("old_habit_for_main", oldHabitName)
 
         setResult(400, mainIntent)
@@ -70,7 +76,7 @@ class InfoActivity : AppCompatActivity() {
             desc.visibility = View.VISIBLE
         }
 
-        steps.text = habit.steps.toString()
+        steps.text = habit.progress.steps.toString()
 
         reminder.text = if (habit.reminder.isSet()) {
             reminder.visibility = View.VISIBLE
@@ -106,7 +112,7 @@ class InfoActivity : AppCompatActivity() {
                 desc.visibility = View.VISIBLE
             }
 
-            steps.text = updatedHabit.steps.toString()
+            steps.text = updatedHabit.progress.steps.toString()
 
             reminder.text = if (updatedHabit.reminder.isSet()) {
                 reminder.visibility = View.VISIBLE
@@ -133,10 +139,10 @@ class InfoActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (item.itemId == R.id.editMenuOption) {
-            editHabit()
-        } else if (item.itemId == R.id.deleteMenuOption) {
-            deleteHabit()
+        when (item.itemId) {
+            R.id.editMenuOption -> editHabit()
+            R.id.deleteMenuOption -> deleteHabit()
+            android.R.id.home -> onBackPressed()
         }
 
         return super.onOptionsItemSelected(item)

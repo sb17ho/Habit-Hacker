@@ -4,7 +4,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
@@ -20,8 +22,8 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
-    private val add: ImageView by lazy { findViewById(R.id.add) }
-    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
+    private val add: TextView by lazy { findViewById(R.id.add) }
+//    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -36,6 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
@@ -54,15 +61,15 @@ class MainActivity : AppCompatActivity() {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
-        signOut.setOnClickListener {
-            mGoogleAuth.signOut().addOnCompleteListener {
-                mAuth = FirebaseAuth.getInstance()
-                mAuth.signOut()
-                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
-                startActivity(intentToSignIn)
-                finish()
-            }
-        }
+//        signOut.setOnClickListener {
+//            mGoogleAuth.signOut().addOnCompleteListener {
+//                mAuth = FirebaseAuth.getInstance()
+//                mAuth.signOut()
+//                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
+//                startActivity(intentToSignIn)
+//                finish()
+//            }
+//        }
 
         progressHabit()
         openHabitInfo()
@@ -75,10 +82,6 @@ class MainActivity : AppCompatActivity() {
 
             val crntHabit = habits[position]
             crntHabit.updateProgress()
-
-            if(crntHabit.status == Status.COMPLETED){
-                changeHabitViewBackgroundColor(habits.indexOf(crntHabit))
-            }
 
             habitAdapter.notifyDataSetChanged()
 
@@ -129,10 +132,9 @@ class MainActivity : AppCompatActivity() {
             val targetHabit =
                 habits.find { it.name == data.getStringExtra("old_habit_for_main") }
             targetHabit?.icon = updatedHabit?.icon!!
-            targetHabit?.name = updatedHabit.name
             targetHabit?.desc = updatedHabit.desc
-            targetHabit?.steps = updatedHabit.steps
-            targetHabit?.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
+            targetHabit?.progress!!.steps = updatedHabit.progress.steps
+            targetHabit.stats = Stats(updatedHabit.stats.streak, updatedHabit.stats.comp)
 
             habitAdapter.notifyDataSetChanged()
 
@@ -167,9 +169,6 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-    private fun changeHabitViewBackgroundColor(position : Int){
-        habitsGrid[position].background =  ContextCompat.getDrawable(this, R.drawable.habit_view_border_filled)
-    }
 
 
 

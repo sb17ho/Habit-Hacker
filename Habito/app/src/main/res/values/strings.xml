@@ -9,4 +9,5 @@
     <string name="am">AM</string>
     <string name="pm">PM</string>
     <string name="textview">TextView</string>
+    <string name="add_habit">ADD HABIT</string>
 </resources>

@@ -4,19 +4,8 @@
     android:id="@+id/habitCard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/habit_view_border"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <ImageView
-        android:id="@+id/habitIcon"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/nil" />
+    android:background="@drawable/habit_view_background"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/habitViewName"
@@ -27,19 +16,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitIcon" />
 
+    <ImageView
+        android:id="@+id/habitIcon"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/nil" />
+
     <TextView
         android:id="@+id/streakView"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitViewName" />
+
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:indeterminate="false"
         android:max="100"
         android:progress="12"
