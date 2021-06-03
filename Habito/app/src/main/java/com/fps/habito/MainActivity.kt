@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
-        val firebaseAccess = FirebaseConnection()
+        var firestoreCollectionReference = FirebaseConnection().firebaseDatabase.collection("Habit")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.adapter = habitAdapter
 
         fetchHabits()
-
         addHabit()
         progressHabit()
         openHabitInfo()
@@ -46,8 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchHabits() {
 
-        firebaseAccess.firebaseDatabase
-            .collection("Habit")
+        firestoreCollectionReference
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -107,12 +105,10 @@ class MainActivity : AppCompatActivity() {
          * 400 for back-buttoning from Info to Main
          */
 
-        val colRef = firebaseAccess.firebaseDatabase.collection("Habit")
-
         when (resultCode) {
 
             100 -> {
-                colRef
+                firestoreCollectionReference
                     .document(data?.getStringExtra("new_habit_name")!!)
                     .get()
                     .addOnSuccessListener {
@@ -122,11 +118,22 @@ class MainActivity : AppCompatActivity() {
             }
 
             200 -> {
-                colRef
+                firestoreCollectionReference
                     .document(data!!.getStringExtra("del_habit")!!)
                     .delete()
                     .addOnSuccessListener {
                         habits.removeIf { it.name == data.getStringExtra("del_habit") }
+                        habitAdapter.notifyDataSetChanged()
+                    }
+            }
+
+            400 -> {
+                firestoreCollectionReference
+                    .document(data?.getStringExtra("current_habit")!!)
+                    .get()
+                    .addOnSuccessListener {
+                        val habit = it.toObject(Habit::class.java)!!
+                        habits[habits.indexOf(habit)] = habit
                         habitAdapter.notifyDataSetChanged()
                     }
             }

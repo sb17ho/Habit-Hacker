@@ -21,8 +21,6 @@ class InfoActivity : AppCompatActivity() {
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
-    private val collectionRef = MainActivity.firebaseAccess.firebaseDatabase.collection("Habit")
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -37,12 +35,15 @@ class InfoActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        val mainIntent = Intent(this, MainActivity::class.java)
+        mainIntent.putExtra("current_habit", title)
+        setResult(400, mainIntent)
         finish()
     }
 
     private fun fillViews() {
 
-        collectionRef
+       MainActivity.firestoreCollectionReference
             .document(intent.getStringExtra("habit_name")!!)
             .get()
             .addOnSuccessListener {

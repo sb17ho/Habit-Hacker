@@ -26,8 +26,6 @@ class FormActivity : AppCompatActivity() {
 
     private var habitReminderFromClock = Reminder()
 
-    private val collectionRef = MainActivity.firebaseAccess.firebaseDatabase.collection("Habit")
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -55,7 +53,7 @@ class FormActivity : AppCompatActivity() {
 
             val habitInfoIntent = Intent(this, InfoActivity::class.java)
 
-            collectionRef
+            MainActivity.firestoreCollectionReference
                 .document(intent.getStringExtra("edit_habit")!!)
                 .set(createHabitFromActivity())
 
@@ -68,7 +66,7 @@ class FormActivity : AppCompatActivity() {
 
     private fun fillViews() {
 
-        collectionRef
+        MainActivity.firestoreCollectionReference
             .document(intent.getStringExtra("edit_habit")!!)
             .get()
             .addOnSuccessListener {
@@ -167,8 +165,7 @@ class FormActivity : AppCompatActivity() {
             if (TextUtils.isEmpty(habitName.editText!!.text)) {
                 habitName.error = "Habit name is required"
             } else {
-                MainActivity.firebaseAccess.firebaseDatabase
-                    .collection("Habit")
+                MainActivity.firestoreCollectionReference
                     .document(newHabit.name)
                     .set(newHabit)
                 setResult(100, mainIntent)
