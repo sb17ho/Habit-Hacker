@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
 
+    private val habits = ArrayList<Habit>()
     companion object {
-        var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
     }
 
@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(this, DayChangeReceiver::class.java)
-        intent.putParcelableArrayListExtra("all_habits_list", habits)
+        intent.putParcelableArrayListExtra("all_habits", habits)
 
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
 

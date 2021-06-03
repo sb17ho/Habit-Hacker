@@ -4,19 +4,23 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 
-
 class DayChangeReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-//        println("DAY CHANGE RECEIVED")
-//        println(MainActivity.habits)
+        intent?.getParcelableArrayListExtra<Habit>("all_habits")?.forEach {
 
-        for (h in MainActivity.habits){
-            h.progress.progress = 0
-            h.progress.status = Status.NOT_STARTED.toString()
+            if (it.progress.status != Status.COMPLETED.toString()) {
+                it.stats.streak = 0
+            }
+
+            it.progress.progress = 0
+            it.progress.status = Status.NOT_STARTED.toString()
+
         }
+
         MainActivity.habitAdapter.notifyDataSetChanged()
 
     }
+
 }
