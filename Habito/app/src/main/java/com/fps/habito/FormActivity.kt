@@ -42,41 +42,50 @@ class FormActivity : AppCompatActivity() {
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
 
-        if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("MAIN")) {
-            title = "Create new habit"
-            selectHabitIcon()
-            getReminderTime()
-            sendNewHabitData()
-        } else if (intent.getStringExtra("PARENT_ACTIVITY_NAME").equals("HABIT_INFO")) {
+        when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
+            "MAIN" -> {
+                title = "Create new habit"
+                selectIcon()
+                selectReminder()
+                createHabitListener()
+            }
+            "HABIT_INFO" -> {
 
-            title = "Edit habit"
+                title = "Edit habit"
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                habitName.editText!!.focusable = View.NOT_FOCUSABLE
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    habitName.editText!!.focusable = View.NOT_FOCUSABLE
+                }
+
+                fillViews()
+                selectIcon()
+                selectReminder()
+                updatedHabitListener()
+
+
             }
 
-            fillWithHabitData()
-            getReminderTime()
-            selectHabitIcon()
-
-            done.setOnClickListener {
-                val habitInfoIntent = Intent(this, InfoActivity::class.java)
-
-                val updatedHabit = Habit(habitName.editText!!.text.toString())
-                updatedHabit.desc = habitDesc.editText!!.text.toString()
-                updatedHabit.icon = icon.tag as Int
-                updatedHabit.progress.steps = steps.editText!!.text.toString().toInt()
-                updatedHabit.reminder = habitReminderFromClock
-
-                habitInfoIntent.putExtra("updated_habit", updatedHabit)
-                setResult(300, habitInfoIntent)
-                finish()
-            }
         }
 
     }
 
-    private fun fillWithHabitData() {
+    private fun updatedHabitListener() {
+        done.setOnClickListener {
+            val habitInfoIntent = Intent(this, InfoActivity::class.java)
+
+            val updatedHabit = Habit(habitName.editText!!.text.toString())
+            updatedHabit.desc = habitDesc.editText!!.text.toString()
+            updatedHabit.icon = icon.tag as Int
+            updatedHabit.progress.steps = steps.editText!!.text.toString().toInt()
+            updatedHabit.reminder = habitReminderFromClock
+
+            habitInfoIntent.putExtra("updated_habit", updatedHabit)
+            setResult(300, habitInfoIntent)
+            finish()
+        }
+    }
+
+    private fun fillViews() {
 
         val habitFilled = intent.getParcelableExtra<Habit>("habit_filled_info")!!
 
@@ -99,7 +108,7 @@ class FormActivity : AppCompatActivity() {
     }
 
 
-    private fun getReminderTime() {
+    private fun selectReminder() {
 
         reminderTextView.setOnClickListener {
             if (reminderSwitch.isChecked) {
@@ -125,7 +134,7 @@ class FormActivity : AppCompatActivity() {
 
     }
 
-    private fun selectHabitIcon() {
+    private fun selectIcon() {
 
         icon.setOnClickListener {
             startActivityForResult(Intent(this, IconPickerActivity::class.java), 1)
@@ -133,8 +142,7 @@ class FormActivity : AppCompatActivity() {
 
     }
 
-
-    private fun sendNewHabitData() {
+    private fun createHabitListener() {
 
         done.setOnClickListener {
 
