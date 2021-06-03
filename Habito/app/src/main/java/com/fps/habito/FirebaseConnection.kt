@@ -1,3 +1,5 @@
+/*
+
 package com.fps.habito
 
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,14 +20,12 @@ class FirebaseConnection {
 
     }
 
-    /*
-    * Returns DocumentSnap of the habit using habit name
-    * @param takes in habit name
-    * @return Task<DocumentSnapshot>
-    * */
+
     fun getData(habitName: String) = firebaseDatabase.collection("Habit").document(habitName).get()
 
 
 }
 
 
+
+*/

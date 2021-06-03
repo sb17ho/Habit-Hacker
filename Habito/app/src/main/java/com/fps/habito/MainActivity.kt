@@ -10,20 +10,15 @@ import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.get
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), LifecycleObserver {
+class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
@@ -37,24 +32,22 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         lateinit var habitAdapter: HabitAdapter
     }
 
-    private val firebaseAccess = FirebaseConnection()
+    private val firestoreConnection = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         setContentView(R.layout.activity_main)
+        println("MY-LOG: CREATE")
 
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
-        onAppBackgrounded()
-        onAppForegrounded()
-
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
+
         add.setOnClickListener {
             val habitFormIntent = Intent(this, FormActivity::class.java)
             habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
@@ -151,25 +144,40 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onAppBackgrounded() {
+    override fun onPause() {
+        super.onPause()
 
-        firebaseAccess.firebaseDatabase.collection("Habit").document("nice").get().addOnSuccessListener {
+        val batch = firestoreConnection.batch()
 
+        habits.forEach {
+            batch.set(firestoreConnection.collection("Habits").document(it.name), it)
         }
-//        val batch = firebaseAccess.firebaseDatabase.batch()
-//
-//        habits.forEach {
-//            batch.set(firebaseAccess.firebaseDatabase.collection("Habit").document(it.name), it)
-//        }
-//
-//        batch.commit()
+
+        batch.commit()
 
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onAppForegrounded() {
-        println("in front")
+
+    override fun onResume() {
+        super.onResume()
+
+        firestoreConnection.collection("Habits").addSnapshotListener { value, error ->
+            value?.documents?.forEach {
+
+                val habit: Habit? = (it.toObject(Habit::class.java))
+
+                if (habit != null) {
+                    if (habits.contains(habit)) {
+                        habits[habits.indexOf(habit)] = habit
+                    } else {
+                        habits.add(habit)
+                    }
+                }
+
+            }
+            habitAdapter.notifyDataSetChanged()
+        }
+
     }
 
 
@@ -195,12 +203,13 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
         )
 
-        /**
-         * for everyday (24 * 60 * 60 * 1000).toLong(),
-         */
     }
-
-
 }
+/**
+ * for everyday (24 * 60 * 60 * 1000).toLong(),
+ */
+
+
+
 
 
