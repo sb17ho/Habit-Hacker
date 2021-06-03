@@ -12,6 +12,10 @@ import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -19,11 +23,12 @@ import java.util.*
 
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
-//    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
+
+    //    private val signOut: Button by lazy { findViewById(R.id.sign_out_button) }
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -37,12 +42,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         setContentView(R.layout.activity_main)
 
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
+
+        onAppBackgrounded()
+        onAppForegrounded()
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
@@ -80,12 +89,12 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
 
-            val crntHabit = habits[position]
-            crntHabit.updateProgress()
+                val crntHabit = habits[position]
+                crntHabit.updateProgress()
 
-            habitAdapter.notifyDataSetChanged()
+                habitAdapter.notifyDataSetChanged()
 
-        }
+            }
 
     }
 
@@ -142,6 +151,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onAppBackgrounded() {
+
+        firebaseAccess.firebaseDatabase.collection("Habit").document("nice").get().addOnSuccessListener {
+
+        }
+//        val batch = firebaseAccess.firebaseDatabase.batch()
+//
+//        habits.forEach {
+//            batch.set(firebaseAccess.firebaseDatabase.collection("Habit").document(it.name), it)
+//        }
+//
+//        batch.commit()
+
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onAppForegrounded() {
+        println("in front")
+    }
+
+
     private fun markDayChange() {
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -157,10 +188,10 @@ class MainActivity : AppCompatActivity() {
         calendar[Calendar.SECOND] = 0
 
         alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                (600 * 1000).toLong(),
-                pendingIntent
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            (600 * 1000).toLong(),
+            pendingIntent
 
         )
 
@@ -168,8 +199,6 @@ class MainActivity : AppCompatActivity() {
          * for everyday (24 * 60 * 60 * 1000).toLong(),
          */
     }
-
-
 
 
 }
