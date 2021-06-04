@@ -90,9 +90,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun startInfoActivity() {
 
+
         habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
             val habitInfoIntent = Intent(this, InfoActivity::class.java)
             habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
+            println("tap ${habits[position]}")
             habitInfoIntent.putExtra("habit_info", habits[position])
             startActivityForResult(habitInfoIntent, 2)
             true
@@ -137,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                     }
             }
 
-            400 -> {
+            300 -> {
 
                 val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")!!
 

@@ -80,7 +80,7 @@ class FormActivity : AppCompatActivity() {
             updatedHabit.reminder = habitReminderFromClock
 
             habitInfoIntent.putExtra("updated_habit", updatedHabit)
-            setResult(300, habitInfoIntent)
+            setResult(100, habitInfoIntent)
             finish()
         }
     }
