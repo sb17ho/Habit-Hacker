@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import com.bumptech.glide.annotation.GlideModule
@@ -43,14 +42,14 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
 
-    private val habits = ArrayList<Habit>()
 
     companion object {
+        val habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
+        private val firestoreConnection = FirebaseFirestore.getInstance()
     }
 
     private lateinit var mGoogleAuth: GoogleSignInClient
-    private val firestoreConnection = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -69,10 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         getFireStoreData()
 
-        addButtonOnClickListener()
-        progressHabit()
-        startInfoActivity()
-        markDayChange()
+
     }
 
     private fun googleSignIn() {
@@ -96,14 +92,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun progressHabit() {
+
         habitsGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-
-                val crntHabit = habits[position]
-                crntHabit.updateProgress()
-
+                habits[position].updateProgress()
                 habitAdapter.notifyDataSetChanged()
-
             }
 
     }
@@ -212,7 +205,7 @@ class MainActivity : AppCompatActivity() {
                     }
             }
 
-            400 -> {
+            300 -> {
 
                 val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")!!
 
@@ -235,49 +228,72 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFireStoreData() {
 
-        firestoreConnection.collection("Habits").addSnapshotListener { value, error ->
-            value?.documents?.forEach {
+        firestoreConnection
+            .collection("Habits")
+            .get()
+            .addOnSuccessListener {
 
-                val habit = (it.toObject(Habit::class.java))
-
-                if (habit != null) {
-                    if (habits.contains(habit)) {
-                        habits[habits.indexOf(habit)] = habit
-                    } else {
-                        habits.add(habit)
-                    }
+                it.documents.forEach { documentSnapshot ->
+                    habits.add(documentSnapshot.toObject(Habit::class.java)!!)
                 }
 
+                habitAdapter.notifyDataSetChanged()
+
+                println("all data received $habits")
+
+                addButtonOnClickListener()
+                progressHabit()
+                startInfoActivity()
+                markDayChange()
+
+
             }
-            habitAdapter.notifyDataSetChanged()
-        }
 
     }
 
     private fun markDayChange() {
 
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         val intent = Intent(this, DayChangeReceiver::class.java)
-        intent.putParcelableArrayListExtra("all_habits", habits)
+        intent.putParcelableArrayListExtra("all_habs", habits)
+        sendBroadcast(intent)
 
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
 
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = 19
+        calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
         calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
-        calendar[Calendar.SECOND] = 0
+        calendar[Calendar.SECOND] = calendar.get(Calendar.SECOND)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            (600 * 1000).toLong(),
+            60000,
             pendingIntent
         )
+//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//
+//        val intent = Intent(this, DayChangeReceiver::class.java)
+//
+//        Log.d("MainActivity:markDayChange", "starting day change $habits")
+//
+//        intent.putParcelableArrayListExtra("all_habits", habits)
+//
+//        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+//
+//        val calendar = Calendar.getInstance()
+//        calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
+//        calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
+//        calendar[Calendar.SECOND] = calendar.get(Calendar.SECOND)
+//
+//        alarmManager.setRepeating(
+//            AlarmManager.RTC_WAKEUP,
+//            calendar.timeInMillis,
+//            AlarmManager.INTERVAL_FIFTEEN_MINUTES/5,
+//            pendingIntent
+//        )
+        //AlarmManager.INTERVAL_DAY
 
-        /**
-         * for everyday (24 * 60 * 60 * 1000).toLong(),
-         */
 
     }
 

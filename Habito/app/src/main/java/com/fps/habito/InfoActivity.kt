@@ -23,6 +23,8 @@ class InfoActivity : AppCompatActivity() {
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
+    private lateinit var habit: Habit
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -34,37 +36,16 @@ class InfoActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
-
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
-            "MAIN" -> fillViews()
+            "MAIN" -> {
+                habit = intent.getParcelableExtra<Habit>("habit_info")!!
+                fillViews()
+            }
         }
 
     }
 
-    override fun onBackPressed() {
-
-        val mainIntent = Intent(this, MainActivity::class.java)
-
-        val habit = Habit(title.toString())
-        habit.desc = desc.text.toString()
-        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
-        habit.reminder = Reminder(5,9, "pm")
-        habit.progress.steps = steps.text.toString().toInt()
-        habit.stats.streak = streak.text.toString().toInt()
-        habit.stats.comp = comp.text.toString().toInt()
-
-        mainIntent.putExtra("habit_for_main", habit)
-
-        setResult(400, mainIntent)
-        finish()
-
-    }
-
     private fun fillViews() {
-
-        val habit = intent.getParcelableExtra<Habit>("habit_info")!!
-
-        println("fill views $habit")
 
         title = habit.name
 
@@ -79,56 +60,75 @@ class InfoActivity : AppCompatActivity() {
 
         steps.text = habit.progress.steps.toString()
 
-        reminder.text = if (habit.reminder.isSet()) {
-            reminder.visibility = View.VISIBLE
-            habit.reminder.toString()
-        } else {
-            "Reminder not set"
-        }
+        reminder.text =
+            if (habit.reminder.isSet()) {
+                reminder.visibility = View.VISIBLE
+                habit.reminder.toString()
+            } else {
+                "Reminder not set"
+            }
 
         streak.text = habit.stats.streak.toString()
 
-
-        alltime.text =habit.stats.allTime.toString()
+        alltime.text = habit.stats.allTime.toString()
 
         comp.text = habit.stats.comp.toString()
 
         startDate.text = "Started on ${habit.stats.startDate}"
 
+    }
+
+    override fun onBackPressed() {
+
+        val mainIntent = Intent(this, MainActivity::class.java)
+
+        habit.desc = desc.text.toString()
+        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+        habit.reminder = Reminder(5, 9, "pm")
+        habit.progress.progress = intent.getParcelableExtra<Habit>("habit_info")!!.progress.progress
+        habit.progress.steps = steps.text.toString().toInt()
+        habit.stats.streak = streak.text.toString().toInt()
+        habit.stats.comp = comp.text.toString().toInt()
+
+        mainIntent.putExtra("habit_for_main", habit)
+
+        setResult(300, mainIntent)
+        finish()
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == 300) {
-            val updatedHabit = data!!.getParcelableExtra<Habit>("updated_habit")!!
+        when (resultCode) {
+            100 -> {
+                val updatedHabit = data!!.getParcelableExtra<Habit>("updated_habit")!!
 
-            icon.setImageResource(updatedHabit.icon)
-            icon.tag = updatedHabit.icon
-            habitName.text = updatedHabit.name
+                title = habitName.text
 
-            desc.text = updatedHabit.desc
-            if (desc.text.isNotEmpty()) {
-                desc.visibility = View.VISIBLE
+                habitName.text = updatedHabit.name
+                icon.tag = updatedHabit.icon
+                icon.setImageResource(updatedHabit.icon)
+
+                desc.text = updatedHabit.desc
+                if (desc.text.isNotEmpty()) {
+                    desc.visibility = View.VISIBLE
+                }
+
+                steps.text = updatedHabit.progress.steps.toString()
+
+                reminder.text =
+                    if (updatedHabit.reminder.isSet()) {
+                        reminder.visibility = View.VISIBLE
+                        updatedHabit.reminder.toString()
+                    } else {
+                        "Reminder not set"
+                    }
+
+                streak.text = updatedHabit.stats.streak.toString()
+                alltime.text = updatedHabit.stats.allTime.toString()
+                comp.text = updatedHabit.stats.comp.toString()
             }
-
-            steps.text = updatedHabit.progress.steps.toString()
-
-            reminder.text = if (updatedHabit.reminder.isSet()) {
-                reminder.visibility = View.VISIBLE
-                updatedHabit.reminder.toString()
-            } else {
-                "Reminder not set"
-            }
-
-            streak.text = updatedHabit.stats.streak.toString()
-
-            alltime.text = updatedHabit.stats.allTime.toString()
-
-            comp.text = updatedHabit.stats.comp.toString()
-
-            title = habitName.text
         }
 
     }
@@ -152,7 +152,10 @@ class InfoActivity : AppCompatActivity() {
     private fun editHabit() {
         val habitFormIntent = Intent(applicationContext, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
-        habitFormIntent.putExtra("habit_filled_info", intent.getParcelableExtra<Habit>("habit_info"))
+        habitFormIntent.putExtra(
+            "habit_filled_info",
+            intent.getParcelableExtra<Habit>("habit_info")
+        )
         startActivityForResult(habitFormIntent, 300)
     }
 
@@ -162,7 +165,6 @@ class InfoActivity : AppCompatActivity() {
         setResult(200, mainActIntent)
         finish()
     }
-
 
 
 }
