@@ -30,7 +30,7 @@ class FormActivity : AppCompatActivity() {
 
     private var habitReminderFromClock = Reminder()
 
-    private lateinit var habit:Habit
+    private lateinit var habit: Habit
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -199,7 +199,9 @@ class FormActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        //val filledHabit = Habit(habitName.editText!!.text.toString())
+
+
+
         habit.desc = if (habitDesc.editText!!.text.toString()
                 .isEmpty()
         ) "" else habitDesc.editText!!.text.toString()

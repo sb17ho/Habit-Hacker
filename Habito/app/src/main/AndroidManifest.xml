@@ -38,8 +38,6 @@
 
         <receiver android:name=".DayChangeReceiver" />
 
-        <service android:name=".MyService" android:enabled="true"
-            android:exported="false" />
 
     </application>
 
