@@ -4,7 +4,6 @@ package com.fps.habito
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -138,30 +137,30 @@ class MainActivity : AppCompatActivity() {
         userName = popupDialog.findViewById(R.id.userNameView)
         userEmail = popupDialog.findViewById(R.id.userEmailView)
 
-        val displaymetric: DisplayMetrics = DisplayMetrics()
+        val displayMetric = DisplayMetrics()
         val windManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         //To make this work for APIs older than based on Android R
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                display?.getRealMetrics(displaymetric)
+                display?.getRealMetrics(displayMetric)
             }
         } catch (e: NoSuchMethodError) {
-            windManager.defaultDisplay.getRealMetrics(displaymetric)
+            windManager.defaultDisplay.getRealMetrics(displayMetric)
         }
         popupDialog.show()
 
         val bundle: Bundle? = intent.extras
-        userName.setText(bundle?.getString("UserName"))
-        userEmail.setText(bundle?.getString("UserEmail"))
+        userName.text = bundle?.getString("UserName")
+        userEmail.text = bundle?.getString("UserEmail")
         Glide.with(this).load(bundle?.get("UserPhoto")).into(userImage)
 
         logout.setOnClickListener {
             mGoogleAuth.signOut().addOnCompleteListener {
                 val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
                 mAuth.signOut()
-                val intent_to_sign_in = Intent(this, GoogleSignIn::class.java)
-                startActivity(intent_to_sign_in)
+                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
+                startActivity(intentToSignIn)
                 finish()
             }
         }
