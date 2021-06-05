@@ -1,11 +1,13 @@
 package com.fps.habito
 
+
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -18,12 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.module.AppGlideModule
-
-
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -140,11 +139,13 @@ class MainActivity : AppCompatActivity() {
         userEmail = popupDialog.findViewById(R.id.userEmailView)
 
         val displaymetric: DisplayMetrics = DisplayMetrics()
-        val windManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val windManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         //To make this work for APIs older than based on Android R
         try {
-            display?.getRealMetrics(displaymetric)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                display?.getRealMetrics(displaymetric)
+            }
         } catch (e: NoSuchMethodError) {
             windManager.defaultDisplay.getRealMetrics(displaymetric)
         }
@@ -259,7 +260,7 @@ class MainActivity : AppCompatActivity() {
 
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
 
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val calendar = Calendar.getInstance()
         calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
         calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
@@ -271,27 +272,7 @@ class MainActivity : AppCompatActivity() {
             60000,
             pendingIntent
         )
-//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//
-//        val intent = Intent(this, DayChangeReceiver::class.java)
-//
-//        Log.d("MainActivity:markDayChange", "starting day change $habits")
-//
-//        intent.putParcelableArrayListExtra("all_habits", habits)
-//
-//        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-//
-//        val calendar = Calendar.getInstance()
-//        calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
-//        calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
-//        calendar[Calendar.SECOND] = calendar.get(Calendar.SECOND)
-//
-//        alarmManager.setRepeating(
-//            AlarmManager.RTC_WAKEUP,
-//            calendar.timeInMillis,
-//            AlarmManager.INTERVAL_FIFTEEN_MINUTES/5,
-//            pendingIntent
-//        )
+
         //AlarmManager.INTERVAL_DAY
 
 

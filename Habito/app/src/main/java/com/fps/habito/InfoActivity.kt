@@ -38,7 +38,7 @@ class InfoActivity : AppCompatActivity() {
 
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
             "MAIN" -> {
-                habit = intent.getParcelableExtra<Habit>("habit_info")!!
+                habit = intent.getParcelableExtra("habit_info")!!
                 fillViews()
             }
         }
@@ -152,10 +152,7 @@ class InfoActivity : AppCompatActivity() {
     private fun editHabit() {
         val habitFormIntent = Intent(applicationContext, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
-        habitFormIntent.putExtra(
-            "habit_filled_info",
-            intent.getParcelableExtra<Habit>("habit_info")
-        )
+        habitFormIntent.putExtra("habit_filled_info", intent.getParcelableExtra<Habit>("habit_info"))
         startActivityForResult(habitFormIntent, 300)
     }
 

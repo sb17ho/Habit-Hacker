@@ -59,7 +59,7 @@ class FormActivity : AppCompatActivity() {
                     habitName.editText!!.focusable = View.NOT_FOCUSABLE
                 }
 
-                habit = intent.getParcelableExtra<Habit>("habit_info")!!
+                habit = intent.getParcelableExtra("habit_filled_info")!!
 
                 fillViews()
                 selectIcon()
