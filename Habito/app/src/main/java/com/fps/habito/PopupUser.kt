@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-class Popup_User : AppCompatActivity() {
+class PopupUser : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
