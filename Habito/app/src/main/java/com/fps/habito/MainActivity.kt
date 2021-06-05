@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val add: TextView by lazy { findViewById(R.id.add) }
 
     private val habits = ArrayList<Habit>()
+
     companion object {
         lateinit var habitAdapter: HabitAdapter
     }
@@ -79,8 +80,7 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
 
-                val crntHabit = habits[position]
-                crntHabit.updateProgress()
+                habits[position].updateProgress()
 
                 habitAdapter.notifyDataSetChanged()
 
@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startInfoActivity() {
-
 
         habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
             val habitInfoIntent = Intent(this, InfoActivity::class.java)
@@ -191,16 +190,17 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
 
         val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = 19
+        calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
         calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
-        calendar[Calendar.SECOND] = 0
+        calendar[Calendar.SECOND] = calendar.get(Calendar.SECOND)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            (600 * 1000).toLong(),
+            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
             pendingIntent
         )
+        //AlarmManager.INTERVAL_DAY
 
         /**
          * for everyday (24 * 60 * 60 * 1000).toLong(),

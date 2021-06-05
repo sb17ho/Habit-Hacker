@@ -8,7 +8,9 @@ class DayChangeReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        intent?.getParcelableArrayListExtra<Habit>("all_habits")?.forEach {
+        val habits = intent?.getParcelableArrayListExtra<Habit>("all_habits")
+
+        habits?.forEach {
 
             if (it.progress.status != Status.COMPLETED.toString()) {
                 it.stats.streak = 0
@@ -18,6 +20,7 @@ class DayChangeReceiver : BroadcastReceiver() {
             it.progress.status = Status.NOT_STARTED.toString()
 
         }
+
 
         MainActivity.habitAdapter.notifyDataSetChanged()
 

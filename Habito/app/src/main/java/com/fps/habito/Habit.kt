@@ -2,31 +2,41 @@ package com.fps.habito
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.util.*
 
 class Habit(
-    var name: String,
+    val name: String,
     var desc: String = "",
     var icon: Int = R.drawable.nil,
     var progress: Progress = Progress(),
-    var stats: Stats = Stats(),
+    var stats: Stats,
     var reminder: Reminder = Reminder()
 ) : Parcelable {
 
-    constructor():this("no-habit-name")
-
+    constructor() : this(
+        name = "no-habit-name",
+        stats = Stats(startDate = Calendar.getInstance().time)
+    )
 
     fun updateProgress() {
 
-        if (progress.progress < progress.steps) {
+        if (progress.status != Status.COMPLETED.toString()) {
+
             ++progress.progress
             progress.status = Status.IN_PROGRESS.toString()
+
+            if (progress.progress == progress.steps) {
+                progress.status = Status.COMPLETED.toString()
+            }
+
+            if (progress.status == Status.COMPLETED.toString()) {
+                progress.status = Status.COMPLETED.toString()
+                ++stats.streak
+                ++stats.comp
+            }
+
         }
 
-        if (progress.progress == progress.steps && progress.status != Status.COMPLETED.toString()) {
-            progress.status = Status.COMPLETED.toString()
-            ++stats.streak
-            ++stats.comp
-        }
 
     }
 
@@ -79,7 +89,7 @@ class Habit(
     }
 
     override fun toString(): String {
-        return "Habit(icon=$icon, name='$name', desc='$desc', progress=$progress, stats=$stats, reminder=$reminder)"
+        return "Habit(name='$name', desc='$desc', icon=$icon, progress=$progress, stats=$stats, reminder=$reminder)"
     }
 
 

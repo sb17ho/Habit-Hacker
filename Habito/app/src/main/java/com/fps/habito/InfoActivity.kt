@@ -23,6 +23,8 @@ class InfoActivity : AppCompatActivity() {
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
+    private lateinit var habit: Habit
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -35,14 +37,15 @@ class InfoActivity : AppCompatActivity() {
         window.statusBarColor = resources.getColor(R.color.vib_red_pink)
 
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
-            "MAIN" -> fillViews()
+            "MAIN" -> {
+                habit = intent.getParcelableExtra<Habit>("habit_info")!!
+                fillViews()
+            }
         }
 
     }
 
     private fun fillViews() {
-
-        val habit = intent.getParcelableExtra<Habit>("habit_info")!!
 
         title = habit.name
 
@@ -79,7 +82,6 @@ class InfoActivity : AppCompatActivity() {
 
         val mainIntent = Intent(this, MainActivity::class.java)
 
-        val habit = Habit(title.toString())
         habit.desc = desc.text.toString()
         habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
         habit.reminder = Reminder(5, 9, "pm")
