@@ -18,8 +18,11 @@ class Boot_Screen_Main : AppCompatActivity() {
 
         Handler().postDelayed({
             if (user_auth != null) {
-                val test_Screen = Intent(this, MainActivity::class.java)
-                startActivity(test_Screen)
+                val habitMainScreen = Intent(this, MainActivity::class.java)
+                habitMainScreen.putExtra("UserName", user_auth.displayName)
+                habitMainScreen.putExtra("UserEmail", user_auth.email)
+                habitMainScreen.putExtra("UserPhoto", user_auth.photoUrl)
+                startActivity(habitMainScreen)
                 finish() //To avoid going back to main activity
             } else {
                 val sign_in_screen = Intent(this, GoogleSignIn::class.java)
