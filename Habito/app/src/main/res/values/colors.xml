@@ -7,5 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="vib_red_pink">#F23B5F</color>
+    <color name="primary_pink">#D32F2F</color>
+    <color name="secondary_pink">#C62828</color>
+    <color name="subtle_gray">#0D1E1E1E</color>
 </resources>
