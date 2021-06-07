@@ -1,11 +1,12 @@
 package com.fps.habito
 
+
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -21,10 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.module.AppGlideModule
-
-
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -43,14 +40,14 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
 
-    private val habits = ArrayList<Habit>()
 
     companion object {
+        val habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
+        private val firestoreConnection = FirebaseFirestore.getInstance()
     }
 
     private lateinit var mGoogleAuth: GoogleSignInClient
-    private val firestoreConnection = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -69,10 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         getFireStoreData()
 
-        addButtonOnClickListener()
-        progressHabit()
-        startInfoActivity()
-        markDayChange()
+
     }
 
     private fun googleSignIn() {
@@ -96,14 +90,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun progressHabit() {
+
         habitsGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-
-                val crntHabit = habits[position]
-                crntHabit.updateProgress()
-
+                habits[position].updateProgress()
                 habitAdapter.notifyDataSetChanged()
-
             }
 
     }
@@ -146,28 +137,30 @@ class MainActivity : AppCompatActivity() {
         userName = popupDialog.findViewById(R.id.userNameView)
         userEmail = popupDialog.findViewById(R.id.userEmailView)
 
-        val displaymetric: DisplayMetrics = DisplayMetrics()
-        val windManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val displayMetric = DisplayMetrics()
+        val windManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         //To make this work for APIs older than based on Android R
         try {
-            display?.getRealMetrics(displaymetric)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                display?.getRealMetrics(displayMetric)
+            }
         } catch (e: NoSuchMethodError) {
-            windManager.defaultDisplay.getRealMetrics(displaymetric)
+            windManager.defaultDisplay.getRealMetrics(displayMetric)
         }
         popupDialog.show()
 
         val bundle: Bundle? = intent.extras
-        userName.setText(bundle?.getString("UserName"))
-        userEmail.setText(bundle?.getString("UserEmail"))
+        userName.text = bundle?.getString("UserName")
+        userEmail.text = bundle?.getString("UserEmail")
         Glide.with(this).load(bundle?.get("UserPhoto")).into(userImage)
 
         logout.setOnClickListener {
             mGoogleAuth.signOut().addOnCompleteListener {
                 val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
                 mAuth.signOut()
-                val intent_to_sign_in = Intent(this, GoogleSignIn::class.java)
-                startActivity(intent_to_sign_in)
+                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
+                startActivity(intentToSignIn)
                 finish()
             }
         }
@@ -212,7 +205,7 @@ class MainActivity : AppCompatActivity() {
                     }
             }
 
-            400 -> {
+            300 -> {
 
                 val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")!!
 
@@ -235,49 +228,52 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFireStoreData() {
 
-        firestoreConnection.collection("Habits").addSnapshotListener { value, error ->
-            value?.documents?.forEach {
+        firestoreConnection
+            .collection("Habits")
+            .get()
+            .addOnSuccessListener {
 
-                val habit = (it.toObject(Habit::class.java))
-
-                if (habit != null) {
-                    if (habits.contains(habit)) {
-                        habits[habits.indexOf(habit)] = habit
-                    } else {
-                        habits.add(habit)
-                    }
+                it.documents.forEach { documentSnapshot ->
+                    habits.add(documentSnapshot.toObject(Habit::class.java)!!)
                 }
 
+                habitAdapter.notifyDataSetChanged()
+
+                println("all data received $habits")
+
+                addButtonOnClickListener()
+                progressHabit()
+                startInfoActivity()
+                markDayChange()
+
+
             }
-            habitAdapter.notifyDataSetChanged()
-        }
 
     }
 
     private fun markDayChange() {
 
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         val intent = Intent(this, DayChangeReceiver::class.java)
-        intent.putParcelableArrayListExtra("all_habits", habits)
+        intent.putParcelableArrayListExtra("all_habs", habits)
+        sendBroadcast(intent)
 
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
 
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = 19
+        calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
         calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
-        calendar[Calendar.SECOND] = 0
+        calendar[Calendar.SECOND] = calendar.get(Calendar.SECOND)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            (600 * 1000).toLong(),
+            60000,
             pendingIntent
         )
 
-        /**
-         * for everyday (24 * 60 * 60 * 1000).toLong(),
-         */
+        //AlarmManager.INTERVAL_DAY
+
 
     }
 

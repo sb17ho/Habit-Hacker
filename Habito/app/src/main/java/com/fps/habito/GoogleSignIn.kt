@@ -40,8 +40,8 @@ class GoogleSignIn : AppCompatActivity() {
         //Firebase Authentication Instance
         mAuth = FirebaseAuth.getInstance()
 
-        val sign_in_button: SignInButton = findViewById(R.id.google_sign_in_button)
-        sign_in_button.setOnClickListener {
+        val signInButton: SignInButton = findViewById(R.id.google_sign_in_button)
+        signInButton.setOnClickListener {
             signIn() //Ask user to sign in with his/her google account
         }
     }
@@ -87,11 +87,11 @@ class GoogleSignIn : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignInActivity", "signInWithCredential:success")
-                    val intent_to = Intent(this, MainActivity::class.java)
-                    intent_to.putExtra("UserName", mAuth.currentUser?.displayName)
-                    intent_to.putExtra("UserEmail", mAuth.currentUser?.email)
-                    intent_to.putExtra("UserPhoto", mAuth.currentUser?.photoUrl)
-                    startActivity(intent_to)
+                    val intentTo = Intent(this, MainActivity::class.java)
+                    intentTo.putExtra("UserName", mAuth.currentUser?.displayName)
+                    intentTo.putExtra("UserEmail", mAuth.currentUser?.email)
+                    intentTo.putExtra("UserPhoto", mAuth.currentUser?.photoUrl)
+                    startActivity(intentTo)
                     finish() //To avoid going back to boot screen
                 } else {
                     // If sign in fails, display a message to the user.

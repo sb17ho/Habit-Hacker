@@ -28,7 +28,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".Boot_Screen_Main"
+            android:name=".BootScreenMain"
             android:theme="@style/bootScreenNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
