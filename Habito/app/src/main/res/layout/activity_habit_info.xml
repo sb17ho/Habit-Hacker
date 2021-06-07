@@ -30,51 +30,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
-        android:id="@+id/desc"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:hint="@string/description"
-        android:padding="4dp"
-        android:text="At a fast pace"
-        android:textColor="#000000"
-        android:textColorHint="#000000"
-        android:textSize="18sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habitName" />
-
-    <TextView
-        android:id="@+id/steps"
-        android:layout_width="300dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="8 glasses"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/desc" />
-
-    <TextView
-        android:id="@+id/reminder"
-        android:layout_width="300dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="10:30 pm"
-        android:textSize="24sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/steps" />
-
-    <TextView
         android:id="@+id/streakValue"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
@@ -82,15 +37,15 @@
         android:layout_weight="1.25"
         android:ems="10"
         android:gravity="center"
+        android:hint="56"
         android:inputType="number"
-        android:text="56"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/alltimeValue"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminder"
-        app:layout_constraintVertical_bias="0.109" />
+        app:layout_constraintTop_toBottomOf="@+id/reminderLL"
+        app:layout_constraintVertical_bias="0.056" />
 
     <TextView
         android:id="@+id/streakText"
@@ -112,8 +67,8 @@
         android:layout_weight="1.25"
         android:ems="10"
         android:gravity="center"
+        android:hint="97.45"
         android:inputType="number"
-        android:text="100.00%"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/streakValue"
         app:layout_constraintEnd_toStartOf="@+id/compValue"
@@ -140,8 +95,8 @@
         android:layout_weight="1.25"
         android:ems="10"
         android:gravity="center"
+        android:hint="62"
         android:inputType="number"
-        android:text="90"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/alltimeValue"
         app:layout_constraintEnd_toEndOf="parent"
@@ -164,13 +119,97 @@
         android:id="@+id/startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="start date"
+        android:hint="Started on"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/streakText"
         app:layout_constraintVertical_bias="1.0" />
+
+    <LinearLayout
+        android:id="@+id/descLL"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <ImageView
+            android:id="@+id/descIcon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/description" />
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="@string/description"
+            android:padding="4dp"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/stepsLL"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descLL">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/steps_circle" />
+
+        <TextView
+            android:id="@+id/steps"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="8 steps"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reminderLL"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stepsLL">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/notifications" />
+
+        <TextView
+            android:id="@+id/reminder"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="10:30 pm"
+            android:textSize="24sp"
+            android:visibility="visible" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,10 +31,10 @@ class InfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_habit_info)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.vib_red_pink)))
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.primary_pink)))
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.statusBarColor = resources.getColor(R.color.vib_red_pink)
+        window.statusBarColor = resources.getColor(R.color.primary_pink)
 
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
             "MAIN" -> {

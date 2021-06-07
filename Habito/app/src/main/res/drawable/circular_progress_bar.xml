@@ -10,8 +10,8 @@
 
         <gradient
             android:angle="0"
-            android:endColor="@color/vib_red_pink"
-            android:startColor="@color/vib_red_pink"
+            android:endColor="@color/primary_pink"
+            android:startColor="@color/primary_pink"
             android:type="sweep"
             android:useLevel="false" />
     </shape>
