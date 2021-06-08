@@ -86,7 +86,6 @@ class GoogleSignIn : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-//                    Log.d("SignInActivity", "signInWithCredential:success")
                     val intentTo = Intent(this, MainActivity::class.java)
                     intentTo.putExtra("UserName", mAuth.currentUser?.displayName)
                     intentTo.putExtra("UserEmail", mAuth.currentUser?.email)

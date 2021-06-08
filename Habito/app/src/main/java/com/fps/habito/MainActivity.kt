@@ -1,17 +1,12 @@
 package com.fps.habito
 
-
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
-import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.view.Menu
-import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
@@ -264,26 +259,7 @@ class MainActivity : AppCompatActivity() {
             60000,
             pendingIntent
         )
-
-        //AlarmManager.INTERVAL_DAY
-
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//
-//        outState.putParcelableArrayList("saved_instance_habits", habits)
-//        habitAdapter.notifyDataSetChanged()
-//
-//    }
-//
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-//        super.onRestoreInstanceState(savedInstanceState)
-//        habits = savedInstanceState.getParcelableArrayList("saved_instance_habits")!!
-//        habitAdapter.notifyDataSetChanged()
-//    }
-
-
 }
 
 
