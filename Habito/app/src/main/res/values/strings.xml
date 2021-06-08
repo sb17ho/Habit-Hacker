@@ -28,5 +28,4 @@
     <string name="notification_icon">notification icon</string>
     <string name="done_button_icon">done button icon</string>
     <string name="habit_icon">habit icon</string>
-    <string name="tap_to_set_reminder">Tap to set reminder</string>
 </resources>

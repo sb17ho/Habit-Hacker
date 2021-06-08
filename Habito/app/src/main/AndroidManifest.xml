@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fps.habito">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fps.habito"
+    android:versionCode="1"
+    android:versionName="1">
 
     <application
+
         android:name=".ReminderNotification"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -42,8 +46,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".DayChangeReceiver" />
 

@@ -61,7 +61,7 @@ class InfoActivity : AppCompatActivity() {
         steps.text = habit.progress.steps.toString()
 
         reminder.text =
-            if (habit.reminder.isSet()) {
+            if (habit.reminder.validate()) {
                 reminder.visibility = View.VISIBLE
                 habit.reminder.toString()
             } else {
@@ -118,7 +118,7 @@ class InfoActivity : AppCompatActivity() {
                 steps.text = updatedHabit.progress.steps.toString()
 
                 reminder.text =
-                    if (updatedHabit.reminder.isSet()) {
+                    if (updatedHabit.reminder.validate()) {
                         reminder.visibility = View.VISIBLE
                         updatedHabit.reminder.toString()
                     } else {
