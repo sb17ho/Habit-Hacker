@@ -33,7 +33,9 @@
 
         <activity
             android:name=".BootScreenMain"
-            android:theme="@style/bootScreenNoBar">
+            android:theme="@style/bootScreenNoBar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -42,11 +44,14 @@
 
         <activity
             android:name=".GoogleSignIn"
-            android:theme="@style/bootScreenNoBar" />
+            android:theme="@style/bootScreenNoBar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation"
             android:screenOrientation="portrait"/>
 
         <receiver android:name=".DayChangeReceiver" />

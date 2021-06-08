@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -35,9 +36,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userName: TextView
     private lateinit var userEmail: TextView
     private val popupDialog: Dialog by lazy { Dialog(this) }
+    private lateinit var bundle: Bundle
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
+    private val user_image_view: ImageView by lazy { findViewById(R.id.user_email_image_view) }
 
     companion object {
         var habits = ArrayList<Habit>()
@@ -52,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.primary_pink)))
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.statusBarColor = resources.getColor(R.color.primary_pink)
@@ -61,6 +63,12 @@ class MainActivity : AppCompatActivity() {
 
         habitAdapter = HabitAdapter(this, habits)
         habitsGrid.adapter = habitAdapter
+
+        bundle = intent.extras!!
+        Glide.with(this).load(bundle.get("UserPhoto")).into(user_image_view)
+        user_image_view.setOnClickListener {
+            popUpHandle()
+        }
 
         getFireStoreData()
 
@@ -76,6 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
+
 
     }
 
@@ -109,20 +118,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.user_log_info, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.main_screen_user_icon -> popUpHandle()
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun popUpHandle() {
         popupDialog.setContentView(R.layout.user_info_layout)
         settings = popupDialog.findViewById(R.id.settingsButton)
@@ -148,10 +143,9 @@ class MainActivity : AppCompatActivity() {
         }
         popupDialog.show()
 
-        val bundle: Bundle? = intent.extras
-        userName.text = bundle?.getString("UserName")
-        userEmail.text = bundle?.getString("UserEmail")
-        Glide.with(this).load(bundle?.get("UserPhoto")).into(userImage)
+        userName.text = bundle.getString("UserName")
+        userEmail.text = bundle.getString("UserEmail")
+        Glide.with(this).load(bundle.get("UserPhoto")).into(userImage)
 
         logout.setOnClickListener {
             mGoogleAuth.signOut().addOnCompleteListener {
@@ -233,7 +227,7 @@ class MainActivity : AppCompatActivity() {
 
                 it.documents.forEach { documentSnapshot ->
                     val fetchedHabit = documentSnapshot.toObject(Habit::class.java)!!
-                    if(!habits.contains(fetchedHabit)){
+                    if (!habits.contains(fetchedHabit)) {
                         habits.add(fetchedHabit)
                     }
                 }
