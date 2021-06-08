@@ -18,6 +18,92 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/descLL"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <ImageView
+            android:id="@+id/descIcon"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/description" />
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="@string/description"
+            android:padding="4dp"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/stepsLL"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descLL">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/steps_circle" />
+
+        <TextView
+            android:id="@+id/steps"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="8 steps"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reminderLL"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stepsLL">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/notifications" />
+
+        <TextView
+            android:id="@+id/reminder"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="10:30 pm"
+            android:textSize="24sp"
+            android:visibility="visible" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/habitName"
         android:layout_width="0dp"
@@ -127,89 +213,7 @@
         app:layout_constraintTop_toBottomOf="@+id/streakText"
         app:layout_constraintVertical_bias="1.0" />
 
-    <LinearLayout
-        android:id="@+id/descLL"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-        <ImageView
-            android:id="@+id/descIcon"
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/description" />
-
-        <TextView
-            android:id="@+id/desc"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:hint="@string/description"
-            android:padding="4dp"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:visibility="visible" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/stepsLL"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descLL">
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/steps_circle" />
-
-        <TextView
-            android:id="@+id/steps"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:hint="8 steps"
-            android:textSize="24sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/reminderLL"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stepsLL">
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/notifications" />
-
-        <TextView
-            android:id="@+id/reminder"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:hint="10:30 pm"
-            android:textSize="24sp"
-            android:visibility="visible" />
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

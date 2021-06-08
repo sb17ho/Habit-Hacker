@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 
 class InfoActivity : AppCompatActivity() {
@@ -22,6 +23,10 @@ class InfoActivity : AppCompatActivity() {
     private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
+
+    private val descLL : LinearLayout  by lazy {findViewById(R.id.descLL)}
+    private val stepsLL : LinearLayout  by lazy {findViewById(R.id.stepsLL)}
+    private val reminderLL : LinearLayout  by lazy {findViewById(R.id.reminderLL)}
 
     private lateinit var habit: Habit
 
@@ -55,14 +60,14 @@ class InfoActivity : AppCompatActivity() {
 
         desc.text = habit.desc
         if (desc.text.isNotEmpty()) {
-            desc.visibility = View.VISIBLE
+            descLL.visibility = View.VISIBLE
         }
 
         steps.text = habit.progress.steps.toString()
 
         reminder.text =
             if (habit.reminder.validate()) {
-                reminder.visibility = View.VISIBLE
+                reminderLL.visibility = View.VISIBLE
                 habit.reminder.toString()
             } else {
                 "Reminder not set"
@@ -112,14 +117,14 @@ class InfoActivity : AppCompatActivity() {
 
                 desc.text = updatedHabit.desc
                 if (desc.text.isNotEmpty()) {
-                    desc.visibility = View.VISIBLE
+                    descLL.visibility = View.VISIBLE
                 }
 
                 steps.text = updatedHabit.progress.steps.toString()
 
                 reminder.text =
                     if (updatedHabit.reminder.validate()) {
-                        reminder.visibility = View.VISIBLE
+                        reminderLL.visibility = View.VISIBLE
                         updatedHabit.reminder.toString()
                     } else {
                         "Reminder not set"

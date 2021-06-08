@@ -49,8 +49,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        println("this shit crazy")
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -170,8 +168,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        println("fuck fuck")
 
         when (resultCode) {
             100 -> {
