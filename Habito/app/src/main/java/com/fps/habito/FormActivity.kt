@@ -108,7 +108,6 @@ class FormActivity : AppCompatActivity() {
 
     }
 
-
     private fun selectReminder() {
 
         reminderTextView.setOnClickListener {
