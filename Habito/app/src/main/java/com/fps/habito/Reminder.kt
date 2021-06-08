@@ -27,7 +27,7 @@ data class Reminder(var hour: Int = -1, var min: Int = -1, var meridiem: String 
         dest?.writeString(meridiem)
     }
 
-    fun isSet(): Boolean = !(hour == -1 && min == -1 && meridiem.isEmpty())
+    fun validate(): Boolean = !(hour == -1 && min == -1 && meridiem.isEmpty())
 
 
     override fun toString(): String {

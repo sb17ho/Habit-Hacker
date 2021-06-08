@@ -96,7 +96,7 @@ class FormActivity : AppCompatActivity() {
         habitDesc.editText!!.setText(habit.desc)
         steps.editText!!.setText(habit.progress.steps.toString())
 
-        reminderTextView.text = if (habit.reminder.isSet()) {
+        reminderTextView.text = if (habit.reminder.validate()) {
             reminderSwitch.isChecked = true
             habit.reminder.toString()
         } else {
@@ -199,25 +199,33 @@ class FormActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        habit.desc = if (habitDesc.editText!!.text.toString()
-                .isEmpty()
-        ) "" else habitDesc.editText!!.text.toString()
-        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+       habit = Habit(name=habitName.editText!!.text.toString(), stats = Stats(startDate = Calendar.getInstance().time))
+
+        habit.desc = if (habitDesc.editText!!.text.toString().isEmpty()) ""
+        else habitDesc.editText!!.text.toString()
+
+        habit.icon =
+            if (icon.tag == null) R.drawable.nil
+            else icon.tag.toString().toInt()
+
         habit.progress.steps =
-            if (steps.editText!!.text.toString().isEmpty()) 1 else steps.editText!!.text.toString()
-                .toInt()
+            if (steps.editText!!.text.toString().isEmpty()) 1
+            else steps.editText!!.text.toString().toInt()
         habit.reminder = habitReminderFromClock
 
-        outState.putParcelable("FILLED_HABIT", habit)
+        outState.putParcelable("instance_state", habit)
 
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        icon.setImageResource(habit.icon)
-        icon.tag = habit.icon
-        habitName.editText!!.setText(habit.name)
-        habitDesc.editText!!.setText(habit.desc)
-        steps.editText!!.setText(habit.progress.steps.toString())
+
+        val instanceStateHabit = savedInstanceState.getParcelable<Habit>("instance_state")!!
+
+        icon.setImageResource(instanceStateHabit.icon)
+        icon.tag = instanceStateHabit.icon
+        habitName.editText!!.setText(instanceStateHabit.name)
+        habitDesc.editText!!.setText(instanceStateHabit.desc)
+        steps.editText!!.setText(instanceStateHabit.progress.steps.toString())
     }
 
 }

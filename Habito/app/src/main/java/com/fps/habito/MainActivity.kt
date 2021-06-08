@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
@@ -40,9 +39,8 @@ class MainActivity : AppCompatActivity() {
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
 
-
     companion object {
-        val habits = ArrayList<Habit>()
+        var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
         private val firestoreConnection = FirebaseFirestore.getInstance()
     }
@@ -50,6 +48,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mGoogleAuth: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        println("this shit crazy")
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -171,6 +171,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        println("fuck fuck")
+
         when (resultCode) {
             100 -> {
                 val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
@@ -185,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                     .document(newHabit.name)
                     .set(newHabit)
                     .addOnSuccessListener {
-                        Log.d("FireStoreHabitAddition", newHabit.name)
+//                        Log.d("FireStoreHabitAddition", newHabit.name)
                     }
             }
 
@@ -201,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                     .document(delHabitName)
                     .delete()
                     .addOnSuccessListener {
-                        Log.d("FireStoreHabitDeletion", delHabitName)
+//                        Log.d("FireStoreHabitDeletion", delHabitName)
                     }
             }
 
@@ -217,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                     .document(updatedHabit.name)
                     .set(updatedHabit)
                     .addOnSuccessListener {
-                        Log.d("FireStoreHabitUpdation", updatedHabit.name)
+//                        Log.d("FireStoreHabitUpdation", updatedHabit.name)
                     }
 
             }
@@ -234,12 +236,13 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener {
 
                 it.documents.forEach { documentSnapshot ->
-                    habits.add(documentSnapshot.toObject(Habit::class.java)!!)
+                    val fetchedHabit = documentSnapshot.toObject(Habit::class.java)!!
+                    if(!habits.contains(fetchedHabit)){
+                        habits.add(fetchedHabit)
+                    }
                 }
 
                 habitAdapter.notifyDataSetChanged()
-
-                println("all data received $habits")
 
                 addButtonOnClickListener()
                 progressHabit()
@@ -274,8 +277,22 @@ class MainActivity : AppCompatActivity() {
 
         //AlarmManager.INTERVAL_DAY
 
-
     }
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//
+//        outState.putParcelableArrayList("saved_instance_habits", habits)
+//        habitAdapter.notifyDataSetChanged()
+//
+//    }
+//
+//    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+//        super.onRestoreInstanceState(savedInstanceState)
+//        habits = savedInstanceState.getParcelableArrayList("saved_instance_habits")!!
+//        habitAdapter.notifyDataSetChanged()
+//    }
+
 
 }
 
