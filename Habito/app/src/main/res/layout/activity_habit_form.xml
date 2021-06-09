@@ -27,7 +27,7 @@
         android:gravity="center"
         android:hint="@string/habit_name"
         app:counterEnabled="true"
-        app:counterMaxLength="15"
+        app:counterMaxLength="25"
         app:endIconMode="clear_text"
         app:helperText="Required"
         app:startIconDrawable="@drawable/baseline_badge_24"
