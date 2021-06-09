@@ -80,12 +80,14 @@ class FormActivity : AppCompatActivity() {
     }
 
     private fun errorMessage(): String? {
-        return if (TextUtils.isEmpty(habitName.editText!!.text)) {
+        return if (habitName.editText!!.text.isEmpty()) {
             "Habit name is required"
         } else {
             null
         }
     }
+
+    
 
     private fun updatedHabitListener() {
         done.setOnClickListener {
@@ -160,30 +162,32 @@ class FormActivity : AppCompatActivity() {
 
         done.setOnClickListener {
 
-            val mainIntent = Intent(applicationContext, MainActivity::class.java)
+           // println("this is not cool ${habitName.error}")
 
-            habit = Habit(
-                name = habitName.editText!!.text.toString(),
-                stats = Stats(startDate = Calendar.getInstance().time)
-            )
+            if (habitName.error == null && habitName.editText!!.text.isNotEmpty()) {
 
-            habit.desc =
-                if (habitDesc.editText!!.text.toString().isEmpty()) ""
-                else habitDesc.editText!!.text.toString()
+                val mainIntent = Intent(applicationContext, MainActivity::class.java)
 
-            habit.icon =
-                if (icon.tag == null) R.drawable.nil
-                else icon.tag.toString().toInt()
+                habit = Habit(
+                    name = habitName.editText!!.text.toString(),
+                    stats = Stats(startDate = Calendar.getInstance().time)
+                )
 
-            habit.progress.steps =
-                if (steps.editText!!.text.toString().isEmpty()) 1
-                else steps.editText!!.text.toString().toInt()
+                habit.desc =
+                    if (habitDesc.editText!!.text.toString().isEmpty()) ""
+                    else habitDesc.editText!!.text.toString()
 
-            habit.reminder = habitReminderFromClock
+                habit.icon =
+                    if (icon.tag == null) R.drawable.nil
+                    else icon.tag.toString().toInt()
 
-            mainIntent.putExtra("new_habit", habit)
+                habit.progress.steps =
+                    if (steps.editText!!.text.toString().isEmpty()) 1
+                    else steps.editText!!.text.toString().toInt()
 
-            if (habitName.editText!!.error != null) {
+                habit.reminder = habitReminderFromClock
+
+                mainIntent.putExtra("new_habit", habit)
                 setResult(100, mainIntent)
                 finish()
             }
