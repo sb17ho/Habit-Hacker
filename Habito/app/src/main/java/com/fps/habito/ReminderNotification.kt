@@ -30,5 +30,4 @@ class ReminderNotification : Application() {
 
     }
 
-
 }
