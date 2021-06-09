@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
@@ -49,6 +50,11 @@ class FormActivity : AppCompatActivity() {
                 title = "Create new habit"
                 selectIcon()
                 selectReminder()
+
+                habitName.editText!!.addTextChangedListener {
+                    habitName.error = errorMessage()
+                }
+
                 createHabitListener()
             }
             "HABIT_INFO" -> {
@@ -71,6 +77,14 @@ class FormActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    private fun errorMessage(): String? {
+        return if (TextUtils.isEmpty(habitName.editText!!.text)) {
+            "Habit name is required"
+        } else {
+            null
+        }
     }
 
     private fun updatedHabitListener() {
@@ -152,24 +166,38 @@ class FormActivity : AppCompatActivity() {
                 name = habitName.editText!!.text.toString(),
                 stats = Stats(startDate = Calendar.getInstance().time)
             )
-            habit.desc = if (habitDesc.editText!!.text.toString()
-                    .isEmpty()
-            ) "" else habitDesc.editText!!.text.toString()
-            habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
-            habit.progress.steps = if (steps.editText!!.text.toString()
-                    .isEmpty()
-            ) 1 else steps.editText!!.text.toString().toInt()
+
+            habit.desc =
+                if (habitDesc.editText!!.text.toString().isEmpty()) ""
+                else habitDesc.editText!!.text.toString()
+
+            habit.icon =
+                if (icon.tag == null) R.drawable.nil
+                else icon.tag.toString().toInt()
+
+            habit.progress.steps =
+                if (steps.editText!!.text.toString().isEmpty()) 1
+                else steps.editText!!.text.toString().toInt()
 
             habit.reminder = habitReminderFromClock
 
             mainIntent.putExtra("new_habit", habit)
 
-            if (TextUtils.isEmpty(habitName.editText!!.text)) {
-                habitName.error = "Habit name is required"
-            } else {
+            if (habitName.editText!!.error != null) {
                 setResult(100, mainIntent)
                 finish()
             }
+            else{
+                habitName.error = errorMessage()
+            }
+
+
+//            if (TextUtils.isEmpty(habitName.editText!!.text)) {
+//                habitName.error = "Habit name is required"
+//            } else {
+//                setResult(100, mainIntent)
+//                finish()
+//            }
 
         }
 
@@ -198,7 +226,10 @@ class FormActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-       habit = Habit(name=habitName.editText!!.text.toString(), stats = Stats(startDate = Calendar.getInstance().time))
+        habit = Habit(
+            name = habitName.editText!!.text.toString(),
+            stats = Stats(startDate = Calendar.getInstance().time)
+        )
 
         habit.desc = if (habitDesc.editText!!.text.toString().isEmpty()) ""
         else habitDesc.editText!!.text.toString()
