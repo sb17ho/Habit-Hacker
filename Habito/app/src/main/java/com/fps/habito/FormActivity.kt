@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -16,9 +15,7 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
-/**
- * TODO add units for steps for land and portrait
- */
+
 class FormActivity : AppCompatActivity() {
 
     private val icon: ImageView by lazy { findViewById(R.id.icon) }
@@ -63,6 +60,7 @@ class FormActivity : AppCompatActivity() {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     habitName.editText!!.focusable = View.NOT_FOCUSABLE
+                    habitName.endIconMode = TextInputLayout.END_ICON_NONE
                 }
 
                 habit = intent.getParcelableExtra("habit_filled_info")!!
@@ -72,7 +70,6 @@ class FormActivity : AppCompatActivity() {
                 selectReminder()
                 updatedHabitListener()
 
-
             }
 
         }
@@ -80,12 +77,11 @@ class FormActivity : AppCompatActivity() {
     }
 
     private fun errorMessage(): String? {
-        return if (TextUtils.isEmpty(habitName.editText!!.text)) {
-            "Habit name is required"
-        } else {
-            null
-        }
+        return if (habitName.editText!!.text.isEmpty()) "Habit name is required"
+        else null
+
     }
+
 
     private fun updatedHabitListener() {
         done.setOnClickListener {
@@ -110,13 +106,14 @@ class FormActivity : AppCompatActivity() {
         habitDesc.editText!!.setText(habit.desc)
         steps.editText!!.setText(habit.progress.steps.toString())
 
-        reminderTextView.text = if (habit.reminder.validate()) {
-            reminderSwitch.isChecked = true
-            habit.reminder.toString()
-        } else {
-            reminderSwitch.isChecked = false
-            "Tap to set reminder"
-        }
+        reminderTextView.text =
+            if (habit.reminder.validate()) {
+                reminderSwitch.isChecked = true
+                habit.reminder.toString()
+            } else {
+                reminderSwitch.isChecked = false
+                "Tap to set reminder"
+            }
 
         habitReminderFromClock = habit.reminder
 
@@ -160,44 +157,35 @@ class FormActivity : AppCompatActivity() {
 
         done.setOnClickListener {
 
-            val mainIntent = Intent(applicationContext, MainActivity::class.java)
+            if (habitName.error == null && habitName.editText!!.text.isNotEmpty()) {
 
-            habit = Habit(
-                name = habitName.editText!!.text.toString(),
-                stats = Stats(startDate = Calendar.getInstance().time)
-            )
+                val mainIntent = Intent(applicationContext, MainActivity::class.java)
 
-            habit.desc =
-                if (habitDesc.editText!!.text.toString().isEmpty()) ""
-                else habitDesc.editText!!.text.toString()
+                habit = Habit(
+                    name = habitName.editText!!.text.toString(),
+                    stats = Stats(startDate = Calendar.getInstance().time)
+                )
 
-            habit.icon =
-                if (icon.tag == null) R.drawable.nil
-                else icon.tag.toString().toInt()
+                habit.desc =
+                    if (habitDesc.editText!!.text.toString().isEmpty()) ""
+                    else habitDesc.editText!!.text.toString()
 
-            habit.progress.steps =
-                if (steps.editText!!.text.toString().isEmpty()) 1
-                else steps.editText!!.text.toString().toInt()
+                habit.icon =
+                    if (icon.tag == null) R.drawable.nil
+                    else icon.tag.toString().toInt()
 
-            habit.reminder = habitReminderFromClock
+                habit.progress.steps =
+                    if (steps.editText!!.text.toString().isEmpty()) 1
+                    else steps.editText!!.text.toString().toInt()
 
-            mainIntent.putExtra("new_habit", habit)
+                habit.reminder = habitReminderFromClock
 
-            if (habitName.editText!!.error != null) {
+                mainIntent.putExtra("new_habit", habit)
                 setResult(100, mainIntent)
                 finish()
-            }
-            else{
+            } else {
                 habitName.error = errorMessage()
             }
-
-
-//            if (TextUtils.isEmpty(habitName.editText!!.text)) {
-//                habitName.error = "Habit name is required"
-//            } else {
-//                setResult(100, mainIntent)
-//                finish()
-//            }
 
         }
 
@@ -231,8 +219,9 @@ class FormActivity : AppCompatActivity() {
             stats = Stats(startDate = Calendar.getInstance().time)
         )
 
-        habit.desc = if (habitDesc.editText!!.text.toString().isEmpty()) ""
-        else habitDesc.editText!!.text.toString()
+        habit.desc =
+            if (habitDesc.editText!!.text.toString().isEmpty()) ""
+            else habitDesc.editText!!.text.toString()
 
         habit.icon =
             if (icon.tag == null) R.drawable.nil
@@ -241,6 +230,7 @@ class FormActivity : AppCompatActivity() {
         habit.progress.steps =
             if (steps.editText!!.text.toString().isEmpty()) 1
             else steps.editText!!.text.toString().toInt()
+
         habit.reminder = habitReminderFromClock
 
         outState.putParcelable("instance_state", habit)

@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var about: Button
     private lateinit var help: Button
     private lateinit var logout: Button
-    private lateinit var closeButton: TextView
+    private lateinit var closeButton: ImageView
     private lateinit var userImage: ImageView
     private lateinit var userName: TextView
     private lateinit var userEmail: TextView
@@ -35,12 +35,12 @@ class MainActivity : AppCompatActivity() {
 
     private val habitsGrid: GridView by lazy { findViewById(R.id.habitsGrid) }
     private val add: TextView by lazy { findViewById(R.id.add) }
-    private val user_image_view: ImageView by lazy { findViewById(R.id.user_email_image_view) }
+    private val userImageView: ImageView by lazy { findViewById(R.id.user_email_image_view) }
 
     companion object {
         var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
-        private val firestoreConnection = FirebaseFirestore.getInstance()
+        val firestoreConnection = FirebaseFirestore.getInstance()
     }
 
     private lateinit var mGoogleAuth: GoogleSignInClient
@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.adapter = habitAdapter
 
         bundle = intent.extras!!
-        Glide.with(this).load(bundle.get("UserPhoto")).into(user_image_view)
-        user_image_view.setOnClickListener {
+        Glide.with(this).load(bundle.get("UserPhoto")).into(userImageView)
+        userImageView.setOnClickListener {
             popUpHandle()
         }
 
@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun popUpHandle() {
+
         popupDialog.setContentView(R.layout.user_info_layout)
         settings = popupDialog.findViewById(R.id.settingsButton)
         howTo = popupDialog.findViewById(R.id.howToUseButton)
@@ -256,7 +257,7 @@ class MainActivity : AppCompatActivity() {
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            60000,
+            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
             pendingIntent
         )
     }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.os.Build
 
 class ReminderNotification : Application() {
 
@@ -18,11 +19,15 @@ class ReminderNotification : Application() {
 
     private fun createNotificationChannels() {
 
-        val notificationChannel = NotificationChannel(
-                CHANNEL_ID,
-                "Habit reminder",
-                NotificationManager.IMPORTANCE_HIGH
-        )
+        val notificationChannel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel(
+                    CHANNEL_ID,
+                    "Habit reminder",
+                    NotificationManager.IMPORTANCE_HIGH
+            )
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
         notificationChannel.description = "Time to complete your habit"
 
         val notificationManager = getSystemService(NotificationManager::class.java)
