@@ -179,6 +179,7 @@ class FormActivity : AppCompatActivity() {
                     else steps.editText!!.text.toString().toInt()
 
                 habit.reminder = habitReminderFromClock
+                println("this is the reminder ${habit.reminder}")
 
                 mainIntent.putExtra("new_habit", habit)
                 setResult(100, mainIntent)

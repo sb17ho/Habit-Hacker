@@ -165,6 +165,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (!habits.contains(newHabit)) {
                     habits.add(newHabit)
+                    println("new habit values $newHabit")
                     habitAdapter.notifyDataSetChanged()
                 }
 
@@ -173,7 +174,6 @@ class MainActivity : AppCompatActivity() {
                     .document(newHabit.name)
                     .set(newHabit)
                     .addOnSuccessListener {
-//                        Log.d("FireStoreHabitAddition", newHabit.name)
                     }
             }
 
@@ -189,7 +189,6 @@ class MainActivity : AppCompatActivity() {
                     .document(delHabitName)
                     .delete()
                     .addOnSuccessListener {
-//                        Log.d("FireStoreHabitDeletion", delHabitName)
                     }
             }
 
@@ -205,7 +204,6 @@ class MainActivity : AppCompatActivity() {
                     .document(updatedHabit.name)
                     .set(updatedHabit)
                     .addOnSuccessListener {
-//                        Log.d("FireStoreHabitUpdation", updatedHabit.name)
                     }
 
             }

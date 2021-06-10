@@ -65,6 +65,9 @@ class InfoActivity : AppCompatActivity() {
         if (desc.text.isNotEmpty()) {
             hd1.visibility = View.VISIBLE
             descLL.visibility = View.VISIBLE
+        } else {
+            hd1.visibility = View.GONE
+            descLL.visibility = View.GONE
         }
 
         steps.text = habit.progress.steps.toString()
@@ -75,6 +78,8 @@ class InfoActivity : AppCompatActivity() {
                 reminderLL.visibility = View.VISIBLE
                 habit.reminder.toString()
             } else {
+                hd3.visibility = View.GONE
+                reminderLL.visibility = View.GONE
                 "Reminder not set"
             }
 
@@ -94,7 +99,6 @@ class InfoActivity : AppCompatActivity() {
 
         habit.desc = desc.text.toString()
         habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
-        habit.reminder = Reminder(5, 9, "pm")
         habit.progress.progress = intent.getParcelableExtra<Habit>("habit_info")!!.progress.progress
         habit.progress.steps = steps.text.toString().toInt()
         habit.stats.streak = streak.text.toString().toInt()
@@ -122,16 +126,23 @@ class InfoActivity : AppCompatActivity() {
 
                 desc.text = updatedHabit.desc
                 if (desc.text.isNotEmpty()) {
+                    hd1.visibility = View.VISIBLE
                     descLL.visibility = View.VISIBLE
+                } else {
+                    hd1.visibility = View.GONE
+                    descLL.visibility = View.GONE
                 }
 
                 steps.text = updatedHabit.progress.steps.toString()
 
                 reminder.text =
                     if (updatedHabit.reminder.validate()) {
+                        hd3.visibility = View.VISIBLE
                         reminderLL.visibility = View.VISIBLE
-                        updatedHabit.reminder.toString()
+                        habit.reminder.toString()
                     } else {
+                        hd3.visibility = View.GONE
+                        reminderLL.visibility = View.GONE
                         "Reminder not set"
                     }
 
