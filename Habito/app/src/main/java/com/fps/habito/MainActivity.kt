@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         val firestoreConnection = FirebaseFirestore.getInstance()
     }
 
+
     private lateinit var mGoogleAuth: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -241,7 +242,6 @@ class MainActivity : AppCompatActivity() {
     private fun markDayChange() {
 
         val intent = Intent(this, DayChangeReceiver::class.java)
-        intent.putParcelableArrayListExtra("all_habs", habits)
         sendBroadcast(intent)
 
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
@@ -259,9 +259,5 @@ class MainActivity : AppCompatActivity() {
             pendingIntent
         )
     }
+
 }
-
-
-
-
-

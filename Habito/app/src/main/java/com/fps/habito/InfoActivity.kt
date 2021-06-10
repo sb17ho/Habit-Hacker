@@ -47,21 +47,21 @@ class InfoActivity : AppCompatActivity() {
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
             "MAIN" -> {
                 habit = intent.getParcelableExtra("habit_info")!!
-                fillViews()
+                fill(habit)
             }
         }
 
     }
 
-    private fun fillViews() {
+    private fun fill(sourceHabit : Habit){
+        title = sourceHabit.name
 
-        title = habit.name
+        icon.setImageResource(sourceHabit.icon)
+        icon.tag = sourceHabit.icon
 
-        icon.setImageResource(habit.icon)
-        icon.tag = habit.icon
-        habitName.text = habit.name
+        habitName.text = sourceHabit.name
 
-        desc.text = habit.desc
+        desc.text = sourceHabit.desc
         if (desc.text.isNotEmpty()) {
             hd1.visibility = View.VISIBLE
             descLL.visibility = View.VISIBLE
@@ -70,39 +70,45 @@ class InfoActivity : AppCompatActivity() {
             descLL.visibility = View.GONE
         }
 
-        steps.text = habit.progress.steps.toString()
+        steps.text = sourceHabit.progress.steps.toString()
 
         reminder.text =
-            if (habit.reminder.validate()) {
+            if (sourceHabit.reminder.validate()) {
                 hd3.visibility = View.VISIBLE
                 reminderLL.visibility = View.VISIBLE
-                habit.reminder.toString()
+                sourceHabit.reminder.toString()
             } else {
                 hd3.visibility = View.GONE
                 reminderLL.visibility = View.GONE
                 "Reminder not set"
             }
 
-        streak.text = habit.stats.streak.toString()
+        streak.text = sourceHabit.stats.streak.toString()
 
-        alltime.text = habit.stats.allTime.toString()
+        alltime.text = sourceHabit.stats.allTime.toString()
 
-        comp.text = habit.stats.comp.toString()
+        comp.text = sourceHabit.stats.comp.toString()
 
-        val dateTime = "${habit.stats.startDate}".split(" ").toTypedArray()
+        val dateTime = "${sourceHabit.stats.startDate}".split(" ").toTypedArray()
         startDate.text = "Created on ${dateTime[0]} ${dateTime[1]} ${dateTime[2]}"
+
     }
+
 
     override fun onBackPressed() {
 
         val mainIntent = Intent(this, MainActivity::class.java)
 
-        habit.desc = desc.text.toString()
-        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
-        habit.progress.progress = intent.getParcelableExtra<Habit>("habit_info")!!.progress.progress
-        habit.progress.steps = steps.text.toString().toInt()
-        habit.stats.streak = streak.text.toString().toInt()
-        habit.stats.comp = comp.text.toString().toInt()
+        fill(habit)
+
+//        habit.desc = desc.text.toString()
+//        habit.icon = if (icon.tag == null) R.drawable.nil else icon.tag.toString().toInt()
+//        habit.progress.progress = intent.getParcelableExtra<Habit>("habit_info")!!.progress.progress
+//
+//
+//        habit.progress.steps = steps.text.toString().toInt()
+//        habit.stats.streak = streak.text.toString().toInt()
+//        habit.stats.comp = comp.text.toString().toInt()
 
         mainIntent.putExtra("habit_for_main", habit)
 
@@ -117,38 +123,16 @@ class InfoActivity : AppCompatActivity() {
         when (resultCode) {
             100 -> {
                 val updatedHabit = data!!.getParcelableExtra<Habit>("updated_habit")!!
+                //fill(updatedHabit)
 
-                title = habitName.text
+                title = updatedHabit.name
 
-                habitName.text = updatedHabit.name
-                icon.tag = updatedHabit.icon
-                icon.setImageResource(updatedHabit.icon)
+                habit.desc = updatedHabit.desc
 
-                desc.text = updatedHabit.desc
-                if (desc.text.isNotEmpty()) {
-                    hd1.visibility = View.VISIBLE
-                    descLL.visibility = View.VISIBLE
-                } else {
-                    hd1.visibility = View.GONE
-                    descLL.visibility = View.GONE
-                }
 
-                steps.text = updatedHabit.progress.steps.toString()
 
-                reminder.text =
-                    if (updatedHabit.reminder.validate()) {
-                        hd3.visibility = View.VISIBLE
-                        reminderLL.visibility = View.VISIBLE
-                        habit.reminder.toString()
-                    } else {
-                        hd3.visibility = View.GONE
-                        reminderLL.visibility = View.GONE
-                        "Reminder not set"
-                    }
 
-                streak.text = updatedHabit.stats.streak.toString()
-                alltime.text = updatedHabit.stats.allTime.toString()
-                comp.text = updatedHabit.stats.comp.toString()
+
             }
         }
 
