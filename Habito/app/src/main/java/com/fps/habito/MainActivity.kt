@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var habits = ArrayList<Habit>()
         lateinit var habitAdapter: HabitAdapter
-        private val firestoreConnection = FirebaseFirestore.getInstance()
+        val firestoreConnection = FirebaseFirestore.getInstance()
     }
 
     private lateinit var mGoogleAuth: GoogleSignInClient
@@ -257,7 +257,7 @@ class MainActivity : AppCompatActivity() {
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            60000,
+            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
             pendingIntent
         )
     }

@@ -2,6 +2,7 @@ package com.fps.habito
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -24,9 +25,11 @@ class InfoActivity : AppCompatActivity() {
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
-    private val descLL : LinearLayout  by lazy {findViewById(R.id.descLL)}
-    private val stepsLL : LinearLayout  by lazy {findViewById(R.id.stepsLL)}
-    private val reminderLL : LinearLayout  by lazy {findViewById(R.id.reminderLL)}
+    private val descLL: LinearLayout by lazy { findViewById(R.id.descLL) }
+    private val reminderLL: LinearLayout by lazy { findViewById(R.id.reminderLL) }
+
+    private val hd1: View by lazy { findViewById(R.id.horizontal_divided_1) }
+    private val hd3: View by lazy { findViewById(R.id.horizontal_divided_3) }
 
     private lateinit var habit: Habit
 
@@ -60,6 +63,7 @@ class InfoActivity : AppCompatActivity() {
 
         desc.text = habit.desc
         if (desc.text.isNotEmpty()) {
+            hd1.visibility = View.VISIBLE
             descLL.visibility = View.VISIBLE
         }
 
@@ -67,6 +71,7 @@ class InfoActivity : AppCompatActivity() {
 
         reminder.text =
             if (habit.reminder.validate()) {
+                hd3.visibility = View.VISIBLE
                 reminderLL.visibility = View.VISIBLE
                 habit.reminder.toString()
             } else {
@@ -157,7 +162,10 @@ class InfoActivity : AppCompatActivity() {
     private fun editHabit() {
         val habitFormIntent = Intent(applicationContext, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
-        habitFormIntent.putExtra("habit_filled_info", intent.getParcelableExtra<Habit>("habit_info"))
+        habitFormIntent.putExtra(
+            "habit_filled_info",
+            intent.getParcelableExtra<Habit>("habit_info")
+        )
         startActivityForResult(habitFormIntent, 300)
     }
 
