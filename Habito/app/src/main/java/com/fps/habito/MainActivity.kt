@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         val firestoreConnection = FirebaseFirestore.getInstance()
     }
 
+
     private lateinit var mGoogleAuth: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,6 +166,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (!habits.contains(newHabit)) {
                     habits.add(newHabit)
+                    println("new habit values $newHabit")
                     habitAdapter.notifyDataSetChanged()
                 }
 
@@ -173,7 +175,6 @@ class MainActivity : AppCompatActivity() {
                     .document(newHabit.name)
                     .set(newHabit)
                     .addOnSuccessListener {
-//                        Log.d("FireStoreHabitAddition", newHabit.name)
                     }
             }
 
@@ -189,7 +190,6 @@ class MainActivity : AppCompatActivity() {
                     .document(delHabitName)
                     .delete()
                     .addOnSuccessListener {
-//                        Log.d("FireStoreHabitDeletion", delHabitName)
                     }
             }
 
@@ -205,7 +205,6 @@ class MainActivity : AppCompatActivity() {
                     .document(updatedHabit.name)
                     .set(updatedHabit)
                     .addOnSuccessListener {
-//                        Log.d("FireStoreHabitUpdation", updatedHabit.name)
                     }
 
             }
@@ -243,7 +242,6 @@ class MainActivity : AppCompatActivity() {
     private fun markDayChange() {
 
         val intent = Intent(this, DayChangeReceiver::class.java)
-        intent.putParcelableArrayListExtra("all_habs", habits)
         sendBroadcast(intent)
 
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
@@ -261,9 +259,5 @@ class MainActivity : AppCompatActivity() {
             pendingIntent
         )
     }
+
 }
-
-
-
-
-

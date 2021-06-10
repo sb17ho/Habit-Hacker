@@ -18,7 +18,6 @@ class DayChangeReceiver : BroadcastReceiver() {
             it.progress.progress = 0
             it.progress.status = Status.NOT_STARTED.toString()
 
-
         }
 
         MainActivity.habitAdapter.notifyDataSetChanged()
