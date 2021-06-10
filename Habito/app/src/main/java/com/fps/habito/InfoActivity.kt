@@ -79,8 +79,8 @@ class InfoActivity : AppCompatActivity() {
 
         comp.text = habit.stats.comp.toString()
 
-        startDate.text = "Started on ${habit.stats.startDate}"
-
+        val dateTime = "${habit.stats.startDate}".split(" ").toTypedArray()
+        startDate.text = "Created on ${dateTime[0]} ${dateTime[1]} ${dateTime[2]}"
     }
 
     override fun onBackPressed() {
