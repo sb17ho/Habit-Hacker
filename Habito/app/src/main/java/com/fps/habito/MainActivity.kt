@@ -42,28 +42,11 @@ class MainActivity : AppCompatActivity() {
     private val userImageView: ImageView by lazy { findViewById(R.id.user_email_image_view) }
 
     companion object {
-        var habits = ArrayList<Habit>()
+        val habits by lazy { ArrayList<Habit>() }
     }
 
-    lateinit var habitAdapter: HabitAdapter
+    val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
     val firestore = FirebaseFirestore.getInstance()
-
-    var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context?, intent: Intent) {
-
-            habitAdapter.notifyDataSetChanged()
-
-            habits.forEach {
-                firestore
-                    .collection("Habits")
-                    .document(it.name).set(it)
-                    .addOnSuccessListener { println("success firestore at midnight") }
-                    .addOnFailureListener { println("failed firestore at midnight") }
-            }
-        }
-
-    }
 
 
     private lateinit var mGoogleAuth: GoogleSignInClient
@@ -75,14 +58,9 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(resultGiver, IntentFilter("NotifyAndBackup"))
 
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = resources.getColor(R.color.primary_pink)
+        habitsGrid.adapter = habitAdapter
 
         googleSignIn()
-
-        habitAdapter = HabitAdapter(this, habits)
-        habitsGrid.adapter = habitAdapter
 
         bundle = intent.extras!!
         Glide.with(this).load(bundle.get("UserPhoto")).into(userImageView)
@@ -102,41 +80,25 @@ class MainActivity : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        // Build a GoogleSignInClient with the options specified by gso.
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
 
     }
 
-    private fun addButtonOnClickListener() {
-        add.setOnClickListener {
-            val habitFormIntent = Intent(this, FormActivity::class.java)
-            habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-            startActivityForResult(habitFormIntent, 1)
-        }
+    private fun startFormActivity() {
+        val habitFormIntent = Intent(this, FormActivity::class.java)
+        habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
+        startActivityForResult(habitFormIntent, 1)
     }
 
-    private fun progressHabit() {
 
-        habitsGrid.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                habits[position].updateProgress()
-                habitAdapter.notifyDataSetChanged()
-            }
-
+    private fun startInfoActivity(position: Int) {
+        val habitInfoIntent = Intent(this, InfoActivity::class.java)
+        habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
+        habitInfoIntent.putExtra("habit_info", habits[position])
+        startActivityForResult(habitInfoIntent, 2)
     }
 
-    private fun startInfoActivity() {
-
-        habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
-            val habitInfoIntent = Intent(this, InfoActivity::class.java)
-            habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-            habitInfoIntent.putExtra("habit_info", habits[position])
-            startActivityForResult(habitInfoIntent, 2)
-            true
-        }
-
-    }
 
     private fun popUpHandle() {
 
@@ -253,12 +215,41 @@ class MainActivity : AppCompatActivity() {
 
                 habitAdapter.notifyDataSetChanged()
 
-                addButtonOnClickListener()
-                progressHabit()
-                startInfoActivity()
+                add.setOnClickListener {
+                    startFormActivity()
+                }
+
+                habitsGrid.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        habits[position].updateProgress()
+                        habitAdapter.notifyDataSetChanged()
+                    }
+
+
+                habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
+                    startInfoActivity(position)
+                    true
+                }
+
                 onDayChange()
-                
+
+
             }
+
+    }
+
+    private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent) {
+
+            habitAdapter.notifyDataSetChanged()
+
+            habits.forEach {
+                firestore
+                    .collection("Habits")
+                    .document(it.name).set(it)
+            }
+        }
 
     }
 

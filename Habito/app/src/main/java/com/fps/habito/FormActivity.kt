@@ -164,27 +164,31 @@ class FormActivity : AppCompatActivity() {
 
                 val mainIntent = Intent(applicationContext, MainActivity::class.java)
 
-                habit = Habit(
-                    name = habitName.editText!!.text.toString(),
-                    stats = Stats(startDate = Calendar.getInstance().time)
+                mainIntent.putExtra(
+                    "new_habit",
+                    Habit(
+                        name = habitName.editText!!.text.toString(),
+
+                        desc =
+                        if (habitDesc.editText!!.text.toString().isEmpty()) ""
+                        else habitDesc.editText!!.text.toString(),
+
+                        icon =
+                        if (icon.tag == null) R.drawable.nil
+                        else icon.tag.toString().toInt(),
+
+                        progress = Progress(
+                            0,
+                            if (steps.editText!!.text.toString().isEmpty()) 1
+                            else steps.editText!!.text.toString().toInt(),
+                            Status.NOT_STARTED.toString()
+                        ),
+
+                        reminder = habitReminderFromClock,
+
+                        stats = Stats(startDate = Calendar.getInstance().time)
+                    )
                 )
-
-                habit.desc =
-                    if (habitDesc.editText!!.text.toString().isEmpty()) ""
-                    else habitDesc.editText!!.text.toString()
-
-                habit.icon =
-                    if (icon.tag == null) R.drawable.nil
-                    else icon.tag.toString().toInt()
-
-                habit.progress.steps =
-                    if (steps.editText!!.text.toString().isEmpty()) 1
-                    else steps.editText!!.text.toString().toInt()
-
-                habit.reminder = habitReminderFromClock
-                println("this is the reminder ${habit.reminder}")
-
-                mainIntent.putExtra("new_habit", habit)
                 setResult(100, mainIntent)
                 finish()
             } else {
@@ -213,43 +217,6 @@ class FormActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        habit = Habit(
-            name = habitName.editText!!.text.toString(),
-            stats = Stats(startDate = Calendar.getInstance().time)
-        )
-
-        habit.desc =
-            if (habitDesc.editText!!.text.toString().isEmpty()) ""
-            else habitDesc.editText!!.text.toString()
-
-        habit.icon =
-            if (icon.tag == null) R.drawable.nil
-            else icon.tag.toString().toInt()
-
-        habit.progress.steps =
-            if (steps.editText!!.text.toString().isEmpty()) 1
-            else steps.editText!!.text.toString().toInt()
-
-        habit.reminder = habitReminderFromClock
-
-        outState.putParcelable("instance_state", habit)
-
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-
-        val instanceStateHabit = savedInstanceState.getParcelable<Habit>("instance_state")!!
-
-        icon.setImageResource(instanceStateHabit.icon)
-        icon.tag = instanceStateHabit.icon
-        habitName.editText!!.setText(instanceStateHabit.name)
-        habitDesc.editText!!.setText(instanceStateHabit.desc)
-        steps.editText!!.setText(instanceStateHabit.progress.steps.toString())
     }
 
 }
