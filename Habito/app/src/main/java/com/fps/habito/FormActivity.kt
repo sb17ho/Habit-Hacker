@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.widget.addTextChangedListener
@@ -30,6 +31,18 @@ class FormActivity : AppCompatActivity() {
 
     private lateinit var habit: Habit
 
+    private val resultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+
+       when(it.resultCode) {
+           500 -> {
+               val iconRes = it.data!!.getIntExtra("selected_icon", 0)
+               icon.setImageResource(iconRes)
+               icon.tag = iconRes
+           }
+       }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -40,7 +53,6 @@ class FormActivity : AppCompatActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = resources.getColor(R.color.primary_pink)
-
 
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
             "MAIN" -> {
@@ -151,7 +163,7 @@ class FormActivity : AppCompatActivity() {
     private fun selectIcon() {
 
         icon.setOnClickListener {
-            startActivityForResult(Intent(this, IconPickerActivity::class.java), 1)
+            resultContract.launch(Intent(this, IconPickerActivity::class.java))
         }
 
     }
@@ -195,17 +207,6 @@ class FormActivity : AppCompatActivity() {
                 habitName.error = errorMessage()
             }
 
-        }
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == 500) {
-            val iconRes = data!!.getIntExtra("selected_icon", 0)
-            icon.setImageResource(iconRes)
-            icon.tag = iconRes
         }
 
     }
