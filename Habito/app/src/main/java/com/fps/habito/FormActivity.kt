@@ -2,6 +2,7 @@ package com.fps.habito
 
 import android.app.TimePickerDialog
 import android.content.Intent
+
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
@@ -31,17 +32,18 @@ class FormActivity : AppCompatActivity() {
 
     private lateinit var habit: Habit
 
-    private val resultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+    private val resultContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
-       when(it.resultCode) {
-           500 -> {
-               val iconRes = it.data!!.getIntExtra("selected_icon", 0)
-               icon.setImageResource(iconRes)
-               icon.tag = iconRes
-           }
-       }
+            when (it.resultCode) {
+                500 -> {
+                    val iconRes = it.data!!.getIntExtra("selected_icon", 0)
+                    icon.setImageResource(iconRes)
+                    icon.tag = iconRes
+                }
+            }
 
-    }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -91,7 +93,6 @@ class FormActivity : AppCompatActivity() {
     private fun errorMessage(): String? {
         return if (habitName.editText!!.text.isEmpty()) "Habit name is required"
         else null
-
     }
 
 
@@ -138,34 +139,34 @@ class FormActivity : AppCompatActivity() {
 
         reminderTextView.setOnClickListener {
             if (reminderSwitch.isChecked) {
-                setHabitReminderFromClock()
+                TimePickerDialog(
+                    this,
+                    R.style.TimePickerTheme,
+                    { _, hourOfDay, minute ->
+                        habitReminderFromClock =
+                            Reminder(
+                                kotlin.math.abs(12 - hourOfDay),
+                                minute,
+                                if (hourOfDay < 12) "am" else "pm"
+                            )
+                        reminderTextView.text = habitReminderFromClock.toString()
+
+                    }, 0, 0, false
+                ).show()
             }
         }
 
     }
 
-    private fun setHabitReminderFromClock() {
-
-        val calendar = Calendar.getInstance()
-
-        TimePickerDialog(this, { _, hourOfDay, minute ->
-            habitReminderFromClock =
-                Reminder(
-                    kotlin.math.abs(12 - hourOfDay),
-                    minute,
-                    if (hourOfDay < 12) "am" else "pm"
-                )
-            reminderTextView.text = habitReminderFromClock.toString()
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
-
-    }
-
     private fun selectIcon() {
-
         icon.setOnClickListener {
-            resultContract.launch(Intent(this, IconPickerActivity::class.java))
+            resultContract.launch(
+                Intent(
+                    this,
+                    IconPickerActivity::class.java
+                )
+            )
         }
-
     }
 
     private fun createHabitListener() {
@@ -212,11 +213,9 @@ class FormActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             android.R.id.home -> finish()
         }
-
         return super.onOptionsItemSelected(item)
     }
 

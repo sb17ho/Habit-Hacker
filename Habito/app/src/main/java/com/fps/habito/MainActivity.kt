@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     private val resultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
             when (it.resultCode) {
+
                 100 -> {
                     val newHabit = it.data?.getParcelableExtra<Habit>("new_habit")!!
 
@@ -146,7 +147,7 @@ class MainActivity : AppCompatActivity() {
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
         resultContract.launch(habitFormIntent)
     }
-    
+
     private fun startInfoActivity(position: Int) {
         val habitInfoIntent = Intent(this, InfoActivity::class.java)
         habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
