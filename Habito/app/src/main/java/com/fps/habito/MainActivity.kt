@@ -100,48 +100,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun popUpHandle() {
 
-        popupDialog.setContentView(R.layout.user_info_layout)
-        settings = popupDialog.findViewById(R.id.settingsButton)
-        howTo = popupDialog.findViewById(R.id.howToUseButton)
-        about = popupDialog.findViewById(R.id.aboutButton)
-        help = popupDialog.findViewById(R.id.helpButton)
-        logout = popupDialog.findViewById(R.id.logoutButton)
-        closeButton = popupDialog.findViewById(R.id.closebutton)
-        userImage = popupDialog.findViewById(R.id.userImageView)
-        userName = popupDialog.findViewById(R.id.userNameView)
-        userEmail = popupDialog.findViewById(R.id.userEmailView)
-
-        val displayMetric = DisplayMetrics()
-        val windManager = getSystemService(WINDOW_SERVICE) as WindowManager
-
-        //To make this work for APIs older than based on Android R
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                display?.getRealMetrics(displayMetric)
-            }
-        } catch (e: NoSuchMethodError) {
-            windManager.defaultDisplay.getRealMetrics(displayMetric)
-        }
-        popupDialog.show()
-
-        userName.text = bundle.getString("UserName")
-        userEmail.text = bundle.getString("UserEmail")
-        Glide.with(this).load(bundle.get("UserPhoto")).into(userImage)
-
-        logout.setOnClickListener {
-            mGoogleAuth.signOut().addOnCompleteListener {
-                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-                mAuth.signOut()
-                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
-                startActivity(intentToSignIn)
-                finish()
-            }
-        }
-
-        closeButton.setOnClickListener { popupDialog.dismiss() }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -236,6 +195,49 @@ class MainActivity : AppCompatActivity() {
 
             }
 
+    }
+
+    private fun popUpHandle() {
+
+        popupDialog.setContentView(R.layout.user_info_layout)
+        settings = popupDialog.findViewById(R.id.settingsButton)
+        howTo = popupDialog.findViewById(R.id.howToUseButton)
+        about = popupDialog.findViewById(R.id.aboutButton)
+        help = popupDialog.findViewById(R.id.helpButton)
+        logout = popupDialog.findViewById(R.id.logoutButton)
+        closeButton = popupDialog.findViewById(R.id.closebutton)
+        userImage = popupDialog.findViewById(R.id.userImageView)
+        userName = popupDialog.findViewById(R.id.userNameView)
+        userEmail = popupDialog.findViewById(R.id.userEmailView)
+
+        val displayMetric = DisplayMetrics()
+        val windManager = getSystemService(WINDOW_SERVICE) as WindowManager
+
+        //To make this work for APIs older than based on Android R
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                display?.getRealMetrics(displayMetric)
+            }
+        } catch (e: NoSuchMethodError) {
+            windManager.defaultDisplay.getRealMetrics(displayMetric)
+        }
+        popupDialog.show()
+
+        userName.text = bundle.getString("UserName")
+        userEmail.text = bundle.getString("UserEmail")
+        Glide.with(this).load(bundle.get("UserPhoto")).into(userImage)
+
+        logout.setOnClickListener {
+            mGoogleAuth.signOut().addOnCompleteListener {
+                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                mAuth.signOut()
+                val intentToSignIn = Intent(this, GoogleSignIn::class.java)
+                startActivity(intentToSignIn)
+                finish()
+            }
+        }
+
+        closeButton.setOnClickListener { popupDialog.dismiss() }
     }
 
     private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {

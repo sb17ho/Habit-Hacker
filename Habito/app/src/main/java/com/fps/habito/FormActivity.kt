@@ -37,8 +37,8 @@ class FormActivity : AppCompatActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.primary_pink)))
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = resources.getColor(R.color.primary_pink)
 
 
@@ -136,7 +136,7 @@ class FormActivity : AppCompatActivity() {
 
         val calendar = Calendar.getInstance()
 
-        TimePickerDialog(this, { view, hourOfDay, minute ->
+        TimePickerDialog(this, { _, hourOfDay, minute ->
             habitReminderFromClock =
                 Reminder(
                     kotlin.math.abs(12 - hourOfDay),
