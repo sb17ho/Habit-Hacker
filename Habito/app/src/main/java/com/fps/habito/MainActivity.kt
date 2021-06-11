@@ -13,6 +13,7 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -51,6 +52,61 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mGoogleAuth: GoogleSignInClient
 
+    private val resultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+            when (it.resultCode) {
+                100 -> {
+                    val newHabit = it.data?.getParcelableExtra<Habit>("new_habit")!!
+
+                    if (!habits.contains(newHabit)) {
+                        habits.add(newHabit)
+                        println("new habit values $newHabit")
+                        habitAdapter.notifyDataSetChanged()
+                    }
+
+                    firestore
+                        .collection("Habits")
+                        .document(newHabit.name)
+                        .set(newHabit)
+                        .addOnSuccessListener {
+                        }
+                }
+
+                200 -> {
+
+                    val delHabitName = it.data!!.getStringExtra("del_habit")!!
+
+                    habits.removeIf { habit -> habit.name == delHabitName }
+                    habitAdapter.notifyDataSetChanged()
+
+                    firestore
+                        .collection("Habits")
+                        .document(delHabitName)
+                        .delete()
+                        .addOnSuccessListener {
+                        }
+                }
+
+                300 -> {
+
+                    val updatedHabit = it.data!!.getParcelableExtra<Habit>("habit_for_main")!!
+
+                    habits[habits.indexOf(updatedHabit)] = updatedHabit
+                    habitAdapter.notifyDataSetChanged()
+
+                    firestore
+                        .collection("Habits")
+                        .document(updatedHabit.name)
+                        .set(updatedHabit)
+                        .addOnSuccessListener {
+                        }
+
+                }
+
+            }
+
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -88,74 +144,14 @@ class MainActivity : AppCompatActivity() {
     private fun startFormActivity() {
         val habitFormIntent = Intent(this, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-        startActivityForResult(habitFormIntent, 1)
+        resultContract.launch(habitFormIntent)
     }
-
-
+    
     private fun startInfoActivity(position: Int) {
         val habitInfoIntent = Intent(this, InfoActivity::class.java)
         habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
         habitInfoIntent.putExtra("habit_info", habits[position])
-        startActivityForResult(habitInfoIntent, 2)
-    }
-
-
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (resultCode) {
-            100 -> {
-                val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
-
-                if (!habits.contains(newHabit)) {
-                    habits.add(newHabit)
-                    println("new habit values $newHabit")
-                    habitAdapter.notifyDataSetChanged()
-                }
-
-                firestore
-                    .collection("Habits")
-                    .document(newHabit.name)
-                    .set(newHabit)
-                    .addOnSuccessListener {
-                    }
-            }
-
-            200 -> {
-
-                val delHabitName = data!!.getStringExtra("del_habit")!!
-
-                habits.removeIf { it.name == delHabitName }
-                habitAdapter.notifyDataSetChanged()
-
-                firestore
-                    .collection("Habits")
-                    .document(delHabitName)
-                    .delete()
-                    .addOnSuccessListener {
-                    }
-            }
-
-            300 -> {
-
-                val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")!!
-
-                habits[habits.indexOf(updatedHabit)] = updatedHabit
-                habitAdapter.notifyDataSetChanged()
-
-                firestore
-                    .collection("Habits")
-                    .document(updatedHabit.name)
-                    .set(updatedHabit)
-                    .addOnSuccessListener {
-                    }
-
-            }
-
-        }
-
+        resultContract.launch(habitInfoIntent)
     }
 
     private fun getFireStoreData() {
