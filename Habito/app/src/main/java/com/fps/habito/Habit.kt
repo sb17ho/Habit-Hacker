@@ -20,8 +20,6 @@ class Habit(
 
     fun updateProgress() {
 
-        Calendar.MONDAY
-
         if (progress.status != Status.COMPLETED.toString()) {
 
             ++progress.progress

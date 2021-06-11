@@ -3,7 +3,10 @@ package com.fps.habito
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -18,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,10 +42,11 @@ class MainActivity : AppCompatActivity() {
     private val userImageView: ImageView by lazy { findViewById(R.id.user_email_image_view) }
 
     companion object {
-        var habits = ArrayList<Habit>()
-        lateinit var habitAdapter: HabitAdapter
-        val firestoreConnection = FirebaseFirestore.getInstance()
+        val habits by lazy { ArrayList<Habit>() }
     }
+
+    val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
+    val firestore = FirebaseFirestore.getInstance()
 
 
     private lateinit var mGoogleAuth: GoogleSignInClient
@@ -51,14 +56,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.statusBarColor = resources.getColor(R.color.primary_pink)
+        registerReceiver(resultGiver, IntentFilter("NotifyAndBackup"))
+
+        habitsGrid.adapter = habitAdapter
 
         googleSignIn()
-
-        habitAdapter = HabitAdapter(this, habits)
-        habitsGrid.adapter = habitAdapter
 
         bundle = intent.extras!!
         Glide.with(this).load(bundle.get("UserPhoto")).into(userImageView)
@@ -78,41 +80,25 @@ class MainActivity : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        // Build a GoogleSignInClient with the options specified by gso.
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
 
     }
 
-    private fun addButtonOnClickListener() {
-        add.setOnClickListener {
-            val habitFormIntent = Intent(this, FormActivity::class.java)
-            habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-            startActivityForResult(habitFormIntent, 1)
-        }
+    private fun startFormActivity() {
+        val habitFormIntent = Intent(this, FormActivity::class.java)
+        habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
+        startActivityForResult(habitFormIntent, 1)
     }
 
-    private fun progressHabit() {
 
-        habitsGrid.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                habits[position].updateProgress()
-                habitAdapter.notifyDataSetChanged()
-            }
-
+    private fun startInfoActivity(position: Int) {
+        val habitInfoIntent = Intent(this, InfoActivity::class.java)
+        habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
+        habitInfoIntent.putExtra("habit_info", habits[position])
+        startActivityForResult(habitInfoIntent, 2)
     }
 
-    private fun startInfoActivity() {
-
-        habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
-            val habitInfoIntent = Intent(this, InfoActivity::class.java)
-            habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-            habitInfoIntent.putExtra("habit_info", habits[position])
-            startActivityForResult(habitInfoIntent, 2)
-            true
-        }
-
-    }
 
     private fun popUpHandle() {
 
@@ -170,7 +156,7 @@ class MainActivity : AppCompatActivity() {
                     habitAdapter.notifyDataSetChanged()
                 }
 
-                firestoreConnection
+                firestore
                     .collection("Habits")
                     .document(newHabit.name)
                     .set(newHabit)
@@ -185,7 +171,7 @@ class MainActivity : AppCompatActivity() {
                 habits.removeIf { it.name == delHabitName }
                 habitAdapter.notifyDataSetChanged()
 
-                firestoreConnection
+                firestore
                     .collection("Habits")
                     .document(delHabitName)
                     .delete()
@@ -200,7 +186,7 @@ class MainActivity : AppCompatActivity() {
                 habits[habits.indexOf(updatedHabit)] = updatedHabit
                 habitAdapter.notifyDataSetChanged()
 
-                firestoreConnection
+                firestore
                     .collection("Habits")
                     .document(updatedHabit.name)
                     .set(updatedHabit)
@@ -215,7 +201,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFireStoreData() {
 
-        firestoreConnection
+        firestore
             .collection("Habits")
             .get()
             .addOnSuccessListener {
@@ -229,35 +215,68 @@ class MainActivity : AppCompatActivity() {
 
                 habitAdapter.notifyDataSetChanged()
 
-                addButtonOnClickListener()
-                progressHabit()
-                startInfoActivity()
-                markDayChange()
+                add.setOnClickListener {
+                    startFormActivity()
+                }
+
+                habitsGrid.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        habits[position].updateProgress()
+                        habitAdapter.notifyDataSetChanged()
+                    }
+
+
+                habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
+                    startInfoActivity(position)
+                    true
+                }
+
+                onDayChange()
 
 
             }
 
     }
 
-    private fun markDayChange() {
+    private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
 
-        val intent = Intent(this, DayChangeReceiver::class.java)
-        sendBroadcast(intent)
+        override fun onReceive(context: Context?, intent: Intent) {
 
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+            habitAdapter.notifyDataSetChanged()
 
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
-        calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
-        calendar[Calendar.SECOND] = calendar.get(Calendar.SECOND)
+            habits.forEach {
+                firestore
+                    .collection("Habits")
+                    .document(it.name).set(it)
+            }
+        }
 
-        alarmManager.setRepeating(
+    }
+
+    private fun onDayChange() {
+
+        val onDayChangeIntent = Intent(this, HabitsReseter::class.java)
+
+        sendBroadcast(onDayChangeIntent)
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, onDayChangeIntent, 0)
+
+        (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
             AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+            getMidnight().timeInMillis,
+            AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+
     }
+
+    private fun getMidnight(): Calendar {
+        val midnight = Calendar.getInstance()
+        midnight[Calendar.HOUR_OF_DAY] = 0
+        midnight[Calendar.MINUTE] = 0
+        midnight[Calendar.SECOND] = 0
+        return midnight
+    }
+
 
 }

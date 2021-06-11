@@ -58,13 +58,13 @@
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
 
-        <receiver android:name=".DayChangeReceiver" />
+        <receiver android:name=".HabitsReseter" />
 
     </application>
 
