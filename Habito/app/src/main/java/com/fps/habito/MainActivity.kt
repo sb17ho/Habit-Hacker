@@ -3,7 +3,10 @@ package com.fps.habito
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -18,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,8 +43,26 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var habits = ArrayList<Habit>()
-        lateinit var habitAdapter: HabitAdapter
-        val firestoreConnection = FirebaseFirestore.getInstance()
+    }
+
+    lateinit var habitAdapter: HabitAdapter
+    val firestore = FirebaseFirestore.getInstance()
+
+    var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent) {
+
+            habitAdapter.notifyDataSetChanged()
+
+            habits.forEach {
+                firestore
+                    .collection("Habits")
+                    .document(it.name).set(it)
+                    .addOnSuccessListener { println("success firestore at midnight") }
+                    .addOnFailureListener { println("failed firestore at midnight") }
+            }
+        }
+
     }
 
 
@@ -51,8 +73,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        registerReceiver(resultGiver, IntentFilter("NotifyAndBackup"))
+
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = resources.getColor(R.color.primary_pink)
 
         googleSignIn()
@@ -104,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startInfoActivity() {
 
-        habitsGrid.onItemLongClickListener = OnItemLongClickListener { a, b, position, d ->
+        habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
             val habitInfoIntent = Intent(this, InfoActivity::class.java)
             habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
             habitInfoIntent.putExtra("habit_info", habits[position])
@@ -170,7 +194,7 @@ class MainActivity : AppCompatActivity() {
                     habitAdapter.notifyDataSetChanged()
                 }
 
-                firestoreConnection
+                firestore
                     .collection("Habits")
                     .document(newHabit.name)
                     .set(newHabit)
@@ -185,7 +209,7 @@ class MainActivity : AppCompatActivity() {
                 habits.removeIf { it.name == delHabitName }
                 habitAdapter.notifyDataSetChanged()
 
-                firestoreConnection
+                firestore
                     .collection("Habits")
                     .document(delHabitName)
                     .delete()
@@ -200,7 +224,7 @@ class MainActivity : AppCompatActivity() {
                 habits[habits.indexOf(updatedHabit)] = updatedHabit
                 habitAdapter.notifyDataSetChanged()
 
-                firestoreConnection
+                firestore
                     .collection("Habits")
                     .document(updatedHabit.name)
                     .set(updatedHabit)
@@ -215,7 +239,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFireStoreData() {
 
-        firestoreConnection
+        firestore
             .collection("Habits")
             .get()
             .addOnSuccessListener {
@@ -232,32 +256,36 @@ class MainActivity : AppCompatActivity() {
                 addButtonOnClickListener()
                 progressHabit()
                 startInfoActivity()
-                markDayChange()
-
-
+                onDayChange()
+                
             }
 
     }
 
-    private fun markDayChange() {
+    private fun onDayChange() {
 
-        val intent = Intent(this, DayChangeReceiver::class.java)
-        sendBroadcast(intent)
+        val onDayChangeIntent = Intent(this, HabitsReseter::class.java)
 
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+        sendBroadcast(onDayChangeIntent)
 
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = calendar.get(Calendar.HOUR)
-        calendar[Calendar.MINUTE] = calendar.get(Calendar.MINUTE)
-        calendar[Calendar.SECOND] = calendar.get(Calendar.SECOND)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, onDayChangeIntent, 0)
 
-        alarmManager.setRepeating(
+        (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
             AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+            getMidnight().timeInMillis,
+            AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+
     }
+
+    private fun getMidnight(): Calendar {
+        val midnight = Calendar.getInstance()
+        midnight[Calendar.HOUR_OF_DAY] = 0
+        midnight[Calendar.MINUTE] = 0
+        midnight[Calendar.SECOND] = 0
+        return midnight
+    }
+
 
 }

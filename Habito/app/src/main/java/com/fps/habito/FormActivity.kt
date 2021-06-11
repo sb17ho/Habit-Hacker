@@ -90,7 +90,10 @@ class FormActivity : AppCompatActivity() {
             habit.desc = habitDesc.editText!!.text.toString()
             habit.icon = icon.tag as Int
             habit.progress.steps = steps.editText!!.text.toString().toInt()
-            habit.reminder = habitReminderFromClock
+
+            habit.reminder =
+                if (reminderSwitch.isChecked) habitReminderFromClock
+                else Reminder()
 
             habitInfoIntent.putExtra("updated_habit", habit)
             setResult(100, habitInfoIntent)
