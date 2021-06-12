@@ -34,10 +34,13 @@ class Habit(
                 ++stats.streak
                 ++stats.comp
             }
-
         }
+    }
 
-
+    fun getCompeleteDay(): Int? {
+//        val dayTime = Calendar.getInstance().time.toString().split(" ").toTypedArray()
+        if (progress.status == Status.COMPLETED.toString() || progress.progress == progress.steps) return Calendar.getInstance().time.day
+        else return null
     }
 
     companion object {

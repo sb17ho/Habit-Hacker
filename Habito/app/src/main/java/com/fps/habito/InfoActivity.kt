@@ -10,7 +10,10 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import java.util.*
+import kotlin.math.roundToInt
 
 class InfoActivity : AppCompatActivity() {
 
@@ -23,6 +26,17 @@ class InfoActivity : AppCompatActivity() {
     private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
+
+    /*Progress Bar Variables*/
+    private val monProgress: ProgressBar by lazy { findViewById(R.id.MonProgressBar) }
+    private val tueProgress: ProgressBar by lazy { findViewById(R.id.TueProgressBar) }
+    private val wedProgress: ProgressBar by lazy { findViewById(R.id.WedProgressBar) }
+    private val thrProgress: ProgressBar by lazy { findViewById(R.id.ThrusProgressBar) }
+    private val friProgress: ProgressBar by lazy { findViewById(R.id.FriProgressBar) }
+    private val satProgress: ProgressBar by lazy { findViewById(R.id.SatProgressBar) }
+    private val sunProgress: ProgressBar by lazy { findViewById(R.id.SunProgressBar) }
+    private val overAllProgress: ProgressBar by lazy { findViewById(R.id.overallProgress) }
+    private val percentageProgress: TextView by lazy { findViewById(R.id.percentProgress) }
 
     private val descLL: LinearLayout by lazy { findViewById(R.id.descLL) }
     private val reminderLL: LinearLayout by lazy { findViewById(R.id.setReminderLL) }
@@ -91,6 +105,79 @@ class InfoActivity : AppCompatActivity() {
         val startDateTime = "Created on ${dateTime[0]} ${dateTime[1]} ${dateTime[2]}"
         startDate.text = startDateTime
 
+        //Todo: Code for handling progress
+        initializeProgressBar(sourceHabit)
+        handleProgress(sourceHabit)
+        handleOverallProgress(sourceHabit)
+    }
+
+    private fun initializeProgressBar(sourceHabit: Habit) {
+        monProgress.max = sourceHabit.progress.steps
+        tueProgress.max = sourceHabit.progress.steps
+        wedProgress.max = sourceHabit.progress.steps
+        thrProgress.max = sourceHabit.progress.steps
+        friProgress.max = sourceHabit.progress.steps
+        satProgress.max = sourceHabit.progress.steps
+        sunProgress.max = sourceHabit.progress.steps
+    }
+
+    //Todo: Add functionality for handling progress bar fill based on the complete status and the date
+    private fun handleProgress(sourceHabit: Habit) {
+        val currentDay = Calendar.getInstance().time.day
+        when (currentDay) {
+            1 -> sunProgress.progress = sourceHabit.progress.progress
+            2 -> monProgress.progress = sourceHabit.progress.progress
+            3 -> tueProgress.progress = sourceHabit.progress.progress
+            4 -> wedProgress.progress = sourceHabit.progress.progress
+            5 -> thrProgress.progress = sourceHabit.progress.progress
+            6 -> friProgress.progress = sourceHabit.progress.progress
+            7 -> satProgress.progress = sourceHabit.progress.progress
+        }
+
+//        val completionDay: Int? = sourceHabit.getCompeleteDay()
+//        val currentDay = Calendar.getInstance().time.day
+//        if (completionDay == null) {
+//            //First day of week is Sunday(1)
+//            when (currentDay) {
+//                1 -> sunProgress.progress = sourceHabit.progress.progress
+//                2 -> monProgress.progress = sourceHabit.progress.progress
+//                3 -> tueProgress.progress = sourceHabit.progress.progress
+//                4 -> wedProgress.progress = sourceHabit.progress.progress
+//                5 -> thrProgress.progress = sourceHabit.progress.progress
+//                6 -> friProgress.progress = sourceHabit.progress.progress
+//                7 -> satProgress.progress = sourceHabit.progress.progress
+//            }
+//        } else {
+//            if (completionDay == currentDay) {
+//                when (completionDay) {
+//                    1 -> sunProgress.progress = sourceHabit.progress.progress
+//                    2 -> monProgress.progress = sourceHabit.progress.progress
+//                    3 -> tueProgress.progress = sourceHabit.progress.progress
+//                    4 -> wedProgress.progress = sourceHabit.progress.progress
+//                    5 -> thrProgress.progress = sourceHabit.progress.progress
+//                    6 -> friProgress.progress = sourceHabit.progress.progress
+//                    7 -> satProgress.progress = sourceHabit.progress.progress
+//                }
+//            }
+//        }
+    }
+
+    //Todo: To handle the overall progress of the activity
+    private fun handleOverallProgress(sourceHabit: Habit) {
+        val totalSteps: Int = 7 * sourceHabit.progress.steps
+        val dailyProgressAdd: Int =
+            monProgress.progress + tueProgress.progress + wedProgress.progress + friProgress.progress + satProgress.progress + sunProgress.progress
+
+        val div: Int = ((dailyProgressAdd / totalSteps.toDouble()) * 100).roundToInt()
+        val overall: String = (div).toString() + "%"
+        if (dailyProgressAdd == totalSteps) {
+            overAllProgress.progress = 100
+            val s: String = "100%"
+            percentageProgress.setText(s)
+        } else {
+            overAllProgress.progress = div
+            percentageProgress.setText(overall)
+        }
     }
 
 

@@ -249,7 +249,7 @@
         android:id="@+id/startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Started on"
+        android:hint="Created on"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -257,5 +257,213 @@
         app:layout_constraintTop_toBottomOf="@+id/streakText"
         app:layout_constraintVertical_bias="1.0" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="42"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/streakText"
+        app:layout_constraintVertical_bias="0.096">
+
+        <ProgressBar
+            android:id="@+id/MonProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_circle_progress_bar"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+        <ProgressBar
+            android:id="@+id/TueProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_circle_progress_bar"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+        <ProgressBar
+            android:id="@+id/WedProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_circle_progress_bar"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+        <ProgressBar
+            android:id="@+id/ThrusProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_circle_progress_bar"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+        <ProgressBar
+            android:id="@+id/FriProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_circle_progress_bar"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+        <ProgressBar
+            android:id="@+id/SatProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_circle_progress_bar"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+        <ProgressBar
+            android:id="@+id/SunProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_circle_progress_bar"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="254dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/MonView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="M"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/TuesView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="T"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/WedView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="W"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/thursView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="T"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/friView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="F"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/satView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="S"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/sunDay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="S"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/overallProgress"
+        android:layout_width="207dp"
+        android:layout_height="201dp"
+        android:indeterminateOnly="false"
+        android:max="100"
+        android:padding="4dp"
+        android:progressDrawable="@drawable/custom_overall_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.061" />
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/progressText"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Progress"-->
+    <!--        android:textSize="20sp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/overallProgress"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/overallProgress"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/overallProgress"-->
+    <!--        app:layout_constraintVertical_bias="0.0" />-->
+
+    <TextView
+        android:id="@+id/percentProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0%"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/overallProgress"
+        app:layout_constraintEnd_toEndOf="@+id/overallProgress"
+        app:layout_constraintStart_toStartOf="@+id/overallProgress"
+        app:layout_constraintTop_toTopOf="@+id/overallProgress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
