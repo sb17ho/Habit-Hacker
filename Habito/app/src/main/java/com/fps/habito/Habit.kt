@@ -10,7 +10,7 @@ class Habit(
     var icon: Int = R.drawable.nil,
     var progress: Progress = Progress(),
     var stats: Stats,
-    var reminder: Reminder = Reminder()
+    var reminder : Reminder = Reminder()
 ) : Parcelable {
 
     constructor() : this(

@@ -24,6 +24,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var settings: Button
@@ -48,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
     val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
     val firestore = FirebaseFirestore.getInstance()
-
 
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
