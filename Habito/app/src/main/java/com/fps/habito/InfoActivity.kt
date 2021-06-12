@@ -123,15 +123,15 @@ class InfoActivity : AppCompatActivity() {
 
     //Todo: Add functionality for handling progress bar fill based on the complete status and the date
     private fun handleProgress(sourceHabit: Habit) {
-        val currentDay = Calendar.getInstance().time.day
+        val currentDay: String = (Calendar.getInstance().time).toString().split(" ")[0]
         when (currentDay) {
-            1 -> sunProgress.progress = sourceHabit.progress.progress
-            2 -> monProgress.progress = sourceHabit.progress.progress
-            3 -> tueProgress.progress = sourceHabit.progress.progress
-            4 -> wedProgress.progress = sourceHabit.progress.progress
-            5 -> thrProgress.progress = sourceHabit.progress.progress
-            6 -> friProgress.progress = sourceHabit.progress.progress
-            7 -> satProgress.progress = sourceHabit.progress.progress
+            "Sun" -> sunProgress.progress = sourceHabit.progress.progress
+            "Mon" -> monProgress.progress = sourceHabit.progress.progress
+            "Tue" -> tueProgress.progress = sourceHabit.progress.progress
+            "Wed" -> wedProgress.progress = sourceHabit.progress.progress
+            "Thr" -> thrProgress.progress = sourceHabit.progress.progress
+            "Fri" -> friProgress.progress = sourceHabit.progress.progress
+            "Sat" -> satProgress.progress = sourceHabit.progress.progress
         }
 
 //        val completionDay: Int? = sourceHabit.getCompeleteDay()
