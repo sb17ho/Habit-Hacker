@@ -37,9 +37,9 @@ class Habit(
         }
     }
 
-    fun getCompeleteDay(): Int? {
-//        val dayTime = Calendar.getInstance().time.toString().split(" ").toTypedArray()
-        if (progress.status == Status.COMPLETED.toString() || progress.progress == progress.steps) return Calendar.getInstance().time.day
+    fun getCompeleteDay(): Array<String>? {
+        val dayTime = Calendar.getInstance().time.toString().split(" ").toTypedArray()
+        if (progress.status == Status.COMPLETED.toString() || progress.progress == progress.steps) return dayTime
         else return null
     }
 
