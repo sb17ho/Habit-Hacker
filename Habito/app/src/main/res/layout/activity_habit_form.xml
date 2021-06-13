@@ -146,6 +146,7 @@
         android:padding="8sp"
         android:text="@string/remindMeAt"
         android:textSize="18sp"
+        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"
