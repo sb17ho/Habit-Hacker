@@ -20,7 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.GsonBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
-    val firestore = FirebaseFirestore.getInstance()
+    val firestore = FirebaseFirestore.getInstance().collection("Habits")
 
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -75,7 +74,6 @@ class MainActivity : AppCompatActivity() {
                     habitAdapter.notifyDataSetChanged()
 
                     firestore
-                        .collection("Habits")
                         .document(delHabitName)
                         .delete()
 
@@ -146,7 +144,6 @@ class MainActivity : AppCompatActivity() {
     private fun getFireStoreData() {
 
         firestore
-            .collection("Habits")
             .get()
             .addOnSuccessListener {
 
@@ -231,7 +228,6 @@ class MainActivity : AppCompatActivity() {
 
             habits.forEach {
                 firestore
-                    .collection("Habits")
                     .document(it.name).set(it)
             }
         }
@@ -301,7 +297,9 @@ class MainActivity : AppCompatActivity() {
         println("at pause : $habits")
 
         habits.forEach {
-            firestore.collection("Habits").document(it.name).set(it)
+            firestore
+                .document(it.name)
+                .set(it)
         }
 
     }
