@@ -20,9 +20,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.GsonBuilder
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     private val userImageView: ImageView by lazy { findViewById(R.id.user_email_image_view) }
 
     companion object {
-        val habits by lazy { ArrayList<Habit>() }
+        val habits = ArrayList<Habit>()
     }
 
     val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mGoogleAuth: GoogleSignInClient
 
-    private val resultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    private val resultContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
             when (it.resultCode) {
 
@@ -61,16 +62,9 @@ class MainActivity : AppCompatActivity() {
 
                     if (!habits.contains(newHabit)) {
                         habits.add(newHabit)
-                        println("new habit values $newHabit")
                         habitAdapter.notifyDataSetChanged()
                     }
 
-                    firestore
-                        .collection("Habits")
-                        .document(newHabit.name)
-                        .set(newHabit)
-                        .addOnSuccessListener {
-                        }
                 }
 
                 200 -> {
@@ -84,8 +78,7 @@ class MainActivity : AppCompatActivity() {
                         .collection("Habits")
                         .document(delHabitName)
                         .delete()
-                        .addOnSuccessListener {
-                        }
+
                 }
 
                 300 -> {
@@ -94,13 +87,6 @@ class MainActivity : AppCompatActivity() {
 
                     habits[habits.indexOf(updatedHabit)] = updatedHabit
                     habitAdapter.notifyDataSetChanged()
-
-                    firestore
-                        .collection("Habits")
-                        .document(updatedHabit.name)
-                        .set(updatedHabit)
-                        .addOnSuccessListener {
-                        }
 
                 }
 
@@ -130,6 +116,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 
     private fun googleSignIn() {
 
@@ -165,9 +152,7 @@ class MainActivity : AppCompatActivity() {
 
                 it.documents.forEach { documentSnapshot ->
                     val fetchedHabit = documentSnapshot.toObject(Habit::class.java)!!
-                    if (!habits.contains(fetchedHabit)) {
-                        habits.add(fetchedHabit)
-                    }
+                    habits.add(fetchedHabit)
                 }
 
                 habitAdapter.notifyDataSetChanged()
@@ -182,13 +167,13 @@ class MainActivity : AppCompatActivity() {
                         habitAdapter.notifyDataSetChanged()
                     }
 
-
                 habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
                     startInfoActivity(position)
                     true
                 }
 
-                onDayChange()
+                //onDayChange()
+                //sendNotificationsAtTime()
 
 
             }
@@ -255,7 +240,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDayChange() {
 
-        val onDayChangeIntent = Intent(this, HabitsReseter::class.java)
+        val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
 
         sendBroadcast(onDayChangeIntent)
 
@@ -276,6 +261,49 @@ class MainActivity : AppCompatActivity() {
         midnight[Calendar.MINUTE] = 0
         midnight[Calendar.SECOND] = 0
         return midnight
+    }
+
+    private fun sendNotificationsAtTime() {
+
+        val notificationAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        habits.forEach {
+            if (it.reminder.validate()) {
+
+                val intent = Intent(this, ReminderNotificationReceiver::class.java)
+                intent.putExtra("habit_reminder_for", it.name)
+                intent.putExtra("habit_reminder", it)
+
+                val pendingIntent =
+                    PendingIntent.getBroadcast(this, System.currentTimeMillis().toInt(), intent, 0)
+
+                val reminderTime = Calendar.getInstance()
+                reminderTime[Calendar.HOUR_OF_DAY] = it.reminder.hour
+                reminderTime[Calendar.MINUTE] = it.reminder.min
+                reminderTime[Calendar.SECOND] = 0
+
+                notificationAlarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    reminderTime.timeInMillis,
+                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                    pendingIntent
+                )
+
+            }
+        }
+
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        println("at pause : $habits")
+
+        habits.forEach {
+            firestore.collection("Habits").document(it.name).set(it)
+        }
+
     }
 
 

@@ -64,7 +64,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
 
-        <receiver android:name=".HabitsReseter" />
+        <receiver android:name=".HabitResetReceiver" />
+        <receiver android:name=".ReminderNotificationReceiver" />
 
     </application>
 

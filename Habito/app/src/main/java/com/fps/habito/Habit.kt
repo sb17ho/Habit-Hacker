@@ -20,19 +20,19 @@ class Habit(
 
     fun updateProgress() {
 
-        if (progress.status != Status.COMPLETED.toString()) {
+        if (progress!!.status != Status.COMPLETED.toString()) {
 
-            ++progress.progress
-            progress.status = Status.IN_PROGRESS.toString()
+            ++progress!!.progress
+            progress!!.status = Status.IN_PROGRESS.toString()
 
-            if (progress.progress == progress.steps) {
-                progress.status = Status.COMPLETED.toString()
+            if ( progress!!.progress ==  progress!!.steps) {
+                progress!!.status = Status.COMPLETED.toString()
             }
 
-            if (progress.status == Status.COMPLETED.toString()) {
-                progress.status = Status.COMPLETED.toString()
-                ++stats.streak
-                ++stats.comp
+            if ( progress!!.status == Status.COMPLETED.toString()) {
+                progress!!.status = Status.COMPLETED.toString()
+                ++stats!!.streak
+                ++stats!!.comp
             }
 
         }
@@ -84,7 +84,7 @@ class Habit(
     override fun hashCode(): Int {
         var result = name.hashCode()
         result = 31 * result + desc.hashCode()
-        result = 31 * result + progress.steps
+        result = 31 * result +  progress!!.steps
         return result
     }
 

@@ -82,7 +82,7 @@ class InfoActivity : AppCompatActivity() {
             descLL.visibility = View.GONE
         }
 
-        steps.text = sourceHabit.progress.steps.toString()
+        steps.text = sourceHabit. progress!!.steps.toString()
 
         if (sourceHabit.reminder.validate()) {
             hd3.visibility = View.VISIBLE
@@ -93,13 +93,13 @@ class InfoActivity : AppCompatActivity() {
             reminderLL.visibility = View.GONE
         }
 
-        streak.text = sourceHabit.stats.streak.toString()
+        streak.text = sourceHabit.stats!!.streak.toString()
 
-        allTime.text = sourceHabit.stats.allTime.toString()
+        allTime.text = sourceHabit.stats!!.allTime.toString()
 
-        comp.text = sourceHabit.stats.comp.toString()
+        comp.text = sourceHabit.stats!!.comp.toString()
 
-        val dateTime = "${sourceHabit.stats.startDate}".split(" ").toTypedArray()
+        val dateTime = "${sourceHabit.stats!!.startDate}".split(" ").toTypedArray()
         val startDateTime = "Created on ${dateTime[0]} ${dateTime[1]} ${dateTime[2]}"
         startDate.text = startDateTime
 
