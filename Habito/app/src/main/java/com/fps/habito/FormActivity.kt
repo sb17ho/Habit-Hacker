@@ -11,6 +11,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.widget.addTextChangedListener
@@ -83,11 +84,8 @@ class FormActivity : AppCompatActivity() {
                 selectIcon()
                 selectReminder()
                 updatedHabitListener()
-
             }
-
         }
-
     }
 
     private fun errorMessage(): String? {
@@ -122,41 +120,39 @@ class FormActivity : AppCompatActivity() {
         habitDesc.editText!!.setText(habit.desc)
         steps.editText!!.setText(habit. progress!!.steps.toString())
 
+        if (habit.reminder.validate() && reminderTextView.visibility == View.GONE)
+            reminderTextView.visibility = View.VISIBLE
+
         reminderTextView.text =
             if (habit.reminder.validate()) {
                 reminderSwitch.isChecked = true
-                habit.reminder.toString()
+                reminderTextView.visibility = View.VISIBLE
+                val reminderTime: String =
+                    resources.getString(R.string.remindMeAt) + " " + habit.reminder.toString()
+                reminderTime
             } else {
                 reminderSwitch.isChecked = false
-                "Tap to set reminder"
+                reminderTextView.visibility = View.GONE
+                resources.getString(R.string.remindMeAt)
             }
 
         habitReminderFromClock = habit.reminder
-
     }
 
     private fun selectReminder() {
 
-        reminderTextView.setOnClickListener {
-            if (reminderSwitch.isChecked) {
-                TimePickerDialog(
-                    this,
-                    R.style.TimePickerTheme,
-                    { _, hourOfDay, minute ->
-                        habitReminderFromClock =
-                            Reminder(
-                                kotlin.math.abs(12 - hourOfDay),
-                                minute,
-                                if (hourOfDay < 12) "am" else "pm"
-                            )
-                        reminderTextView.text = habitReminderFromClock.toString()
-
-                    }, 0, 0, false
-                ).show()
+        reminderSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            run {
+                if (isChecked == true) {
+                    setHabitReminderFromClock()
+                    reminderTextView.visibility = View.VISIBLE
+                } else {
+                    reminderTextView.visibility = View.GONE
+                }
             }
-        }
-
+        })
     }
+
 
     private fun selectIcon() {
         icon.setOnClickListener {

@@ -9,14 +9,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
-class HabitAdapter(private var mContext: Context, private var allHabits: ArrayList<Habit>) : ArrayAdapter<Habit>(mContext, 0, allHabits) {
+class HabitAdapter(private var mContext: Context, private var allHabits: ArrayList<Habit>) :
+    ArrayAdapter<Habit>(mContext, 0, allHabits) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var habitItemView: View? = convertView
 
         if (habitItemView == null) {
-            habitItemView = LayoutInflater.from(mContext).inflate(R.layout.habit_view, parent, false)
+            habitItemView =
+                LayoutInflater.from(mContext).inflate(R.layout.habit_view, parent, false)
         }
 
         val habit = allHabits[position]

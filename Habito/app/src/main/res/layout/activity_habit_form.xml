@@ -13,11 +13,11 @@
         android:id="@+id/icon"
         android:layout_width="128dp"
         android:layout_height="128dp"
+        android:contentDescription="@string/habit_icon"
+        android:src="@drawable/nil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/nil"
-        android:contentDescription="@string/habit_icon" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/habitName"
@@ -31,10 +31,10 @@
         app:counterMaxLength="25"
         app:endIconMode="clear_text"
         app:helperText="Required"
-        app:startIconDrawable="@drawable/baseline_badge_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/icon">
+        app:layout_constraintTop_toBottomOf="@+id/icon"
+        app:startIconDrawable="@drawable/baseline_badge_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -54,10 +54,10 @@
         android:nextFocusDown="@id/steps"
         app:counterEnabled="true"
         app:counterMaxLength="320"
-        app:startIconDrawable="@drawable/description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habitName">
+        app:layout_constraintTop_toBottomOf="@+id/habitName"
+        app:startIconDrawable="@drawable/description">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -74,10 +74,10 @@
         android:layout_marginVertical="8dp"
         android:layout_marginTop="4dp"
         android:hint="@string/steps"
-        app:startIconDrawable="@drawable/steps_circle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/habit_desc">
+        app:layout_constraintTop_toBottomOf="@+id/habit_desc"
+        app:startIconDrawable="@drawable/steps_circle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -96,6 +96,7 @@
         android:layout_marginTop="24dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:padding="8sp"
         android:weightSum="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -116,19 +117,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:translationX="-1sp"
             android:gravity="center_vertical"
             android:theme="@style/Theme.Habito" />
     </LinearLayout>
+
+    <!--    <TextView-->
+<!--        android:id="@+id/reminderTextView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="46dp"-->
+<!--        android:layout_marginHorizontal="2dp"-->
+<!--        android:background="@drawable/add_button_background"-->
+<!--        android:gravity="center"-->
+<!--        android:padding="2dp"-->
+<!--        android:visibility="gone"-->
+<!--        android:text="@string/tap_to_set_reminder"-->
+<!--        android:textColor="@color/white"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/done"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/setReminderLL"-->
+<!--        app:layout_constraintVertical_bias="0.07" />-->
 
     <TextView
         android:id="@+id/reminderTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="@string/tap_to_set_reminder"
+        android:padding="8sp"
+        android:text="@string/remindMeAt"
         android:textSize="18sp"
+        android:visibility="gone"
+        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/done"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.812"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setReminderLL"
         app:layout_constraintVertical_bias="0.0" />
@@ -138,17 +161,14 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:background="#FFFFFF"
+        android:contentDescription="@string/done_button_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/steps"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/done"
-        android:contentDescription="@string/done_button_icon" />
-
-
-
+        app:srcCompat="@drawable/done" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
