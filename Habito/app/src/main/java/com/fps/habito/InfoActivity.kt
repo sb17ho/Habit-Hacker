@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -23,7 +24,7 @@ class InfoActivity : AppCompatActivity() {
     private val steps: TextView by lazy { findViewById(R.id.steps) }
     private val reminder: TextView by lazy { findViewById(R.id.reminder) }
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
-    private val alltime: TextView by lazy { findViewById(R.id.alltimeValue) }
+    private val allTime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
@@ -46,6 +47,17 @@ class InfoActivity : AppCompatActivity() {
 
     private lateinit var habit: Habit
 
+    private val resultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+
+        when (it.resultCode) {
+            100 -> {
+                habit = it.data!!.getParcelableExtra("updated_habit")!!
+                fillViews(habit)
+            }
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -53,8 +65,8 @@ class InfoActivity : AppCompatActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.primary_pink)))
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = resources.getColor(R.color.primary_pink)
 
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
@@ -84,7 +96,7 @@ class InfoActivity : AppCompatActivity() {
             descLL.visibility = View.GONE
         }
 
-        steps.text = sourceHabit.progress.steps.toString()
+        steps.text = sourceHabit. progress!!.steps.toString()
 
         if (sourceHabit.reminder.validate()) {
             hd3.visibility = View.VISIBLE
@@ -95,13 +107,13 @@ class InfoActivity : AppCompatActivity() {
             reminderLL.visibility = View.GONE
         }
 
-        streak.text = sourceHabit.stats.streak.toString()
+        streak.text = sourceHabit.stats!!.streak.toString()
 
-        alltime.text = sourceHabit.stats.allTime.toString()
+        allTime.text = sourceHabit.stats!!.allTime.toString()
 
-        comp.text = sourceHabit.stats.comp.toString()
+        comp.text = sourceHabit.stats!!.comp.toString()
 
-        val dateTime = "${sourceHabit.stats.startDate}".split(" ").toTypedArray()
+        val dateTime = "${sourceHabit.stats!!.startDate}".split(" ").toTypedArray()
         val startDateTime = "Created on ${dateTime[0]} ${dateTime[1]} ${dateTime[2]}"
         startDate.text = startDateTime
 
@@ -180,7 +192,6 @@ class InfoActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onBackPressed() {
 
         val mainIntent = Intent(this, MainActivity::class.java)
@@ -191,18 +202,6 @@ class InfoActivity : AppCompatActivity() {
 
         setResult(300, mainIntent)
         finish()
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (resultCode) {
-            100 -> {
-                habit = data!!.getParcelableExtra<Habit>("updated_habit")!!
-                fillViews(habit)
-            }
-        }
 
     }
 
@@ -226,7 +225,8 @@ class InfoActivity : AppCompatActivity() {
         val habitFormIntent = Intent(applicationContext, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
         habitFormIntent.putExtra("habit_filled_info", habit)
-        startActivityForResult(habitFormIntent, 300)
+        resultContract.launch(habitFormIntent)
+
     }
 
     private fun deleteHabit() {

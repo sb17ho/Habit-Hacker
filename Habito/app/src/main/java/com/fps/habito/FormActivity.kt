@@ -2,6 +2,7 @@ package com.fps.habito
 
 import android.app.TimePickerDialog
 import android.content.Intent
+
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -31,6 +33,19 @@ class FormActivity : AppCompatActivity() {
 
     private lateinit var habit: Habit
 
+    private val resultContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+            when (it.resultCode) {
+                500 -> {
+                    val iconRes = it.data!!.getIntExtra("selected_icon", 0)
+                    icon.setImageResource(iconRes)
+                    icon.tag = iconRes
+                }
+            }
+
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -38,8 +53,8 @@ class FormActivity : AppCompatActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.primary_pink)))
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = resources.getColor(R.color.primary_pink)
 
         when (intent.getStringExtra("PARENT_ACTIVITY_NAME")) {
@@ -76,7 +91,6 @@ class FormActivity : AppCompatActivity() {
     private fun errorMessage(): String? {
         return if (habitName.editText!!.text.isEmpty()) "Habit name is required"
         else null
-
     }
 
 
@@ -86,7 +100,7 @@ class FormActivity : AppCompatActivity() {
 
             habit.desc = habitDesc.editText!!.text.toString()
             habit.icon = icon.tag as Int
-            habit.progress.steps = steps.editText!!.text.toString().toInt()
+            habit. progress!!.steps = steps.editText!!.text.toString().toInt()
 
             habit.reminder =
                 if (reminderSwitch.isChecked) habitReminderFromClock
@@ -104,7 +118,7 @@ class FormActivity : AppCompatActivity() {
         icon.tag = habit.icon
         habitName.editText!!.setText(habit.name)
         habitDesc.editText!!.setText(habit.desc)
-        steps.editText!!.setText(habit.progress.steps.toString())
+        steps.editText!!.setText(habit. progress!!.steps.toString())
 
         if (habit.reminder.validate() && reminderTextView.visibility == View.GONE)
             reminderTextView.visibility = View.VISIBLE
@@ -139,33 +153,16 @@ class FormActivity : AppCompatActivity() {
         })
     }
 
-    private fun setHabitReminderFromClock() {
-
-        val calendar = Calendar.getInstance()
-
-        TimePickerDialog(this, { view, hourOfDay, minute ->
-            habitReminderFromClock =
-                Reminder(
-                    if (hourOfDay > 12) hourOfDay - 12 else hourOfDay,
-                    minute,
-                    if (hourOfDay > 12) "pm" else "am"
-                )
-
-            reminderTextView.text = run {
-                val reminderTime =
-                    resources.getString(R.string.remindMeAt) + " " + habitReminderFromClock.toString()
-                reminderTime
-            }
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
-
-    }
 
     private fun selectIcon() {
-
         icon.setOnClickListener {
-            startActivityForResult(Intent(this, IconPickerActivity::class.java), 1)
+            resultContract.launch(
+                Intent(
+                    this,
+                    IconPickerActivity::class.java
+                )
+            )
         }
-
     }
 
     private fun createHabitListener() {
@@ -211,23 +208,10 @@ class FormActivity : AppCompatActivity() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == 500) {
-            val iconRes = data!!.getIntExtra("selected_icon", 0)
-            icon.setImageResource(iconRes)
-            icon.tag = iconRes
-        }
-
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             android.R.id.home -> finish()
         }
-
         return super.onOptionsItemSelected(item)
     }
 

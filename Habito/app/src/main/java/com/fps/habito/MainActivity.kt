@@ -13,12 +13,14 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.GsonBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -42,14 +44,56 @@ class MainActivity : AppCompatActivity() {
     private val userImageView: ImageView by lazy { findViewById(R.id.user_email_image_view) }
 
     companion object {
-        val habits by lazy { ArrayList<Habit>() }
+        val habits = ArrayList<Habit>()
     }
 
     val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
     val firestore = FirebaseFirestore.getInstance()
 
-
     private lateinit var mGoogleAuth: GoogleSignInClient
+
+    private val resultContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+            when (it.resultCode) {
+
+                100 -> {
+                    val newHabit = it.data?.getParcelableExtra<Habit>("new_habit")!!
+
+                    if (!habits.contains(newHabit)) {
+                        habits.add(newHabit)
+                        habitAdapter.notifyDataSetChanged()
+                    }
+
+                }
+
+                200 -> {
+
+                    val delHabitName = it.data!!.getStringExtra("del_habit")!!
+
+                    habits.removeIf { habit -> habit.name == delHabitName }
+                    habitAdapter.notifyDataSetChanged()
+
+                    firestore
+                        .collection("Habits")
+                        .document(delHabitName)
+                        .delete()
+
+                }
+
+                300 -> {
+
+                    val updatedHabit = it.data!!.getParcelableExtra<Habit>("habit_for_main")!!
+
+                    habits[habits.indexOf(updatedHabit)] = updatedHabit
+                    habitAdapter.notifyDataSetChanged()
+
+                }
+
+            }
+
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -73,6 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun googleSignIn() {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -88,17 +133,52 @@ class MainActivity : AppCompatActivity() {
     private fun startFormActivity() {
         val habitFormIntent = Intent(this, FormActivity::class.java)
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
-        startActivityForResult(habitFormIntent, 1)
+        resultContract.launch(habitFormIntent)
     }
-
 
     private fun startInfoActivity(position: Int) {
         val habitInfoIntent = Intent(this, InfoActivity::class.java)
         habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
         habitInfoIntent.putExtra("habit_info", habits[position])
-        startActivityForResult(habitInfoIntent, 2)
+        resultContract.launch(habitInfoIntent)
     }
 
+    private fun getFireStoreData() {
+
+        firestore
+            .collection("Habits")
+            .get()
+            .addOnSuccessListener {
+
+                it.documents.forEach { documentSnapshot ->
+                    val fetchedHabit = documentSnapshot.toObject(Habit::class.java)!!
+                    habits.add(fetchedHabit)
+                }
+
+                habitAdapter.notifyDataSetChanged()
+
+                add.setOnClickListener {
+                    startFormActivity()
+                }
+
+                habitsGrid.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        habits[position].updateProgress()
+                        habitAdapter.notifyDataSetChanged()
+                    }
+
+                habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
+                    startInfoActivity(position)
+                    true
+                }
+
+                //onDayChange()
+                //sendNotificationsAtTime()
+
+
+            }
+
+    }
 
     private fun popUpHandle() {
 
@@ -143,101 +223,6 @@ class MainActivity : AppCompatActivity() {
         closeButton.setOnClickListener { popupDialog.dismiss() }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (resultCode) {
-            100 -> {
-                val newHabit = data?.getParcelableExtra<Habit>("new_habit")!!
-
-                if (!habits.contains(newHabit)) {
-                    habits.add(newHabit)
-                    println("new habit values $newHabit")
-                    habitAdapter.notifyDataSetChanged()
-                }
-
-                firestore
-                    .collection("Habits")
-                    .document(newHabit.name)
-                    .set(newHabit)
-                    .addOnSuccessListener {
-                    }
-            }
-
-            200 -> {
-
-                val delHabitName = data!!.getStringExtra("del_habit")!!
-
-                habits.removeIf { it.name == delHabitName }
-                habitAdapter.notifyDataSetChanged()
-
-                firestore
-                    .collection("Habits")
-                    .document(delHabitName)
-                    .delete()
-                    .addOnSuccessListener {
-                    }
-            }
-
-            300 -> {
-
-                val updatedHabit = data!!.getParcelableExtra<Habit>("habit_for_main")!!
-
-                habits[habits.indexOf(updatedHabit)] = updatedHabit
-                habitAdapter.notifyDataSetChanged()
-
-                firestore
-                    .collection("Habits")
-                    .document(updatedHabit.name)
-                    .set(updatedHabit)
-                    .addOnSuccessListener {
-                    }
-
-            }
-
-        }
-
-    }
-
-    private fun getFireStoreData() {
-
-        firestore
-            .collection("Habits")
-            .get()
-            .addOnSuccessListener {
-
-                it.documents.forEach { documentSnapshot ->
-                    val fetchedHabit = documentSnapshot.toObject(Habit::class.java)!!
-                    if (!habits.contains(fetchedHabit)) {
-                        habits.add(fetchedHabit)
-                    }
-                }
-
-                habitAdapter.notifyDataSetChanged()
-
-                add.setOnClickListener {
-                    startFormActivity()
-                }
-
-                habitsGrid.onItemClickListener =
-                    AdapterView.OnItemClickListener { _, _, position, _ ->
-                        habits[position].updateProgress()
-                        habitAdapter.notifyDataSetChanged()
-                    }
-
-
-                habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
-                    startInfoActivity(position)
-                    true
-                }
-
-                onDayChange()
-
-
-            }
-
-    }
-
     private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context?, intent: Intent) {
@@ -255,7 +240,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDayChange() {
 
-        val onDayChangeIntent = Intent(this, HabitsReseter::class.java)
+        val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
 
         sendBroadcast(onDayChangeIntent)
 
@@ -276,6 +261,49 @@ class MainActivity : AppCompatActivity() {
         midnight[Calendar.MINUTE] = 0
         midnight[Calendar.SECOND] = 0
         return midnight
+    }
+
+    private fun sendNotificationsAtTime() {
+
+        val notificationAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        habits.forEach {
+            if (it.reminder.validate()) {
+
+                val intent = Intent(this, ReminderNotificationReceiver::class.java)
+                intent.putExtra("habit_reminder_for", it.name)
+                intent.putExtra("habit_reminder", it)
+
+                val pendingIntent =
+                    PendingIntent.getBroadcast(this, System.currentTimeMillis().toInt(), intent, 0)
+
+                val reminderTime = Calendar.getInstance()
+                reminderTime[Calendar.HOUR_OF_DAY] = it.reminder.hour
+                reminderTime[Calendar.MINUTE] = it.reminder.min
+                reminderTime[Calendar.SECOND] = 0
+
+                notificationAlarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    reminderTime.timeInMillis,
+                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                    pendingIntent
+                )
+
+            }
+        }
+
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        println("at pause : $habits")
+
+        habits.forEach {
+            firestore.collection("Habits").document(it.name).set(it)
+        }
+
     }
 
 
