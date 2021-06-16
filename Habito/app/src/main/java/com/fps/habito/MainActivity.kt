@@ -60,24 +60,23 @@ class MainActivity : AppCompatActivity() {
                     val newHabit = it.data?.getParcelableExtra<Habit>("new_habit")!!
                     if (!habits.contains(newHabit)) {
                         habits.add(newHabit)
-                        habitAdapter.notifyDataSetChanged()
                     }
                 }
 
                 200 -> {
                     val delHabitName = it.data!!.getStringExtra("del_habit")!!
                     habits.removeIf { habit -> habit.name == delHabitName }
-                    habitAdapter.notifyDataSetChanged()
                     firestore.document(delHabitName).delete()
                 }
 
                 300 -> {
                     val updatedHabit = it.data!!.getParcelableExtra<Habit>("habit_for_main")!!
                     habits[habits.indexOf(updatedHabit)] = updatedHabit
-                    habitAdapter.notifyDataSetChanged()
                 }
 
             }
+
+            habitAdapter.notifyDataSetChanged()
 
         }
 
@@ -87,10 +86,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        registerReceiver(resultGiver, IntentFilter("NotifyAndBackup"))
-
-        habitsGrid.adapter = habitAdapter
-
         googleSignIn()
 
         bundle = intent.extras!!
@@ -98,6 +93,10 @@ class MainActivity : AppCompatActivity() {
         userImageView.setOnClickListener {
             popUpHandle()
         }
+
+        registerReceiver(resultGiver, IntentFilter("NotifyAndBackup"))
+
+        habitsGrid.adapter = habitAdapter
 
         firestore
             .get()
@@ -127,12 +126,9 @@ class MainActivity : AppCompatActivity() {
                 onDayChange()
                 //sendNotificationsAtTime()
 
-
             }
 
-
     }
-
 
     private fun googleSignIn() {
 
@@ -211,29 +207,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDayChange() {
 
-        fun getMidnight(): Calendar {
-            val midnight = Calendar.getInstance()
-            midnight[Calendar.HOUR_OF_DAY] = 0
-            midnight[Calendar.MINUTE] = 0
+        fun midnight(): Calendar {
+            val midnight = GregorianCalendar()
+            midnight[Calendar.HOUR_OF_DAY] = 23
+            midnight[Calendar.MINUTE] = 59
             midnight[Calendar.SECOND] = 0
+            midnight[Calendar.MILLISECOND] = 0
             return midnight
         }
 
         val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
-
-        sendBroadcast(onDayChangeIntent)
-
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, onDayChangeIntent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(this, 454534, onDayChangeIntent, 0)
 
         (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
             AlarmManager.RTC_WAKEUP,
-            getMidnight().timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
+            midnight().timeInMillis,
+            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+            pendingIntent,
         )
 
     }
-
 
     private fun sendNotificationsAtTime() {
 
