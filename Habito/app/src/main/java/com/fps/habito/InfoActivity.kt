@@ -193,10 +193,9 @@ class InfoActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        val mainIntent = Intent(this, MainActivity::class.java)
-
         fillViews(habit)
 
+        val mainIntent = Intent(this, MainActivity::class.java)
         mainIntent.putExtra("habit_for_main", habit)
 
         setResult(300, mainIntent)
@@ -210,13 +209,11 @@ class InfoActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             R.id.editMenuOption -> editHabit()
             R.id.deleteMenuOption -> deleteHabit()
             android.R.id.home -> onBackPressed()
         }
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -225,7 +222,6 @@ class InfoActivity : AppCompatActivity() {
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
         habitFormIntent.putExtra("habit_filled_info", habit)
         resultContract.launch(habitFormIntent)
-
     }
 
     private fun deleteHabit() {
@@ -234,6 +230,5 @@ class InfoActivity : AppCompatActivity() {
         setResult(200, mainActIntent)
         finish()
     }
-
 
 }

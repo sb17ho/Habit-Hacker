@@ -12,14 +12,12 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
 
         val notification =
             NotificationCompat.Builder(context!!, ReminderNotification.CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.id.habitIcon)
                 .setContentTitle(intent!!.getStringExtra("habit_reminder_for"))
-                .setContentText(intent!!.getStringExtra("habit_reminder_for"))
+                .setContentText(intent.getStringExtra("habit_reminder_for"))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .build()
-
-
 
         NotificationManagerCompat
             .from(context)
