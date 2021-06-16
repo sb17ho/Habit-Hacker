@@ -217,11 +217,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
+        onDayChangeIntent.putParcelableArrayListExtra("all_habits", habits)
+        sendBroadcast(onDayChangeIntent)
         val pendingIntent = PendingIntent.getBroadcast(this, 454534, onDayChangeIntent, 0)
 
         (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
             AlarmManager.RTC_WAKEUP,
-            midnight().timeInMillis,
+            Calendar.getInstance().timeInMillis,
             AlarmManager.INTERVAL_FIFTEEN_MINUTES,
             pendingIntent,
         )

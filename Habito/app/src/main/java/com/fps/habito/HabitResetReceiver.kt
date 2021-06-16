@@ -14,7 +14,7 @@ class HabitResetReceiver : BroadcastReceiver() {
 
         Toast.makeText(context, "Alarm Manager just ran ${Calendar.getInstance().time}", Toast.LENGTH_LONG).show();
 
-        MainActivity.habits.forEach {
+        intent?.getParcelableArrayListExtra<Habit>("all_habits")!!.forEach {
 
             if (it. progress.status != Status.COMPLETED.toString()) {
                 it.stats.streak = 0
