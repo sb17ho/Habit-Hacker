@@ -96,7 +96,7 @@ class InfoActivity : AppCompatActivity() {
             descLL.visibility = View.GONE
         }
 
-        steps.text = sourceHabit. progress!!.steps.toString()
+        steps.text = sourceHabit. progress.steps.toString()
 
         if (sourceHabit.reminder.validate()) {
             hd3.visibility = View.VISIBLE
@@ -107,13 +107,13 @@ class InfoActivity : AppCompatActivity() {
             reminderLL.visibility = View.GONE
         }
 
-        streak.text = sourceHabit.stats!!.streak.toString()
+        streak.text = sourceHabit.stats.streak.toString()
 
-        allTime.text = sourceHabit.stats!!.allTime.toString()
+        allTime.text = sourceHabit.stats.allTime.toString()
 
-        comp.text = sourceHabit.stats!!.comp.toString()
+        comp.text = sourceHabit.stats.comp.toString()
 
-        val dateTime = "${sourceHabit.stats!!.startDate}".split(" ").toTypedArray()
+        val dateTime = "${sourceHabit.stats.startDate}".split(" ").toTypedArray()
         val startDateTime = "Created on ${dateTime[0]} ${dateTime[1]} ${dateTime[2]}"
         startDate.text = startDateTime
 
@@ -135,8 +135,7 @@ class InfoActivity : AppCompatActivity() {
 
     //Todo: Add functionality for handling progress bar fill based on the complete status and the date
     private fun handleProgress(sourceHabit: Habit) {
-        val currentDay: String = (Calendar.getInstance().time).toString().split(" ")[0]
-        when (currentDay) {
+        when ((Calendar.getInstance().time).toString().split(" ")[0]) {
             "Sun" -> sunProgress.progress = sourceHabit.progress.progress
             "Mon" -> monProgress.progress = sourceHabit.progress.progress
             "Tue" -> tueProgress.progress = sourceHabit.progress.progress
@@ -184,20 +183,19 @@ class InfoActivity : AppCompatActivity() {
         val overall: String = (div).toString() + "%"
         if (dailyProgressAdd == totalSteps) {
             overAllProgress.progress = 100
-            val s: String = "100%"
-            percentageProgress.setText(s)
+            val s = "100%"
+            percentageProgress.text = s
         } else {
             overAllProgress.progress = div
-            percentageProgress.setText(overall)
+            percentageProgress.text = overall
         }
     }
 
     override fun onBackPressed() {
 
-        val mainIntent = Intent(this, MainActivity::class.java)
-
         fillViews(habit)
 
+        val mainIntent = Intent(this, MainActivity::class.java)
         mainIntent.putExtra("habit_for_main", habit)
 
         setResult(300, mainIntent)
@@ -211,13 +209,11 @@ class InfoActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             R.id.editMenuOption -> editHabit()
             R.id.deleteMenuOption -> deleteHabit()
             android.R.id.home -> onBackPressed()
         }
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -226,7 +222,6 @@ class InfoActivity : AppCompatActivity() {
         habitFormIntent.putExtra("PARENT_ACTIVITY_NAME", "HABIT_INFO")
         habitFormIntent.putExtra("habit_filled_info", habit)
         resultContract.launch(habitFormIntent)
-
     }
 
     private fun deleteHabit() {
@@ -235,6 +230,5 @@ class InfoActivity : AppCompatActivity() {
         setResult(200, mainActIntent)
         finish()
     }
-
 
 }

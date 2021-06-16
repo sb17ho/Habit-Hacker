@@ -25,8 +25,8 @@ class HabitAdapter(private var mContext: Context, private var allHabits: ArrayLi
 
         (habitItemView!!.findViewById(R.id.habitViewName) as TextView).text = habit.name
         (habitItemView.findViewById(R.id.habitIcon) as ImageView).setImageResource(habit.icon)
-        (habitItemView.findViewById(R.id.streakView) as TextView).text = habit.stats!!.streak.toString()
-        (habitItemView.findViewById(R.id.progressBar) as LinearProgressIndicator).progress = ((habit. progress!!.progress*1.0/habit. progress!!.steps)*100).toInt()
+        (habitItemView.findViewById(R.id.streakView) as TextView).text = habit.stats.streak.toString()
+        (habitItemView.findViewById(R.id.progressBar) as LinearProgressIndicator).progress = ((habit. progress.progress*1.0/habit. progress.steps)*100).toInt()
 
         return habitItemView
 

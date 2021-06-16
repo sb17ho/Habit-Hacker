@@ -20,7 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.GsonBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
-    val firestore = FirebaseFirestore.getInstance()
+    val firestore = FirebaseFirestore.getInstance().collection("Habits")
 
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -59,35 +58,23 @@ class MainActivity : AppCompatActivity() {
 
                 100 -> {
                     val newHabit = it.data?.getParcelableExtra<Habit>("new_habit")!!
-
                     if (!habits.contains(newHabit)) {
                         habits.add(newHabit)
                         habitAdapter.notifyDataSetChanged()
                     }
-
                 }
 
                 200 -> {
-
                     val delHabitName = it.data!!.getStringExtra("del_habit")!!
-
                     habits.removeIf { habit -> habit.name == delHabitName }
                     habitAdapter.notifyDataSetChanged()
-
-                    firestore
-                        .collection("Habits")
-                        .document(delHabitName)
-                        .delete()
-
+                    firestore.document(delHabitName).delete()
                 }
 
                 300 -> {
-
                     val updatedHabit = it.data!!.getParcelableExtra<Habit>("habit_for_main")!!
-
                     habits[habits.indexOf(updatedHabit)] = updatedHabit
                     habitAdapter.notifyDataSetChanged()
-
                 }
 
             }
@@ -112,7 +99,36 @@ class MainActivity : AppCompatActivity() {
             popUpHandle()
         }
 
-        getFireStoreData()
+        firestore
+            .get()
+            .addOnSuccessListener {
+
+                it.documents.forEach { documentSnapshot ->
+                    habits.add(documentSnapshot.toObject(Habit::class.java)!!)
+                }
+
+                habitAdapter.notifyDataSetChanged()
+
+                add.setOnClickListener {
+                    startFormActivity()
+                }
+
+                habitsGrid.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        habits[position].updateProgress()
+                        habitAdapter.notifyDataSetChanged()
+                    }
+
+                habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
+                    startInfoActivity(position)
+                    true
+                }
+
+                onDayChange()
+                //sendNotificationsAtTime()
+
+
+            }
 
 
     }
@@ -141,43 +157,6 @@ class MainActivity : AppCompatActivity() {
         habitInfoIntent.putExtra("PARENT_ACTIVITY_NAME", "MAIN")
         habitInfoIntent.putExtra("habit_info", habits[position])
         resultContract.launch(habitInfoIntent)
-    }
-
-    private fun getFireStoreData() {
-
-        firestore
-            .collection("Habits")
-            .get()
-            .addOnSuccessListener {
-
-                it.documents.forEach { documentSnapshot ->
-                    val fetchedHabit = documentSnapshot.toObject(Habit::class.java)!!
-                    habits.add(fetchedHabit)
-                }
-
-                habitAdapter.notifyDataSetChanged()
-
-                add.setOnClickListener {
-                    startFormActivity()
-                }
-
-                habitsGrid.onItemClickListener =
-                    AdapterView.OnItemClickListener { _, _, position, _ ->
-                        habits[position].updateProgress()
-                        habitAdapter.notifyDataSetChanged()
-                    }
-
-                habitsGrid.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
-                    startInfoActivity(position)
-                    true
-                }
-
-                //onDayChange()
-                //sendNotificationsAtTime()
-
-
-            }
-
     }
 
     private fun popUpHandle() {
@@ -224,21 +203,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
-
         override fun onReceive(context: Context?, intent: Intent) {
-
             habitAdapter.notifyDataSetChanged()
-
-            habits.forEach {
-                firestore
-                    .collection("Habits")
-                    .document(it.name).set(it)
-            }
+            habits.forEach { firestore.document(it.name).set(it) }
         }
-
     }
 
     private fun onDayChange() {
+
+        fun getMidnight(): Calendar {
+            val midnight = Calendar.getInstance()
+            midnight[Calendar.HOUR_OF_DAY] = 0
+            midnight[Calendar.MINUTE] = 0
+            midnight[Calendar.SECOND] = 0
+            return midnight
+        }
 
         val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
 
@@ -255,13 +234,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun getMidnight(): Calendar {
-        val midnight = Calendar.getInstance()
-        midnight[Calendar.HOUR_OF_DAY] = 0
-        midnight[Calendar.MINUTE] = 0
-        midnight[Calendar.SECOND] = 0
-        return midnight
-    }
 
     private fun sendNotificationsAtTime() {
 
@@ -297,13 +269,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
-        println("at pause : $habits")
-
-        habits.forEach {
-            firestore.collection("Habits").document(it.name).set(it)
-        }
-
+        habits.forEach { firestore.document(it.name).set(it) }
     }
 
 
