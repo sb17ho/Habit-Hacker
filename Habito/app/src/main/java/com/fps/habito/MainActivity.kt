@@ -15,6 +15,8 @@ import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -60,24 +62,23 @@ class MainActivity : AppCompatActivity() {
                     val newHabit = it.data?.getParcelableExtra<Habit>("new_habit")!!
                     if (!habits.contains(newHabit)) {
                         habits.add(newHabit)
-                        habitAdapter.notifyDataSetChanged()
                     }
                 }
 
                 200 -> {
                     val delHabitName = it.data!!.getStringExtra("del_habit")!!
                     habits.removeIf { habit -> habit.name == delHabitName }
-                    habitAdapter.notifyDataSetChanged()
                     firestore.document(delHabitName).delete()
                 }
 
                 300 -> {
                     val updatedHabit = it.data!!.getParcelableExtra<Habit>("habit_for_main")!!
                     habits[habits.indexOf(updatedHabit)] = updatedHabit
-                    habitAdapter.notifyDataSetChanged()
                 }
 
             }
+
+            habitAdapter.notifyDataSetChanged()
 
         }
 
@@ -87,10 +88,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        registerReceiver(resultGiver, IntentFilter("NotifyAndBackup"))
-
-        habitsGrid.adapter = habitAdapter
-
         googleSignIn()
 
         bundle = intent.extras!!
@@ -98,6 +95,10 @@ class MainActivity : AppCompatActivity() {
         userImageView.setOnClickListener {
             popUpHandle()
         }
+
+        registerReceiver(resultGiver, IntentFilter("NotifyAndBackup"))
+
+        habitsGrid.adapter = habitAdapter
 
         firestore
             .get()
@@ -125,14 +126,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 onDayChange()
-                //sendNotificationsAtTime()
-
 
             }
 
-
     }
-
 
     private fun googleSignIn() {
 
@@ -211,66 +208,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDayChange() {
 
-        fun getMidnight(): Calendar {
-            val midnight = Calendar.getInstance()
-            midnight[Calendar.HOUR_OF_DAY] = 0
-            midnight[Calendar.MINUTE] = 0
+        fun midnight(): Calendar {
+            val midnight = GregorianCalendar()
+            midnight[Calendar.HOUR_OF_DAY] = 23
+            midnight[Calendar.MINUTE] = 59
             midnight[Calendar.SECOND] = 0
+            midnight[Calendar.MILLISECOND] = 0
             return midnight
         }
 
         val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
-
+        onDayChangeIntent.putParcelableArrayListExtra("all_habits", habits)
         sendBroadcast(onDayChangeIntent)
 
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, onDayChangeIntent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(this, 454534, onDayChangeIntent, 0)
 
-        (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            getMidnight().timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
-
-    }
-
-
-    private fun sendNotificationsAtTime() {
-
-        val notificationAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-
-        habits.forEach {
-            if (it.reminder.validate()) {
-
-                val intent = Intent(this, ReminderNotificationReceiver::class.java)
-                intent.putExtra("habit_reminder_for", it.name)
-                intent.putExtra("habit_reminder", it)
-
-                val pendingIntent =
-                    PendingIntent.getBroadcast(this, System.currentTimeMillis().toInt(), intent, 0)
-
-                val reminderTime = Calendar.getInstance()
-                reminderTime[Calendar.HOUR_OF_DAY] = it.reminder.hour
-                reminderTime[Calendar.MINUTE] = it.reminder.min
-                reminderTime[Calendar.SECOND] = 0
-
-                notificationAlarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    reminderTime.timeInMillis,
-                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-                    pendingIntent
-                )
-
-            }
-        }
-
+        (getSystemService(ALARM_SERVICE) as AlarmManager)
+            .setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                midnight().timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent,
+            )
 
     }
+
+
 
     override fun onPause() {
         super.onPause()
         habits.forEach { firestore.document(it.name).set(it) }
     }
-
-
+    
 }
