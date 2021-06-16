@@ -12,7 +12,7 @@ class HabitResetReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        Toast.makeText(context, "Alarm Manager just ran ${Calendar.getInstance().time}", Toast.LENGTH_LONG).show();
+
 
         intent?.getParcelableArrayListExtra<Habit>("all_habits")!!.forEach {
 

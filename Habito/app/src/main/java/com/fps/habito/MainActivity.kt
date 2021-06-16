@@ -15,6 +15,8 @@ import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -124,7 +126,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 onDayChange()
-                //sendNotificationsAtTime()
 
             }
 
@@ -222,51 +223,21 @@ class MainActivity : AppCompatActivity() {
 
         val pendingIntent = PendingIntent.getBroadcast(this, 454534, onDayChangeIntent, 0)
 
-        (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            midnight().timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent,
-        )
+        (getSystemService(ALARM_SERVICE) as AlarmManager)
+            .setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                midnight().timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent,
+            )
 
     }
 
-    private fun sendNotificationsAtTime() {
 
-        val notificationAlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-
-        habits.forEach {
-            if (it.reminder.validate()) {
-
-                val intent = Intent(this, ReminderNotificationReceiver::class.java)
-                intent.putExtra("habit_reminder_for", it.name)
-                intent.putExtra("habit_reminder", it)
-
-                val pendingIntent =
-                    PendingIntent.getBroadcast(this, System.currentTimeMillis().toInt(), intent, 0)
-
-                val reminderTime = Calendar.getInstance()
-                reminderTime[Calendar.HOUR_OF_DAY] = it.reminder.hour
-                reminderTime[Calendar.MINUTE] = it.reminder.min
-                reminderTime[Calendar.SECOND] = 0
-
-                notificationAlarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    reminderTime.timeInMillis,
-                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-                    pendingIntent
-                )
-
-            }
-        }
-
-
-    }
 
     override fun onPause() {
         super.onPause()
         habits.forEach { firestore.document(it.name).set(it) }
     }
-
-
+    
 }
