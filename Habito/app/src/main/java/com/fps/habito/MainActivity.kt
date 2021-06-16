@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 
         (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
             AlarmManager.RTC_WAKEUP,
-            Calendar.getInstance().timeInMillis,
+            midnight().timeInMillis,
             AlarmManager.INTERVAL_FIFTEEN_MINUTES,
             pendingIntent,
         )
