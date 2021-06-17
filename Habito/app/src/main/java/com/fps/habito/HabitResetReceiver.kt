@@ -7,12 +7,9 @@ import android.widget.CalendarView
 import android.widget.Toast
 import java.util.*
 
-
 class HabitResetReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-
-
 
         intent?.getParcelableArrayListExtra<Habit>("all_habits")!!.forEach {
 
@@ -28,7 +25,6 @@ class HabitResetReceiver : BroadcastReceiver() {
         context?.sendBroadcast(Intent("NotifyAndBackup"))
 
     }
-
 
 }
 
