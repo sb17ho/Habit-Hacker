@@ -205,15 +205,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDayChange() {
 
-        fun midnight(): Calendar {
-            val midnight = GregorianCalendar()
-            midnight[Calendar.HOUR_OF_DAY] = 23
-            midnight[Calendar.MINUTE] = 59
-            midnight[Calendar.SECOND] = 0
-            midnight[Calendar.MILLISECOND] = 0
-            return midnight
-        }
-
         val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
         onDayChangeIntent.putParcelableArrayListExtra("all_habits", habits)
         sendBroadcast(onDayChangeIntent)
@@ -235,32 +226,31 @@ class MainActivity : AppCompatActivity() {
 
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
-        habits.forEach {
+        val notificationIntent = Intent(this, ReminderNotificationReceiver::class.java)
 
-            if (it.reminder.validate()) {
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            Calendar.getInstance().timeInMillis.toInt(),
+            notificationIntent,
+            0
+        )
 
-                val notificationIntent = Intent(this, ReminderNotificationReceiver::class.java)
-                notificationIntent.putExtra("reminder_cool", it.name)
-                sendBroadcast(notificationIntent)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            midnight().timeInMillis,
+            AlarmManager.INTERVAL_HOUR*3,
+            pendingIntent
+        )
 
-                val pendingIntent = PendingIntent.getBroadcast(this, 454538, notificationIntent, 0)
+    }
 
-                val reminderTime = GregorianCalendar()
-                reminderTime[Calendar.HOUR_OF_DAY] = it.reminder.hour
-                reminderTime[Calendar.MINUTE] = it.reminder.min
-                reminderTime[Calendar.SECOND] = 0
-
-                alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    reminderTime.timeInMillis,
-                    60000,
-                    pendingIntent
-                )
-
-            }
-
-        }
-
+    private fun midnight(): Calendar {
+        val midnight = GregorianCalendar()
+        midnight[Calendar.HOUR_OF_DAY] = 23
+        midnight[Calendar.MINUTE] = 59
+        midnight[Calendar.SECOND] = 0
+        midnight[Calendar.MILLISECOND] = 0
+        return midnight
     }
 
     override fun onPause() {

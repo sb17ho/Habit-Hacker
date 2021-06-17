@@ -16,13 +16,17 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.google_icon)
-            .setContentTitle(intent!!.getStringExtra("reminder_cool"))
+            .setContentTitle("Reminder")
             .setContentText("Time to complete your habit")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .build()
 
-        notificationManagerCompat.notify(Calendar.getInstance().timeInMillis.toInt(), notification)
+        notificationManagerCompat.notify(
+            Calendar.getInstance().timeInMillis.toInt(),
+            notification
+        )
 
     }
+
 }
