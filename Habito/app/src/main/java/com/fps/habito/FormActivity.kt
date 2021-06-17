@@ -1,5 +1,7 @@
 package com.fps.habito
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Intent
 
@@ -99,7 +101,7 @@ class FormActivity : AppCompatActivity() {
 
             habit.desc = habitDesc.editText!!.text.toString()
             habit.icon = icon.tag as Int
-            habit. progress.steps = steps.editText!!.text.toString().toInt()
+            habit.progress.steps = steps.editText!!.text.toString().toInt()
 
             habit.reminder =
                 if (reminderSwitch.isChecked) habitReminderFromClock
@@ -117,7 +119,7 @@ class FormActivity : AppCompatActivity() {
         icon.tag = habit.icon
         habitName.editText!!.setText(habit.name)
         habitDesc.editText!!.setText(habit.desc)
-        steps.editText!!.setText(habit. progress.steps.toString())
+        steps.editText!!.setText(habit.progress.steps.toString())
 
         if (habit.reminder.validate() && reminderTextView.visibility == View.GONE)
             reminderTextView.visibility = View.VISIBLE
