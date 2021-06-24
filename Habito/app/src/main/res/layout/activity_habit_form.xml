@@ -97,6 +97,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="8sp"
+        android:visibility="gone"
         android:weightSum="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -117,9 +118,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:translationX="-1sp"
             android:gravity="center_vertical"
-            android:theme="@style/Theme.Habito" />
+            android:theme="@style/Theme.Habito"
+            android:translationX="-1sp" />
     </LinearLayout>
 
     <!--    <TextView-->
@@ -143,12 +144,12 @@
         android:id="@+id/reminderTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:clickable="false"
         android:gravity="center_vertical"
         android:padding="8sp"
         android:text="@string/remindMeAt"
         android:textSize="18sp"
         android:visibility="gone"
-        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.812"

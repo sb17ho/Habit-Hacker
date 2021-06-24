@@ -98,14 +98,15 @@ class InfoActivity : AppCompatActivity() {
 
         steps.text = sourceHabit. progress.steps.toString()
 
-        if (sourceHabit.reminder.validate()) {
-            hd3.visibility = View.VISIBLE
-            reminderLL.visibility = View.VISIBLE
-            reminder.text = sourceHabit.reminder.toString()
-        } else {
-            hd3.visibility = View.GONE
-            reminderLL.visibility = View.GONE
-        }
+//        to keep visibility gone
+//        if (sourceHabit.reminder.validate()) {
+//            hd3.visibility = View.VISIBLE
+//            reminderLL.visibility = View.VISIBLE
+//            reminder.text = sourceHabit.reminder.toString()
+//        } else {
+//            hd3.visibility = View.GONE
+//            reminderLL.visibility = View.GONE
+//        }
 
         streak.text = sourceHabit.stats.streak.toString()
 

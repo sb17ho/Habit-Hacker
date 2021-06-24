@@ -15,7 +15,7 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
         val notificationManagerCompat = NotificationManagerCompat.from(context!!)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.google_icon)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Reminder")
             .setContentText("Time to mark your completed habit")
             .setPriority(NotificationCompat.PRIORITY_HIGH)

@@ -266,7 +266,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        habits.forEach { firestore.document(it.name).set(it) }
+        habits.forEach {
+            firestore.document(it.name).set(it)
+        }
     }
 
 }
