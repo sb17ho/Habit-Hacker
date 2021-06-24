@@ -68,7 +68,6 @@
         <receiver android:name=".HabitResetReceiver" />
         <receiver android:name=".ReminderNotificationReceiver" />
 
-
     </application>
 
 </manifest>

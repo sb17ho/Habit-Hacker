@@ -2,7 +2,6 @@ package com.fps.habito
 
 import android.app.AlarmManager
 import android.app.Dialog
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -198,18 +197,28 @@ class MainActivity : AppCompatActivity() {
 
     private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
+            println("doing changes")
+            habits.forEach {
+                if (it.progress.status != Status.COMPLETED.toString()) {
+                    it.stats.streak = 0
+                }
+
+                it.progress.progress = 0
+                it.progress.status = Status.NOT_STARTED.toString()
+                firestore.document(it.name).set(it)
+            }
             habitAdapter.notifyDataSetChanged()
-            habits.forEach { firestore.document(it.name).set(it) }
         }
     }
 
     private fun onDayChange() {
 
-        val onDayChangeIntent = Intent(this, HabitResetReceiver::class.java)
-        onDayChangeIntent.putParcelableArrayListExtra("all_habits", habits)
-        sendBroadcast(onDayChangeIntent)
-
-        val pendingIntent = PendingIntent.getBroadcast(this, 454534, onDayChangeIntent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            454534,
+            Intent(this, HabitResetReceiver::class.java),
+            0
+        )
 
         (getSystemService(ALARM_SERVICE) as AlarmManager)
             .setRepeating(
@@ -224,21 +233,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun notificationSender() {
 
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-
-        val notificationIntent = Intent(this, ReminderNotificationReceiver::class.java)
+        val reminderTime = GregorianCalendar()
+        reminderTime[Calendar.HOUR_OF_DAY] = 23
+        reminderTime[Calendar.MINUTE] = 59
+        reminderTime[Calendar.SECOND] = 0
+        reminderTime[Calendar.MILLISECOND] = 0
 
         val pendingIntent = PendingIntent.getBroadcast(
             this,
-            Calendar.getInstance().timeInMillis.toInt(),
-            notificationIntent,
+            54654,
+            Intent(this, ReminderNotificationReceiver::class.java),
             0
         )
 
-        alarmManager.setRepeating(
+        (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
             AlarmManager.RTC_WAKEUP,
-            midnight().timeInMillis,
-            AlarmManager.INTERVAL_HOUR*3,
+            Calendar.getInstance().timeInMillis,
+            AlarmManager.INTERVAL_HALF_DAY,
             pendingIntent
         )
 
