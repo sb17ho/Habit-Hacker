@@ -148,6 +148,7 @@ class InfoActivity : AppCompatActivity() {
             "Fri" -> friProgress.progress = sourceHabit.progress.progress
             "Sat" -> satProgress.progress = sourceHabit.progress.progress
         }
+    }
 
     private fun handleOverallProgress(sourceHabit: Habit) {
         val totalSteps: Int = 7 * sourceHabit.progress.steps
