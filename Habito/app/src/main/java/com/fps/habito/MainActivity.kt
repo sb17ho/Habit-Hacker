@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,8 +45,10 @@ class MainActivity : AppCompatActivity() {
     private val userImageView: ImageView by lazy { findViewById(R.id.user_email_image_view) }
 
     private val habits = ArrayList<Habit>()
-    private val habitAdapter: HabitAdapter by lazy { HabitAdapter(this, habits) }
+    private val habitAdapter by lazy { HabitAdapter(this, habits) }
     private val firestore = FirebaseFirestore.getInstance().collection("Habits")
+
+    private val hacker by lazy { User(bundle.getString("UserEmail")!!, habits) }
 
     private lateinit var mGoogleAuth: GoogleSignInClient
 
@@ -96,12 +99,11 @@ class MainActivity : AppCompatActivity() {
         habitsGrid.adapter = habitAdapter
 
         firestore
+            .document(hacker.userName)
             .get()
             .addOnSuccessListener {
 
-                it.documents.forEach { documentSnapshot ->
-                    habits.add(documentSnapshot.toObject(Habit::class.java)!!)
-                }
+                it.toObject(User::class.java)?.userHabits?.forEach {  habits.add(it) }
 
                 habitAdapter.notifyDataSetChanged()
 
@@ -213,6 +215,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDayChange() {
 
+        val midnight = GregorianCalendar()
+        midnight[Calendar.HOUR_OF_DAY] = 23
+        midnight[Calendar.MINUTE] = 59
+        midnight[Calendar.SECOND] = 0
+        midnight[Calendar.MILLISECOND] = 0
+
         val pendingIntent = PendingIntent.getBroadcast(
             this,
             454534,
@@ -223,19 +231,18 @@ class MainActivity : AppCompatActivity() {
         (getSystemService(ALARM_SERVICE) as AlarmManager)
             .setRepeating(
                 AlarmManager.RTC_WAKEUP,
-                midnight().timeInMillis,
+                midnight.timeInMillis,
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent,
             )
 
     }
 
-
     private fun notificationSender() {
 
         val reminderTime = GregorianCalendar()
-        reminderTime[Calendar.HOUR_OF_DAY] = 23
-        reminderTime[Calendar.MINUTE] = 59
+        reminderTime[Calendar.HOUR_OF_DAY] = 9
+        reminderTime[Calendar.MINUTE] = 0
         reminderTime[Calendar.SECOND] = 0
         reminderTime[Calendar.MILLISECOND] = 0
 
@@ -248,26 +255,17 @@ class MainActivity : AppCompatActivity() {
 
         (getSystemService(ALARM_SERVICE) as AlarmManager).setRepeating(
             AlarmManager.RTC_WAKEUP,
-            Calendar.getInstance().timeInMillis,
+            reminderTime.timeInMillis,
             AlarmManager.INTERVAL_HALF_DAY,
             pendingIntent
         )
 
     }
 
-    private fun midnight(): Calendar {
-        val midnight = GregorianCalendar()
-        midnight[Calendar.HOUR_OF_DAY] = 23
-        midnight[Calendar.MINUTE] = 59
-        midnight[Calendar.SECOND] = 0
-        midnight[Calendar.MILLISECOND] = 0
-        return midnight
-    }
-
     override fun onPause() {
         super.onPause()
         habits.forEach {
-            firestore.document(it.name).set(it)
+            firestore.document(hacker.userName).set(hacker)
         }
     }
 
