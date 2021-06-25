@@ -1,17 +1,16 @@
 package com.fps.habito
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
-
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -142,42 +141,40 @@ class FormActivity : AppCompatActivity() {
 
     private fun selectReminder() {
 
-        reminderSwitch.setOnCheckedChangeListener { _, isChecked ->
-            run {
-                if (isChecked) {
-                    setHabitReminderFromClock()
-                    reminderTextView.visibility = View.VISIBLE
-                } else {
-                    reminderTextView.visibility = View.GONE
-                }
-            }
-        }
-    }
-
-    private fun setHabitReminderFromClock() {
-
         val calendar = Calendar.getInstance()
 
-        TimePickerDialog(this, { _, hourOfDay, minute ->
-            habitReminderFromClock =
-                Reminder(
-                    kotlin.math.abs(12 - hourOfDay),
-                    minute,
-                    if (hourOfDay < 12) "am" else "pm"
+        val reminderPickerDialog = TimePickerDialog(
+            this,
+            R.style.DialogTheme,
+            { _, selectedHour, selectedMinute ->
+                habitReminderFromClock = Reminder(
+                    kotlin.math.abs(12 - selectedHour),
+                    selectedMinute,
+                    if (selectedHour < 12) "am" else "pm"
                 )
-            reminderTextView.text = habitReminderFromClock.toString()
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
+                reminderTextView.text = habitReminderFromClock.toString()
+            },
+            calendar[Calendar.HOUR_OF_DAY],
+            calendar[Calendar.MINUTE],
+            false
+        )
+
+        reminderSwitch.setOnCheckedChangeListener { _, isChecked ->
+            reminderTextView.visibility =
+                if (isChecked) {
+                    reminderPickerDialog.show()
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+        }
 
     }
+
 
     private fun selectIcon() {
         icon.setOnClickListener {
-            resultContract.launch(
-                Intent(
-                    this,
-                    IconPickerActivity::class.java
-                )
-            )
+            resultContract.launch(Intent(this, IconPickerActivity::class.java))
         }
     }
 
