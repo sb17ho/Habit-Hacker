@@ -103,12 +103,14 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
 
+
                 it.toObject(User::class.java)?.userHabits?.forEach { habits.add(it) }
 
                 habitAdapter.notifyDataSetChanged()
 
                 add.setOnClickListener {
                     startFormActivity()
+                    
                 }
 
                 habitsGrid.onItemClickListener =
@@ -135,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
+            
 
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
@@ -194,6 +197,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         closeButton.setOnClickListener { popupDialog.dismiss() }
+        
         settings.setOnClickListener {
             popupDialog.dismiss()
             startActivity(Intent(this, SettingsActivity::class.java))

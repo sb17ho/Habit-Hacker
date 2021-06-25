@@ -38,6 +38,7 @@ class InfoActivity : AppCompatActivity() {
     private val sunProgress: ProgressBar by lazy { findViewById(R.id.SunProgressBar) }
     private val overAllProgress: ProgressBar by lazy { findViewById(R.id.overallProgress) }
     private val percentageProgress: TextView by lazy { findViewById(R.id.percentProgress) }
+
     private val progressBarArr by lazy {
         arrayOf(
             monProgress,
@@ -50,6 +51,7 @@ class InfoActivity : AppCompatActivity() {
         )
     }
 
+
     private val descLL: LinearLayout by lazy { findViewById(R.id.descLL) }
     private val reminderLL: LinearLayout by lazy { findViewById(R.id.setReminderLL) }
 
@@ -58,17 +60,16 @@ class InfoActivity : AppCompatActivity() {
 
     private lateinit var habit: Habit
 
-    private val resultContract =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    private val resultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
 
-            when (it.resultCode) {
-                100 -> {
-                    habit = it.data!!.getParcelableExtra("updated_habit")!!
-                    fillViews(habit)
-                }
+        when (it.resultCode) {
+            100 -> {
+                habit = it.data!!.getParcelableExtra("updated_habit")!!
+                fillViews(habit)
             }
-
         }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -110,6 +111,7 @@ class InfoActivity : AppCompatActivity() {
 
         steps.text = sourceHabit.progress.steps.toString()
 
+
         streak.text = sourceHabit.stats.streak.toString()
 
         allTime.text = sourceHabit.stats.allTime.toString()
@@ -146,9 +148,7 @@ class InfoActivity : AppCompatActivity() {
             "Fri" -> friProgress.progress = sourceHabit.progress.progress
             "Sat" -> satProgress.progress = sourceHabit.progress.progress
         }
-    }
 
-    //Todo: Write data to file to test for each day
     private fun handleOverallProgress(sourceHabit: Habit) {
         val totalSteps: Int = 7 * sourceHabit.progress.steps
         val dailyProgressAdd: Int =

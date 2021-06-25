@@ -71,7 +71,7 @@
             android:label="Settings"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
+      
         <receiver android:name=".HabitResetReceiver" />
         <receiver android:name=".ReminderNotificationReceiver" />
 
