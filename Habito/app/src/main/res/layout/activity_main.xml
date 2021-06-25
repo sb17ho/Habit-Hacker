@@ -8,61 +8,72 @@
     android:background="#FFFFFF"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <GridView
+        android:id="@+id/habitsGrid"
+        android:layout_width="394dp"
+        android:layout_height="591dp"
+        android:horizontalSpacing="16dp"
+        android:numColumns="2"
+        android:padding="16dp"
+        android:verticalSpacing="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/add"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/add_button_background"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="@string/add_habit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habitsGrid"
+        app:layout_constraintVertical_bias="1.0" />
 
-        <ImageButton
-            android:id="@+id/userInfoImageButton"
-            android:layout_width="60dp"
-            android:layout_height="65dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="@null"
-            android:contentDescription="@string/userInformation"
-            android:padding="1dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/no_user_icon" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/primary_pink"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <GridView
-            android:id="@+id/habitsGrid"
-            android:layout_width="match_parent"
-            android:layout_height="615dp"
-            android:numColumns="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+
+        <TextView
+            android:id="@+id/habit_hacker"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            android:background="@color/primary_pink"
+            android:gravity="center_vertical"
+            android:text="Habit Hacker"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/user_email_image_view"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="0.1"
+            android:foregroundGravity="center"
+            app:srcCompat="@drawable/nil" />
 
-            <ImageView
-                android:id="@+id/add"
-                android:layout_width="240dp"
-                android:layout_height="38dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginVertical="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/sign_out_button"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/habitsGrid"
-                app:srcCompat="@drawable/add" />
 
-            <Button
-                android:id="@+id/sign_out_button"
-                android:layout_width="142dp"
-                android:layout_height="43dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginBottom="16dp"
-                android:text="Sign Out"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/habitsGrid"
-                app:layout_constraintVertical_bias="1.0" />
-        </LinearLayout>
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@
     <string name="habit_name">Habit Name</string>
     <string name="description">Description</string>
     <string name="steps">Steps</string>
+    <string name="add_habit">ADD HABIT</string>
     <string name="done">done</string>
     <string name="hour">hour</string>
     <string name="min">min</string>
@@ -19,4 +20,20 @@
     <string name="noUserLoggedInImageDesc">No user logged in</string>
     <string name="textview">TextView</string>
     <string name="userInformation">User Information</string>
+    <string name="Habito">Habit Hacker</string>
+    <string name="Login">LOGIN</string>
+    <string name="guestUser">Continue as Guest User</string>
+    <string name="remindMeAt">Remind me at:</string>
+    <string name="daily_reminder">Daily-Reminder</string>
+    <string name="notification_icon">notification icon</string>
+    <string name="done_button_icon">done button icon</string>
+    <string name="habit_icon">habit icon</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="streak">STREAK</string>
+    <string name="all_time">ALL TIME</string>
+    <string name="completions">COMPLETIONS</string>
+    <string name="desc_icon">desc icon</string>
+    <string name="steps_android_icon">steps android icon</string>
+    <string name="reminder_android_icon">reminder android icon</string>
 </resources>

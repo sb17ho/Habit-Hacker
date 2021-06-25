@@ -2,35 +2,41 @@ package com.fps.habito
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.util.*
 
 class Habit(
-    var icon: Int = R.drawable.nil,
-    var name: String,
+    val name: String,
     var desc: String = "",
-    var steps: Int = 1,
-    var streak: Int = 0,
-    var allTime: Double = 0.0,
-    var comp: Int = 0,
+    var icon: Int = R.drawable.nil,
+    var progress: Progress = Progress(),
+    var stats: Stats,
+    var reminder : Reminder = Reminder()
+) : Parcelable {
 
-    ) : Parcelable {
-
-    var progress = 0
-    var status = HabitStatus.NOT_STARTED
+    constructor() : this(
+        name = "no-habit-name",
+        stats = Stats(startDate = Calendar.getInstance().time)
+    )
 
     fun updateProgress() {
 
-        if (progress < steps) {
-            ++progress
-            status =HabitStatus.IN_PROGRESS
-        }
+        if (progress.status != Status.COMPLETED.toString()) {
 
-        if(progress == steps && status != HabitStatus.COMPLETED){
-            status = HabitStatus.COMPLETED
-            ++streak
-            ++comp
-        }
+            ++progress.progress
+            progress.status = Status.IN_PROGRESS.toString()
 
+            if ( progress.progress ==  progress.steps) {
+                progress.status = Status.COMPLETED.toString()
+            }
+
+            if ( progress.status == Status.COMPLETED.toString()) {
+                progress.status = Status.COMPLETED.toString()
+                ++stats.streak
+                ++stats.comp
+            }
+        }
     }
+
 
     companion object {
         @JvmField
@@ -41,14 +47,24 @@ class Habit(
     }
 
     private constructor(parcel: Parcel) : this(
-            parcel.readInt(),
-            parcel.readString()!!,
-            parcel.readString()!!,
-            parcel.readInt(),
-            parcel.readInt(),
-            parcel.readDouble(),
-            parcel.readInt(),
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readInt(),
+        parcel.readParcelable<Progress>(Progress::class.java.classLoader)!!,
+        parcel.readParcelable<Stats>(Stats::class.java.classLoader)!!,
+        parcel.readParcelable<Reminder>(Reminder::class.java.classLoader)!!,
     )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeString(name)
+        dest?.writeString(desc)
+        dest?.writeInt(icon)
+        dest?.writeParcelable(progress, flags)
+        dest?.writeParcelable(stats, flags)
+        dest?.writeParcelable(reminder, flags)
+    }
 
     override fun equals(other: Any?): Boolean {
 
@@ -66,24 +82,12 @@ class Habit(
     override fun hashCode(): Int {
         var result = name.hashCode()
         result = 31 * result + desc.hashCode()
-        result = 31 * result + steps
+        result = 31 * result +  progress.steps
         return result
     }
 
-    override fun describeContents() = 0
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(icon)
-        dest?.writeString(name)
-        dest?.writeString(desc)
-        dest?.writeInt(steps)
-        dest?.writeInt(streak)
-        dest?.writeDouble(allTime)
-        dest?.writeInt(comp)
-    }
-
     override fun toString(): String {
-        return "Habit(icon=$icon, name='$name', desc='$desc', steps=$steps, streak=$streak, allTime=$allTime, comp=$comp, progress=$progress, status='$status')"
+        return "Habit(name='$name', desc='$desc', icon=$icon, progress=$progress, stats=$stats, reminder=$reminder)"
     }
 
 

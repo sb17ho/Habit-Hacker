@@ -40,8 +40,8 @@ class GoogleSignIn : AppCompatActivity() {
         //Firebase Authentication Instance
         mAuth = FirebaseAuth.getInstance()
 
-        val sign_in_button: SignInButton = findViewById(R.id.google_sign_in_button)
-        sign_in_button.setOnClickListener {
+        val signInButton: SignInButton = findViewById(R.id.google_sign_in_button)
+        signInButton.setOnClickListener {
             signIn() //Ask user to sign in with his/her google account
         }
     }
@@ -68,7 +68,7 @@ class GoogleSignIn : AppCompatActivity() {
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     val account = task.getResult(ApiException::class.java)!!
-                    Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
+//                    Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
@@ -86,11 +86,12 @@ class GoogleSignIn : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("SignInActivity", "signInWithCredential:success")
-                    val intent_to = Intent(this, MainActivity::class.java)
-                    startActivity(intent_to)
+                    val intentTo = Intent(this, MainActivity::class.java)
+                    intentTo.putExtra("UserName", mAuth.currentUser?.displayName)
+                    intentTo.putExtra("UserEmail", mAuth.currentUser?.email)
+                    intentTo.putExtra("UserPhoto", mAuth.currentUser?.photoUrl)
+                    startActivity(intentTo)
                     finish() //To avoid going back to boot screen
-                    //TODO If success take the user to its habit screen
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
