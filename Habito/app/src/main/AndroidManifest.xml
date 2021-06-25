@@ -65,6 +65,13 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
 
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".BootScreenMain"
+            android:label="Settings"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+      
         <receiver android:name=".HabitResetReceiver" />
         <receiver android:name=".ReminderNotificationReceiver" />
 

@@ -103,12 +103,14 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
 
-                it.toObject(User::class.java)?.userHabits?.forEach {  habits.add(it) }
+
+                it.toObject(User::class.java)?.userHabits?.forEach { habits.add(it) }
 
                 habitAdapter.notifyDataSetChanged()
 
                 add.setOnClickListener {
                     startFormActivity()
+                    
                 }
 
                 habitsGrid.onItemClickListener =
@@ -135,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
+            
 
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
@@ -160,7 +163,6 @@ class MainActivity : AppCompatActivity() {
         settings = popupDialog.findViewById(R.id.settingsButton)
         howTo = popupDialog.findViewById(R.id.howToUseButton)
         about = popupDialog.findViewById(R.id.aboutButton)
-        help = popupDialog.findViewById(R.id.helpButton)
         logout = popupDialog.findViewById(R.id.logoutButton)
         closeButton = popupDialog.findViewById(R.id.closebutton)
         userImage = popupDialog.findViewById(R.id.userImageView)
@@ -195,6 +197,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         closeButton.setOnClickListener { popupDialog.dismiss() }
+        
+        settings.setOnClickListener {
+            popupDialog.dismiss()
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
     }
 
     private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
