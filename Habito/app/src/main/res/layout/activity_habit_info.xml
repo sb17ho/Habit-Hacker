@@ -1,457 +1,467 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".FormActivity">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="129dp"
-        android:layout_height="104dp"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp"
-        android:src="@drawable/nil"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/horizontal_divided_1"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginVertical="16dp"
-        android:background="@color/subtle_gray"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <LinearLayout
-        android:id="@+id/descLL"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_1">
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:padding="2dp"
+        tools:context=".FormActivity">
 
         <ImageView
-            android:id="@+id/descIcon"
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/description" />
+            android:id="@+id/imageView"
+            android:layout_width="129dp"
+            android:layout_height="104dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
+            android:src="@drawable/nil"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/horizontal_divided_1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="16dp"
+            android:background="@color/subtle_gray"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <LinearLayout
+            android:id="@+id/descLL"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_1">
+
+            <ImageView
+                android:id="@+id/descIcon"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/description" />
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:hint="@string/description"
+                android:padding="4dp"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/horizontal_divided_2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/subtle_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descLL" />
+
+        <LinearLayout
+            android:id="@+id/stepsLL"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_2">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:foregroundGravity="center_vertical"
+                app:srcCompat="@drawable/steps_circle" />
+
+            <TextView
+                android:id="@+id/steps"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:hint="8 steps"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/horizontal_divided_3"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/subtle_gray"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stepsLL" />
+
+        <LinearLayout
+            android:id="@+id/setReminderLL"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_3">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/notifications" />
+
+            <TextView
+                android:id="@+id/reminder"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:hint="10:30 pm"
+                android:textSize="24sp"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/horizontal_divided_4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/subtle_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setReminderLL" />
 
         <TextView
-            android:id="@+id/desc"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:hint="@string/description"
-            android:padding="4dp"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:visibility="visible" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/horizontal_divided_2"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/subtle_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descLL" />
-
-    <LinearLayout
-        android:id="@+id/stepsLL"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_2">
-
-        <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/habitName"
             android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:foregroundGravity="center_vertical"
-            app:srcCompat="@drawable/steps_circle" />
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="Skip Rope"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <TextView
-            android:id="@+id/steps"
-            android:layout_width="360dp"
+            android:id="@+id/streakValue"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:hint="8 steps"
-            android:textSize="24sp" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/horizontal_divided_3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/subtle_gray"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stepsLL" />
-
-    <LinearLayout
-        android:id="@+id/setReminderLL"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_3">
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/notifications" />
-
-        <TextView
-            android:id="@+id/reminder"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:hint="10:30 pm"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="172dp"
+            android:layout_weight="1.25"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="56"
+            android:inputType="number"
             android:textSize="24sp"
-            android:visibility="visible" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/horizontal_divided_4"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/subtle_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setReminderLL" />
-
-    <TextView
-        android:id="@+id/habitName"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:text="Skip Rope"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/streakValue"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="172dp"
-        android:layout_weight="1.25"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="56"
-        android:inputType="number"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/alltimeValue"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_4"
-        app:layout_constraintVertical_bias="0.04" />
-
-    <TextView
-        android:id="@+id/streakText"
-        android:layout_width="120dp"
-        android:layout_height="0dp"
-        android:layout_weight="0.75"
-        android:gravity="center"
-        android:text="STREAK"
-        app:layout_constraintEnd_toEndOf="@+id/streakValue"
-        app:layout_constraintEnd_toStartOf="@+id/alltimeText"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/streakValue" />
-
-    <TextView
-        android:id="@+id/alltimeValue"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.25"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="97.45"
-        android:inputType="number"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/streakValue"
-        app:layout_constraintEnd_toStartOf="@+id/compValue"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/streakValue" />
-
-    <TextView
-        android:id="@+id/alltimeText"
-        android:layout_width="120dp"
-        android:layout_height="0dp"
-        android:layout_weight="0.75"
-        android:gravity="center"
-        android:text="ALL TIME"
-        app:layout_constraintBaseline_toBaselineOf="@+id/streakText"
-        app:layout_constraintEnd_toEndOf="@+id/alltimeValue"
-        app:layout_constraintEnd_toStartOf="@+id/compText"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/streakText" />
-
-    <TextView
-        android:id="@+id/compValue"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.25"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="62"
-        android:inputType="number"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/alltimeValue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/alltimeValue" />
-
-    <TextView
-        android:id="@+id/compText"
-        android:layout_width="120dp"
-        android:layout_height="0dp"
-        android:layout_weight="0.75"
-        android:gravity="center"
-        android:text="COMPLETIONS"
-        app:layout_constraintBaseline_toBaselineOf="@+id/alltimeText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/alltimeText" />
-
-    <TextView
-        android:id="@+id/startDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Created on"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/streakText"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:weightSum="42"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/streakText"
-        app:layout_constraintVertical_bias="0.096">
-
-        <ProgressBar
-            android:id="@+id/MonProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/custom_circle_progress_bar"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="254dp" />
-
-        <ProgressBar
-            android:id="@+id/TueProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/custom_circle_progress_bar"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="254dp" />
-
-        <ProgressBar
-            android:id="@+id/WedProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/custom_circle_progress_bar"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="254dp" />
-
-        <ProgressBar
-            android:id="@+id/ThrusProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/custom_circle_progress_bar"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="254dp" />
-
-        <ProgressBar
-            android:id="@+id/FriProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/custom_circle_progress_bar"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="254dp" />
-
-        <ProgressBar
-            android:id="@+id/SatProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/custom_circle_progress_bar"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="254dp" />
-
-        <ProgressBar
-            android:id="@+id/SunProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/custom_circle_progress_bar"
-            tools:layout_editor_absoluteX="50dp"
-            tools:layout_editor_absoluteY="254dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:weightSum="7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_4"
+            app:layout_constraintVertical_bias="0.04" />
 
         <TextView
-            android:id="@+id/MonView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="M"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:id="@+id/streakText"
+            android:layout_width="120dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="60dp"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            android:text="STREAK"
+            app:layout_constraintBottom_toBottomOf="@+id/compText"
+            app:layout_constraintEnd_toEndOf="@+id/streakValue"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/streakValue" />
 
         <TextView
-            android:id="@+id/TuesView"
-            android:layout_width="0dp"
+            android:id="@+id/compValue"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="T"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:layout_marginEnd="68dp"
+            android:layout_weight="1.25"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="62"
+            android:inputType="number"
+            android:textSize="24sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/streakValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/streakValue" />
 
         <TextView
-            android:id="@+id/WedView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="W"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:id="@+id/compText"
+            android:layout_width="120dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="68dp"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            android:text="COMPLETIONS"
+            app:layout_constraintBaseline_toBaselineOf="@+id/streakText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/streakText" />
 
         <TextView
-            android:id="@+id/thursView"
-            android:layout_width="0dp"
+            android:id="@+id/startDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="T"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:hint="Created on"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/streakText"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="42"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/streakText"
+            app:layout_constraintVertical_bias="0.161">
+
+            <ProgressBar
+                android:id="@+id/MonProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:indeterminateOnly="false"
+                android:padding="4dp"
+                android:progressDrawable="@drawable/custom_circle_progress_bar"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="254dp" />
+
+            <ProgressBar
+                android:id="@+id/TueProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:indeterminateOnly="false"
+                android:padding="4dp"
+                android:progressDrawable="@drawable/custom_circle_progress_bar"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="254dp" />
+
+            <ProgressBar
+                android:id="@+id/WedProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:indeterminateOnly="false"
+                android:padding="4dp"
+                android:progressDrawable="@drawable/custom_circle_progress_bar"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="254dp" />
+
+            <ProgressBar
+                android:id="@+id/ThrusProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:indeterminateOnly="false"
+                android:padding="4dp"
+                android:progressDrawable="@drawable/custom_circle_progress_bar"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="254dp" />
+
+            <ProgressBar
+                android:id="@+id/FriProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:indeterminateOnly="false"
+                android:padding="4dp"
+                android:progressDrawable="@drawable/custom_circle_progress_bar"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="254dp" />
+
+            <ProgressBar
+                android:id="@+id/SatProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:indeterminateOnly="false"
+                android:padding="4dp"
+                android:progressDrawable="@drawable/custom_circle_progress_bar"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="254dp" />
+
+            <ProgressBar
+                android:id="@+id/SunProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:indeterminateOnly="false"
+                android:padding="4dp"
+                android:progressDrawable="@drawable/custom_circle_progress_bar"
+                tools:layout_editor_absoluteX="50dp"
+                tools:layout_editor_absoluteY="254dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/MonView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="M"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TuesView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="T"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/WedView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="W"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/thursView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="T"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/friView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="F"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/satView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="S"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/sunDay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="S"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/overallProgress"
+            android:layout_width="207dp"
+            android:layout_height="201dp"
+            android:indeterminateOnly="false"
+            android:max="100"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/custom_overall_progress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:layout_constraintVertical_bias="0.515" />
 
         <TextView
-            android:id="@+id/friView"
-            android:layout_width="0dp"
+            android:id="@+id/percentProgress"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="F"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:text="0%"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="@+id/overallProgress"
+            app:layout_constraintEnd_toEndOf="@+id/overallProgress"
+            app:layout_constraintStart_toStartOf="@+id/overallProgress"
+            app:layout_constraintTop_toTopOf="@+id/overallProgress" />
 
         <TextView
-            android:id="@+id/satView"
-            android:layout_width="0dp"
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="S"
+            android:text="Daily Progress"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/streakText"
+            app:layout_constraintVertical_bias="0.45" />
 
         <TextView
-            android:id="@+id/sunDay"
-            android:layout_width="0dp"
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="S"
+            android:layout_marginTop="24dp"
+            android:text="All Time Progress"
             android:textAlignment="center"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/overallProgress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <ProgressBar
-        android:id="@+id/overallProgress"
-        android:layout_width="207dp"
-        android:layout_height="201dp"
-        android:indeterminateOnly="false"
-        android:max="100"
-        android:padding="4dp"
-        android:progressDrawable="@drawable/custom_overall_progress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.061" />
-
-    <TextView
-        android:id="@+id/percentProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0%"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/overallProgress"
-        app:layout_constraintEnd_toEndOf="@+id/overallProgress"
-        app:layout_constraintStart_toStartOf="@+id/overallProgress"
-        app:layout_constraintTop_toTopOf="@+id/overallProgress" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

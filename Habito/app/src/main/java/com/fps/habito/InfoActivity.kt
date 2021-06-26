@@ -24,7 +24,6 @@ class InfoActivity : AppCompatActivity() {
     private val steps: TextView by lazy { findViewById(R.id.steps) }
     private val reminder: TextView by lazy { findViewById(R.id.reminder) }
     private val streak: TextView by lazy { findViewById(R.id.streakValue) }
-    private val allTime: TextView by lazy { findViewById(R.id.alltimeValue) }
     private val comp: TextView by lazy { findViewById(R.id.compValue) }
     private val startDate: TextView by lazy { findViewById(R.id.startDate) }
 
@@ -56,7 +55,6 @@ class InfoActivity : AppCompatActivity() {
     private val reminderLL: LinearLayout by lazy { findViewById(R.id.setReminderLL) }
 
     private val hd1: View by lazy { findViewById(R.id.horizontal_divided_1) }
-    private val hd3: View by lazy { findViewById(R.id.horizontal_divided_3) }
 
     private lateinit var habit: Habit
 
@@ -114,8 +112,6 @@ class InfoActivity : AppCompatActivity() {
 
         streak.text = sourceHabit.stats.streak.toString()
 
-        allTime.text = sourceHabit.stats.allTime.toString()
-
         comp.text = sourceHabit.stats.comp.toString()
 
         val dateTime = "${sourceHabit.stats.startDate}".split(" ").toTypedArray()
@@ -138,33 +134,48 @@ class InfoActivity : AppCompatActivity() {
         sunProgress.max = sourceHabit.progress.steps
     }
 
+    //Todo: Write data to file to test for each day
     private fun handleProgress(sourceHabit: Habit) {
+        /*So, say if the progressBar is empty, then equate it to what source habit progress is and write it to file for now
+        * But, now if progressBar(s) are not empty as in the array,
+        * Also, check for week end to clear the array */
+
+        /*TODO
+        *  Instead of equating, add with value of the array value
+        *   If the sourceHabit.progress.progress does reset daily and accounts for taps, then its right
+        *   And have overall progress in array as well which will not be reset as long as the activity stays
+        *   or complete*/
+
         when ((Calendar.getInstance().time).toString().split(" ")[0]) {
-            "Sun" -> sunProgress.progress = sourceHabit.progress.progress
+            "Sun" -> progressBarArr[6].progress =
+                progressBarArr.get(6).progress + sourceHabit.progress.progress
             "Mon" -> monProgress.progress = sourceHabit.progress.progress
             "Tue" -> tueProgress.progress = sourceHabit.progress.progress
             "Wed" -> wedProgress.progress = sourceHabit.progress.progress
-            "Thr" -> thrProgress.progress = sourceHabit.progress.progress
+            "Thu" -> thrProgress.progress = sourceHabit.progress.progress
             "Fri" -> friProgress.progress = sourceHabit.progress.progress
             "Sat" -> satProgress.progress = sourceHabit.progress.progress
         }
     }
 
     private fun handleOverallProgress(sourceHabit: Habit) {
-        val totalSteps: Int = 7 * sourceHabit.progress.steps
-        val dailyProgressAdd: Int =
-            monProgress.progress + tueProgress.progress + wedProgress.progress + friProgress.progress + satProgress.progress + sunProgress.progress
-
-        val div: Int = ((dailyProgressAdd / totalSteps.toDouble()) * 100).roundToInt()
-        val overall: String = (div).toString() + "%"
-        if (dailyProgressAdd == totalSteps) {
-            overAllProgress.progress = 100
-            val s = "100%"
-            percentageProgress.text = s
-        } else {
-            overAllProgress.progress = div
-            percentageProgress.text = overall
-        }
+        overAllProgress.progress = sourceHabit.stats.allTime.toInt()
+        val allTimeProg: String = sourceHabit.stats.allTime.toInt().toString()
+        percentageProgress.text = "$allTimeProg%"
+//        val totalSteps: Int = 7 * sourceHabit.progress.steps
+//        val dailyProgressAdd: Int =
+//            monProgress.progress + tueProgress.progress + wedProgress.progress + friProgress.progress + satProgress.progress + sunProgress.progress
+//
+//        val div: Int = ((dailyProgressAdd / totalSteps.toDouble()) * 100).roundToInt()
+//        val overall: String = (div).toString() + "%"
+//        if (dailyProgressAdd == totalSteps) {
+//            overAllProgress.progress = 100
+//            val s = "100%"
+//            percentageProgress.text = s
+//        } else {
+//            overAllProgress.progress = div
+//            percentageProgress.text = overall
+//        }
     }
 
     override fun onBackPressed() {
