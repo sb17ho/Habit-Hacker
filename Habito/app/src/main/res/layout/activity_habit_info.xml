@@ -178,7 +178,6 @@
             android:inputType="number"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/alltimeValue"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/horizontal_divided_4"
@@ -194,7 +193,6 @@
             android:text="STREAK"
             app:layout_constraintBottom_toBottomOf="@+id/compText"
             app:layout_constraintEnd_toEndOf="@+id/streakValue"
-            app:layout_constraintEnd_toStartOf="@+id/alltimeText"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/streakValue" />
