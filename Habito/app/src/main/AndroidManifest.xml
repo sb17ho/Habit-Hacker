@@ -67,8 +67,22 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".BootScreenMain"
             android:label="Settings"
+            android:parentActivityName=".BootScreenMain"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".About"
+            android:label="About"
+            android:parentActivityName=".BootScreenMain"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".HowToUse"
+            android:label="How To Use"
+            android:parentActivityName=".BootScreenMain"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
       
