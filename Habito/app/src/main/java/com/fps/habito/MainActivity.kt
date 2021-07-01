@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settings: Button
     private lateinit var howTo: Button
     private lateinit var about: Button
-    private lateinit var help: Button
     private lateinit var logout: Button
     private lateinit var closeButton: ImageView
     private lateinit var userImage: ImageView
@@ -197,6 +196,14 @@ class MainActivity : AppCompatActivity() {
         settings.setOnClickListener {
             popupDialog.dismiss()
             startActivity(Intent(this, SettingsActivity::class.java))
+        }
+        about.setOnClickListener {
+            popupDialog.dismiss()
+            startActivity(Intent(this, About::class.java))
+        }
+        howTo.setOnClickListener {
+            popupDialog.dismiss()
+            startActivity(Intent(this, HowToUse::class.java))
         }
     }
 
