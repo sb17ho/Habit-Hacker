@@ -101,19 +101,7 @@
             android:textColor="@android:color/black" />
 
         <Button
-            android:id="@+id/helpButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/help"
-            android:drawablePadding="10dp"
-            android:gravity="start"
-            android:padding="10dp"
-            android:text="@string/help"
-            android:textColor="@android:color/black" />
 
-        <Button
             android:id="@+id/aboutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

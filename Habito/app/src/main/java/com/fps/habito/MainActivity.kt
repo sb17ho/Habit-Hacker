@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settings: Button
     private lateinit var howTo: Button
     private lateinit var about: Button
-    private lateinit var help: Button
     private lateinit var logout: Button
     private lateinit var closeButton: ImageView
     private lateinit var userImage: ImageView
@@ -104,10 +103,13 @@ class MainActivity : AppCompatActivity() {
 
                 docSnap.toObject(User::class.java)?.userHabits?.forEach { habits.add(it) }
 
+
+
                 habitAdapter.notifyDataSetChanged()
 
                 add.setOnClickListener {
                     startFormActivity()
+                    
                 }
 
                 habitsGrid.onItemClickListener =
@@ -134,6 +136,7 @@ class MainActivity : AppCompatActivity() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
+            
 
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
 
@@ -158,7 +161,6 @@ class MainActivity : AppCompatActivity() {
         settings = popupDialog.findViewById(R.id.settingsButton)
         howTo = popupDialog.findViewById(R.id.howToUseButton)
         about = popupDialog.findViewById(R.id.aboutButton)
-        help = popupDialog.findViewById(R.id.helpButton)
         logout = popupDialog.findViewById(R.id.logoutButton)
         closeButton = popupDialog.findViewById(R.id.closebutton)
         userImage = popupDialog.findViewById(R.id.userImageView)
@@ -193,6 +195,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         closeButton.setOnClickListener { popupDialog.dismiss() }
+        
+        settings.setOnClickListener {
+            popupDialog.dismiss()
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+        about.setOnClickListener {
+            popupDialog.dismiss()
+            startActivity(Intent(this, About::class.java))
+        }
+        howTo.setOnClickListener {
+            popupDialog.dismiss()
+            startActivity(Intent(this, HowToUse::class.java))
+        }
     }
 
     private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {

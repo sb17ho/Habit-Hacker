@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "1004088719177-pne7bropmkse99259eoi0kun018tl0s7.apps.googleusercontent.com",
+          "client_id": "1004088719177-iro6is8slvheu5fk5dvdoqr7h1nqilih.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fps.habito",
-            "certificate_hash": "54be86d621cfd62cbf6142b9bfed375544f0f2d0"
+            "certificate_hash": "952a82c7e1396498f9bb7ae8cb3a4a1aef88e7da"
+          }
+        },
+        {
+          "client_id": "1004088719177-p0q5psns1ml00r2io2mgj1f3ls2q9lu8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fps.habito",
+            "certificate_hash": "2953d166daad39bb04bcb3a759ccf68ebe13f8a3"
           }
         },
         {
