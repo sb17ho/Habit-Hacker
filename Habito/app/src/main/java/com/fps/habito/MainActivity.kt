@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity() {
                 200 -> {
                     val delHabitName = it.data!!.getStringExtra("del_habit")!!
                     habits.removeIf { habit -> habit.name == delHabitName }
-                    firestore.document(delHabitName).delete()
                 }
 
                 300 -> {
@@ -101,9 +100,9 @@ class MainActivity : AppCompatActivity() {
         firestore
             .document(hacker.userName)
             .get()
-            .addOnSuccessListener {
+            .addOnSuccessListener { docSnap ->
 
-                it.toObject(User::class.java)?.userHabits?.forEach {  habits.add(it) }
+                docSnap.toObject(User::class.java)?.userHabits?.forEach { habits.add(it) }
 
                 habitAdapter.notifyDataSetChanged()
 
@@ -137,7 +136,6 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         mGoogleAuth = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
-
 
     }
 
@@ -199,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 
     private var resultGiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            println("doing changes")
+
             habits.forEach {
                 if (it.progress.status != Status.COMPLETED.toString()) {
                     it.stats.streak = 0
@@ -207,17 +205,19 @@ class MainActivity : AppCompatActivity() {
 
                 it.progress.progress = 0
                 it.progress.status = Status.NOT_STARTED.toString()
-                firestore.document(it.name).set(it)
             }
+
             habitAdapter.notifyDataSetChanged()
+
+            firestore.document(hacker.userName).set(hacker)
         }
     }
 
     private fun onDayChange() {
 
         val midnight = GregorianCalendar()
-        midnight[Calendar.HOUR_OF_DAY] = 23
-        midnight[Calendar.MINUTE] = 59
+        midnight[Calendar.HOUR_OF_DAY] = 0
+        midnight[Calendar.MINUTE] = 0
         midnight[Calendar.SECOND] = 0
         midnight[Calendar.MILLISECOND] = 0
 
@@ -264,9 +264,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        habits.forEach {
-            firestore.document(hacker.userName).set(hacker)
-        }
+
+        firestore.document(hacker.userName).set(hacker)
+
     }
 
 }
