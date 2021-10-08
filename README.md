@@ -1,4 +1,4 @@
-# habitude
+# Habitude
 Habit tracking android app
 
 
